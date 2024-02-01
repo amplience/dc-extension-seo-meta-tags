@@ -1,10 +1,13 @@
-import "./App.css";
+import { SeoMetaTags } from "./components/SeoMetaTags";
+import Theme from "./components/Theme";
 import { WithContentFieldExtension } from "./hooks/useFieldExtension";
 
 function App() {
   return (
     <WithContentFieldExtension pollForm={false}>
-      <p>ih</p>
+      <Theme>
+        <SeoMetaTags />
+      </Theme>
     </WithContentFieldExtension>
   );
 }
