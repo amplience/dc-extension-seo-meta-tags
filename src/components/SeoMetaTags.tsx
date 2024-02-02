@@ -1,17 +1,12 @@
-import { useContext } from "react";
+import { useContext, useState } from "react";
 import { ContentFieldExtensionContext } from "../hooks/useFieldExtension";
-import {
-  Button,
-  Grid,
-  Link,
-  Stack,
-  TextField,
-  Typography,
-} from "@mui/material";
+import { Button, Grid, Link, Stack, Typography } from "@mui/material";
 import { SparklesIcon } from "./SparklesIcon";
+import { SeoField } from "./SeoField";
 
 export const SeoMetaTags = () => {
   const sdk = useContext(ContentFieldExtensionContext);
+  const [inputValue] = useState(sdk.initialValue || undefined);
 
   if (!sdk) {
     return <p>Loading</p>;
@@ -58,7 +53,7 @@ export const SeoMetaTags = () => {
             </Grid>
           </Grid>
           <Grid item xs>
-            <TextField />
+            <SeoField schema={sdk.field.schema} value={inputValue} />
           </Grid>
         </Grid>
       </Grid>
