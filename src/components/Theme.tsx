@@ -4,6 +4,7 @@ import {
   Experimental_CssVarsProvider as CssVarsProvider,
   experimental_extendTheme as extendTheme,
 } from "@mui/material/styles";
+import { ReactElement } from "react";
 
 declare module "@mui/material/styles" {
   interface PaletteColor {
@@ -150,7 +151,7 @@ const theme = extendTheme({
   },
 });
 
-function Theme({ children }) {
+function Theme({ children }: { children: ReactElement }) {
   return (
     <CssVarsProvider theme={theme}>
       <CssBaseline />

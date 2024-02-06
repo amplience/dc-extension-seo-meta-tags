@@ -1,18 +1,33 @@
-import { useContext, useState } from "react";
-import { ContentFieldExtensionContext } from "../hooks/useFieldExtension";
-import { Button, Grid, Link, Stack, Typography } from "@mui/material";
+import { useContext, useEffect, useState } from "react";
+import { Grid, Link, Stack, TextField, Typography } from "@mui/material";
 import { SparklesIcon } from "./SparklesIcon";
-import { SeoField } from "./SeoField";
+import { ContentFieldExtensionContext } from "../hooks/useContentFieldExtension";
+import { GenerateButton } from "./GenerateButton";
 
 export const SeoMetaTags = () => {
-  const sdk = useContext(ContentFieldExtensionContext);
-  const [inputValue] = useState(sdk.initialValue || undefined);
+  const { sdk } = useContext(ContentFieldExtensionContext);
+  const [inputValue, setInputValue] = useState("");
+  const [loaded, setLoaded] = useState(false);
+
+  useEffect(() => {
+    (sdk?.field.getValue() as Promise<string>).then((val) => {
+      setInputValue(val);
+      setLoaded(true);
+    });
+  }, [sdk]);
+
+  useEffect(() => {
+    if (!loaded) {
+      return;
+    }
+    sdk?.field.setValue(inputValue);
+  }, [sdk, inputValue, loaded]);
 
   if (!sdk) {
     return <p>Loading</p>;
   }
 
-  const isInactive = sdk.readOnly;
+  const isInactive = sdk.form.readOnly;
 
   return (
     <div>
@@ -45,15 +60,16 @@ export const SeoMetaTags = () => {
               </Stack>
             </Grid>
             <Grid item xs="auto">
-              <span>
-                <Button variant="outlined" disabled={isInactive}>
-                  Generate
-                </Button>
-              </span>
+              <GenerateButton disabled={isInactive}></GenerateButton>
             </Grid>
           </Grid>
           <Grid item xs>
-            <SeoField schema={sdk.field.schema} value={inputValue} />
+            <TextField
+              fullWidth
+              onChange={({ target: { value } }) => setInputValue(value)}
+              value={inputValue}
+              variant="standard"
+            />
           </Grid>
         </Grid>
       </Grid>
