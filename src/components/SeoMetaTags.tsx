@@ -3,31 +3,30 @@ import { Grid, Link, Stack, TextField, Typography } from "@mui/material";
 import { SparklesIcon } from "./SparklesIcon";
 import { ContentFieldExtensionContext } from "../hooks/useContentFieldExtension";
 import { GenerateButton } from "./GenerateButton";
+import { ContentFieldExtension } from "dc-extensions-sdk";
 
 export const SeoMetaTags = () => {
-  const { sdk } = useContext(ContentFieldExtensionContext);
+  const { sdk } = useContext(ContentFieldExtensionContext) as {
+    sdk: ContentFieldExtension;
+  };
   const [inputValue, setInputValue] = useState("");
   const [loaded, setLoaded] = useState(false);
   const [isInactive, setInactive] = useState(false);
 
   useEffect(() => {
-    (sdk?.field.getValue() as Promise<string>).then((val) => {
+    (sdk.field.getValue() as Promise<string>).then((val) => {
       setInputValue(val);
       setLoaded(true);
     });
-    sdk?.form.onReadOnlyChange(setInactive);
+    sdk.form.onReadOnlyChange(setInactive);
   }, [sdk]);
 
   useEffect(() => {
     if (!loaded) {
       return;
     }
-    sdk?.field.setValue(inputValue);
+    sdk.field.setValue(inputValue);
   }, [sdk, inputValue, loaded]);
-
-  if (!sdk) {
-    return <p>Loading</p>;
-  }
 
   return (
     <div>
