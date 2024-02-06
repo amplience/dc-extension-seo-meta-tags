@@ -1,4 +1,5 @@
 import { CssBaseline } from "@mui/material";
+import "@fontsource/ibm-plex-sans";
 
 import {
   Experimental_CssVarsProvider as CssVarsProvider,
