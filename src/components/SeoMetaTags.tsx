@@ -8,12 +8,14 @@ export const SeoMetaTags = () => {
   const { sdk } = useContext(ContentFieldExtensionContext);
   const [inputValue, setInputValue] = useState("");
   const [loaded, setLoaded] = useState(false);
+  const [isInactive, setInactive] = useState(false);
 
   useEffect(() => {
     (sdk?.field.getValue() as Promise<string>).then((val) => {
       setInputValue(val);
       setLoaded(true);
     });
+    sdk?.form.onReadOnlyChange(setInactive);
   }, [sdk]);
 
   useEffect(() => {
@@ -26,8 +28,6 @@ export const SeoMetaTags = () => {
   if (!sdk) {
     return <p>Loading</p>;
   }
-
-  const isInactive = sdk.form.readOnly;
 
   return (
     <div>
