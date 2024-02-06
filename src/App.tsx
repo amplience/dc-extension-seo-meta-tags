@@ -1,4 +1,4 @@
-import { SeoMetaTags } from "./components/SeoMetaTags";
+import { SeoMetaTags } from "./components/seoMetaTags/SeoMetaTags";
 import Theme from "./components/Theme";
 import { WithContentFieldExtension } from "./hooks/withFieldExtension";
 

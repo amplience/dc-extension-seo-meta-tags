@@ -1,9 +1,11 @@
 import { useContext, useEffect, useState } from "react";
 import { Grid, Link, Stack, TextField, Typography } from "@mui/material";
-import { SparklesIcon } from "./SparklesIcon";
-import { ContentFieldExtensionContext } from "../hooks/useContentFieldExtension";
-import { GenerateButton } from "./GenerateButton";
+import { SparklesIcon } from "../SparklesIcon";
+import { ContentFieldExtensionContext } from "../../hooks/useContentFieldExtension";
+import { GenerateButton } from "../GenerateButton";
 import { ContentFieldExtension } from "dc-extensions-sdk";
+import { getTitle } from "./getTitle";
+import { getDescription } from "./getDescription";
 
 export const SeoMetaTags = () => {
   const { sdk } = useContext(ContentFieldExtensionContext) as {
@@ -12,6 +14,8 @@ export const SeoMetaTags = () => {
   const [inputValue, setInputValue] = useState("");
   const [loaded, setLoaded] = useState(false);
   const [isInactive, setInactive] = useState(false);
+  const title = getTitle(sdk);
+  const description = getDescription(sdk);
 
   useEffect(() => {
     (sdk.field.getValue() as Promise<string>).then((val) => {
@@ -39,14 +43,10 @@ export const SeoMetaTags = () => {
             <Grid item xs>
               <Stack direction="column">
                 <Typography variant="title" color={isInactive ? "#BFBFBF" : ""}>
-                  {sdk.field.schema.title}
+                  {title}
                 </Typography>
                 <Stack direction="row" spacing={0.5}>
-                  <Typography variant="subtitle">
-                    Generate an effective SEO{" "}
-                    {sdk.field.schema.title?.toLowerCase()} based on the content
-                    of the page.
-                  </Typography>
+                  <Typography variant="subtitle">{description}</Typography>
                   <Link
                     href="https://amplience.com/developers/docs/knowledge-center/amplience-labs"
                     target="_blank"
