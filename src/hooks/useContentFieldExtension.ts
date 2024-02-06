@@ -1,14 +1,13 @@
 import { ContentFieldExtension } from "dc-extensions-sdk";
 import { createContext, useContext } from "react";
 
-export type ContentFieldExtensionContextState = {
+export type ContentFieldExtensionContext = {
   sdk: ContentFieldExtension | null;
 };
 
 export const ContentFieldExtensionContext =
-  createContext<ContentFieldExtensionContextState>({ sdk: null });
+  createContext<ContentFieldExtensionContext>({ sdk: null });
 
-export const useContentFieldExtension =
-  (): ContentFieldExtensionContextState => {
-    return useContext(ContentFieldExtensionContext);
-  };
+export const useContentFieldExtension = (): ContentFieldExtensionContext => {
+  return useContext(ContentFieldExtensionContext);
+};
