@@ -6,6 +6,7 @@ import { GenerateButton } from "../GenerateButton";
 import { ContentFieldExtension } from "dc-extensions-sdk";
 import { getTitle } from "./getTitle";
 import { getDescription } from "./getDescription";
+import { withValue } from "../../lib/events/withValue";
 
 export const SeoMetaTags = () => {
   const { sdk } = useContext(ContentFieldExtensionContext) as {
@@ -67,7 +68,7 @@ export const SeoMetaTags = () => {
           <Grid item xs>
             <TextField
               fullWidth
-              onChange={({ target: { value } }) => setInputValue(value)}
+              onChange={withValue(setInputValue)}
               value={inputValue}
               variant="standard"
             />

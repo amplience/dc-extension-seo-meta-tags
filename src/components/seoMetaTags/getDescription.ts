@@ -1,5 +1,5 @@
 import { ContentFieldExtension } from "dc-extensions-sdk";
-import { getParams } from "../../lib/getParams";
+import { getParams } from "../../lib/sdk/getParams";
 
 export const getDescription = (sdk: ContentFieldExtension) => {
   const { variant } = getParams(sdk);
