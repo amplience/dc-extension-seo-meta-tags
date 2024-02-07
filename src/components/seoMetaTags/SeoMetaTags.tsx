@@ -13,7 +13,6 @@ export const SeoMetaTags = () => {
   };
   const [initialValue, setInitialValue] = useState("");
   const [inputValue, setInputValue] = useState("");
-  const [loaded, setLoaded] = useState(false);
   const [isInactive, setInactive] = useState(false);
   const title = getTitle(sdk);
   const description = getDescription(sdk);
@@ -22,7 +21,6 @@ export const SeoMetaTags = () => {
     (sdk.field.getValue() as Promise<string | undefined>).then((val = "") => {
       setInputValue(val);
       setInitialValue(val);
-      setLoaded(true);
     });
     sdk.form.onReadOnlyChange(setInactive);
   }, [sdk]);
@@ -30,11 +28,11 @@ export const SeoMetaTags = () => {
   useEffect(() => {
     const unchanged = initialValue === inputValue;
 
-    if (!loaded || unchanged) {
+    if (unchanged) {
       return;
     }
     sdk.field.setValue(inputValue);
-  }, [sdk, inputValue, initialValue, loaded]);
+  }, [sdk, inputValue, initialValue]);
 
   return (
     <div>
