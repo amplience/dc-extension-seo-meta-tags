@@ -19,9 +19,9 @@ export const SeoMetaTags = () => {
   const description = getDescription(sdk);
 
   useEffect(() => {
-    (sdk.field.getValue() as Promise<string | undefined>).then((val): void => {
-      setInputValue(val || "");
-      setInitialValue(val || "");
+    (sdk.field.getValue() as Promise<string | undefined>).then((val = "") => {
+      setInputValue(val);
+      setInitialValue(val);
       setLoaded(true);
     });
     sdk.form.onReadOnlyChange(setInactive);
