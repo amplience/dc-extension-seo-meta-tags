@@ -11,6 +11,7 @@ export const SeoMetaTags = () => {
   const { sdk } = useContext(ContentFieldExtensionContext) as {
     sdk: ContentFieldExtension;
   };
+  const [initialValue, setInitialValue] = useState("");
   const [inputValue, setInputValue] = useState("");
   const [loaded, setLoaded] = useState(false);
   const [isInactive, setInactive] = useState(false);
@@ -18,19 +19,22 @@ export const SeoMetaTags = () => {
   const description = getDescription(sdk);
 
   useEffect(() => {
-    (sdk.field.getValue() as Promise<string>).then((val) => {
-      setInputValue(val);
+    (sdk.field.getValue() as Promise<string | undefined>).then((val): void => {
+      setInputValue(val || "");
+      setInitialValue(val || "");
       setLoaded(true);
     });
     sdk.form.onReadOnlyChange(setInactive);
   }, [sdk]);
 
   useEffect(() => {
-    if (!loaded) {
+    const unchanged = initialValue === inputValue;
+
+    if (!loaded || unchanged) {
       return;
     }
     sdk.field.setValue(inputValue);
-  }, [sdk, inputValue, loaded]);
+  }, [sdk, inputValue, initialValue, loaded]);
 
   return (
     <div>
