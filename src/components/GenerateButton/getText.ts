@@ -6,5 +6,13 @@ export const getText = async (sdk: ContentFieldExtension) => {
   const { sources } = getParams(sdk);
   const form = await sdk.form.getValue().catch(() => ({}));
 
-  return sources.map((source) => pointer.get(form, source)).join("\n");
+  return sources
+    .map((source) => {
+      try {
+        return pointer.get(form, source);
+      } catch (e) {
+        return "";
+      }
+    })
+    .join("\n");
 };

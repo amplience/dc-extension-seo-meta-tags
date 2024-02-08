@@ -12,7 +12,6 @@ type Params = {
  */
 export const getParams = (sdk: ContentFieldExtension): Params =>
   ({
-    type: "title",
     ...sdk.params.installation,
     ...sdk.params.instance,
   } as Params);
