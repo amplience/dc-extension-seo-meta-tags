@@ -16,7 +16,7 @@ export const WithContentFieldExtension = ({
         sdk.frame.startAutoResizer();
       })
       .catch((e) => {
-        console.log("Could not initialise SDK", e);
+        console.error("Could not initialise SDK", e);
       });
   }, []);
 
