@@ -19,7 +19,7 @@ export const GenerateButton = ({
     const enableButtonIfContentInForm = (form: Record<string, unknown>) =>
       setCanGenerate(hasContent(sdk, form));
 
-    sdk.form.getValue().then(enableButtonIfContentInForm);
+    sdk.form.getValue().then(enableButtonIfContentInForm).catch();
     sdk.form.onFormValueChange(enableButtonIfContentInForm);
   }, [sdk]);
 
