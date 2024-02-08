@@ -1,8 +1,8 @@
 import { ContentFieldExtension } from "dc-extensions-sdk";
 
 type Params = {
-  variant: "title" | "description";
-  source: string;
+  type: "title" | "description";
+  sources: string[];
 };
 
 /**
@@ -12,7 +12,7 @@ type Params = {
  */
 export const getParams = (sdk: ContentFieldExtension): Params =>
   ({
-    variant: "title",
+    type: "title",
     ...sdk.params.installation,
     ...sdk.params.instance,
   } as Params);

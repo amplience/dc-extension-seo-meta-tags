@@ -2,7 +2,7 @@ import { useContext, useEffect, useState } from "react";
 import { Grid, Link, Stack, TextField, Typography } from "@mui/material";
 import { SparklesIcon } from "../SparklesIcon";
 import { ContentFieldExtensionContext } from "../../hooks/useContentFieldExtension";
-import { GenerateButton } from "../GenerateButton";
+import { GenerateButton } from "../GenerateButton/GenerateButton";
 import { ContentFieldExtension } from "dc-extensions-sdk";
 import { getTitle } from "./getTitle";
 import { getDescription } from "./getDescription";
@@ -62,7 +62,11 @@ export const SeoMetaTags = () => {
               </Stack>
             </Grid>
             <Grid item xs="auto">
-              <GenerateButton disabled={isInactive}></GenerateButton>
+              <GenerateButton
+                disabled={isInactive}
+                sdk={sdk}
+                onTextGenerated={setInputValue}
+              ></GenerateButton>
             </Grid>
           </Grid>
           <Grid item xs>

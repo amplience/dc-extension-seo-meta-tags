@@ -3,7 +3,7 @@ import { getParams } from "../../lib/sdk/getParams";
 import upperFirst from "lodash/upperFirst";
 
 export const getTitle = (sdk: ContentFieldExtension) => {
-  const { variant } = getParams(sdk);
+  const { type } = getParams(sdk);
 
-  return sdk.field.schema.title || upperFirst(variant);
+  return sdk.field.schema.title || upperFirst(type);
 };
