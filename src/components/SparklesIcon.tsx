@@ -2,18 +2,18 @@ import { SvgIcon } from "@mui/material";
 
 export const SparklesIcon = (props: { inactive?: boolean }) => {
   return (
-    <SvgIcon
-      sx={{
-        color: props.inactive ? "#D9D9D9" : "#F88B8B",
-        fontSize: "32px",
-      }}
-    >
+    <SvgIcon>
       <svg
+        data-testid="icon"
         xmlns="http://www.w3.org/2000/svg"
         width="32"
         height="32"
         fill="none"
         viewBox="5.34 5.34 21.33 21.33"
+        style={{
+          color: props.inactive ? "#D9D9D9" : "#F88B8B",
+          fontSize: "32px",
+        }}
       >
         <path
           fill="currentColor"

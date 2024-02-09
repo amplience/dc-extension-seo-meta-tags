@@ -36,7 +36,7 @@ export const SeoMetaTags = () => {
   }, [sdk, inputValue, initialValue]);
 
   return (
-    <div>
+    <div data-testid="seo-component">
       <Grid container spacing={1} width="100%">
         <Grid item xs="auto">
           <SparklesIcon inactive={isInactive} />

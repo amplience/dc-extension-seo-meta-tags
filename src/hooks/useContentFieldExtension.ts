@@ -1,5 +1,5 @@
 import { ContentFieldExtension } from "dc-extensions-sdk";
-import { createContext, useContext } from "react";
+import { createContext } from "react";
 
 export type ContentFieldExtensionContext = {
   sdk: ContentFieldExtension | null;
@@ -7,7 +7,3 @@ export type ContentFieldExtensionContext = {
 
 export const ContentFieldExtensionContext =
   createContext<ContentFieldExtensionContext>({ sdk: null });
-
-export const useContentFieldExtension = (): ContentFieldExtensionContext => {
-  return useContext(ContentFieldExtensionContext);
-};
