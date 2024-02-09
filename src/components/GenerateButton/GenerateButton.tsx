@@ -3,6 +3,7 @@ import type { ContentFieldExtension } from "dc-extensions-sdk";
 import { generateValue } from "./generateValue";
 import { useEffect, useState } from "react";
 import { hasContent } from "./hasContent";
+import { track } from "../../gainsight";
 
 export const GenerateButton = ({
   sdk,
@@ -15,6 +16,11 @@ export const GenerateButton = ({
 }) => {
   const [canGenerate, setCanGenerate] = useState(false);
 
+  const trackingParams = {
+    name: "dc-extension-seo-meta-tags",
+    category: "Extension",
+  };
+
   useEffect(() => {
     const enableButtonIfContentInForm = (form: Record<string, unknown>) =>
       setCanGenerate(hasContent(sdk, form));
@@ -24,6 +30,7 @@ export const GenerateButton = ({
   }, [sdk]);
 
   const handleClick = async () => {
+    track(window, "SEO generation", trackingParams);
     const value = await generateValue(sdk);
 
     if (value) {
