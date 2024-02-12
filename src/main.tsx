@@ -1,7 +1,7 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
 import App from "./App.tsx";
-import { initGainsight } from "./gainsight.ts";
+import { init as initGainsight } from "./lib/gainsight";
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
   <React.StrictMode>
@@ -9,4 +9,4 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
   </React.StrictMode>
 );
 
-initGainsight();
+initGainsight(window, import.meta.env.PUBLIC_APTRINSIC_APP_ID);

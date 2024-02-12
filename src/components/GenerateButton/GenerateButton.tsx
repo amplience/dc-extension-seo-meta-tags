@@ -3,7 +3,7 @@ import type { ContentFieldExtension } from "dc-extensions-sdk";
 import { generateValue } from "./generateValue";
 import { useEffect, useState } from "react";
 import { hasContent } from "./hasContent";
-import { track } from "../../gainsight";
+import { track } from "../../lib/gainsight";
 
 export const GenerateButton = ({
   sdk,
