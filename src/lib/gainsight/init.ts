@@ -2,6 +2,7 @@ export function init(window: Window, aptrinsicId: string) {
   if (!aptrinsicId) {
     return;
   }
+
   window.aptrinsic = function (...args: unknown[]) {
     (window.aptrinsic.q = window.aptrinsic.q || []).push(args);
   };

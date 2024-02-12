@@ -2,6 +2,11 @@ import { act, render, screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { GenerateButton } from "./GenerateButton";
 import { ContentFieldExtension, init } from "dc-extensions-sdk";
+import { track } from "../../lib";
+
+jest.mock("../../lib/gainsight/track.ts", () => ({
+  track: jest.fn(),
+}));
 
 describe("GenerateButton", () => {
   it("Should be disabled if disabled property is set", async () => {
@@ -102,7 +107,7 @@ describe("GenerateButton", () => {
 
     expect(onTextGenerated).not.toHaveBeenCalled();
   });
-  it("Should fire the `onTextGenerated` event if text has been generated", async () => {
+  it("Should fire the `onTextGenerated` event if text has been generated and track generation", async () => {
     const sdk = await init<ContentFieldExtension>();
     const onTextGenerated = jest.fn();
 
@@ -124,5 +129,6 @@ describe("GenerateButton", () => {
     await userEvent.click(btn);
 
     expect(onTextGenerated).toHaveBeenCalledWith("this is the description");
+    expect(track).toHaveBeenCalled();
   });
 });

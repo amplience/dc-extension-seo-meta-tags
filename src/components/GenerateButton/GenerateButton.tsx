@@ -4,6 +4,7 @@ import { generateValue } from "./generateValue";
 import { useEffect, useState } from "react";
 import { hasContent } from "./hasContent";
 import { track } from "../../lib/gainsight";
+import { EXTENSION_NAME, getParams } from "../../lib";
 
 export const GenerateButton = ({
   sdk,
@@ -17,8 +18,9 @@ export const GenerateButton = ({
   const [canGenerate, setCanGenerate] = useState(false);
 
   const trackingParams = {
-    name: "dc-extension-seo-meta-tags",
+    name: EXTENSION_NAME,
     category: "Extension",
+    type: getParams(sdk).type,
   };
 
   useEffect(() => {
@@ -30,10 +32,10 @@ export const GenerateButton = ({
   }, [sdk]);
 
   const handleClick = async () => {
-    track(window, "SEO generation", trackingParams);
     const value = await generateValue(sdk);
 
     if (value) {
+      track(window, "SEO generation", trackingParams);
       onTextGenerated(value);
     }
   };
