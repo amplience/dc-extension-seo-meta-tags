@@ -1,5 +1,5 @@
 import { ContentFieldExtension, init } from "dc-extensions-sdk";
-import { generateValue } from "./generateValue";
+import { generateValue } from "./generateValues";
 
 describe("generateValue", () => {
   it("Should return null if there isn't any text", async () => {

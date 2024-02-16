@@ -2,9 +2,9 @@ import type { ContentFieldExtension } from "dc-extensions-sdk";
 import { EVENTS, isEmptyString } from "../../lib";
 import { getText } from "./getText";
 
-export const generateValue = async (
+export const generateValues = async (
   sdk: ContentFieldExtension
-): Promise<string | null> => {
+): Promise<string[] | null> => {
   const text = await getText(sdk);
 
   if (isEmptyString(text)) {

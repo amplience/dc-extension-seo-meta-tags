@@ -1,6 +1,6 @@
 import { Button, ButtonProps } from "@mui/material";
 import type { ContentFieldExtension } from "dc-extensions-sdk";
-import { generateValue } from "./generateValue";
+// import { generateValues } from "./generateValues";
 import { useEffect, useState } from "react";
 import { hasContent } from "./hasContent";
 import { track } from "../../lib/gainsight";
@@ -13,7 +13,7 @@ export const GenerateButton = ({
   ...props
 }: ButtonProps & {
   sdk: ContentFieldExtension;
-  onTextGenerated: { (v: string): void };
+  onTextGenerated: { (v: string[]): void };
 }) => {
   const [canGenerate, setCanGenerate] = useState(false);
 
@@ -32,11 +32,12 @@ export const GenerateButton = ({
   }, [sdk]);
 
   const handleClick = async () => {
-    const value = await generateValue(sdk);
+    // const values = await generateValues(sdk);
+    const values = ["title one", "title two", "title three"];
 
-    if (value) {
+    if (values) {
       track(window, "SEO generation", trackingParams);
-      onTextGenerated(value);
+      onTextGenerated(values);
     }
   };
 

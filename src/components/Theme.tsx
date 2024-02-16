@@ -37,7 +37,7 @@ const theme = extendTheme({
     light: {
       palette: {
         text: {
-          primary: "rgb(51, 51, 51)",
+          primary: "#333",
         },
         primary: {
           main: "#039BE5",
