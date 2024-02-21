@@ -8,6 +8,7 @@ import { ContentFieldExtensionContext } from "../../hooks/ContentFieldExtensionC
 
 export const GenerateButton = ({
   onTextGenerated,
+  disabled,
   ...props
 }: ButtonProps & {
   onTextGenerated: { (v: string[]): void };
@@ -36,7 +37,7 @@ export const GenerateButton = ({
     <Button
       onClick={handleClick}
       variant="outlined"
-      disabled={readOnly || !canGenerate}
+      disabled={disabled || readOnly || !canGenerate}
       {...props}
     >
       Generate

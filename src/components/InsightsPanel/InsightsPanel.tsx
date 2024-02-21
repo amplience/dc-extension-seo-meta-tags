@@ -193,11 +193,16 @@ export const InsightsPanel = ({
                     animate={{ opacity: 1, height: "auto" }}
                     exit={{ opacity: 0, height: 0 }}
                   >
-                    <Grid container spacing={2} marginTop={0.1}>
-                      <Grid item flexGrow={1}>
+                    <Grid
+                      container
+                      spacing={2}
+                      marginTop={0.1}
+                      flexWrap="nowrap"
+                    >
+                      <Grid item flexGrow={1} xs={6}>
                         <Insights type="positive" insights={x}></Insights>
                       </Grid>
-                      <Grid item flexGrow={1}>
+                      <Grid item flexGrow={1} xs={6}>
                         <Insights type="negative" insights={x}></Insights>
                       </Grid>
                     </Grid>

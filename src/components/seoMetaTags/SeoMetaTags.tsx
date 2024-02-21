@@ -35,7 +35,7 @@ export const SeoMetaTags = () => {
   const insightsSelected = selectedPanel === "insights";
   const previewSelected = selectedPanel === "preview";
   const hasOptions = options.length > 0;
-  const textfieldDisabled = selectedPanel !== null;
+  const panelOpen = selectedPanel !== null;
 
   useEffect(() => {
     (sdk.field.getValue() as Promise<string | undefined>).then((val = "") => {
@@ -60,6 +60,8 @@ export const SeoMetaTags = () => {
   };
 
   const hidePanels = () => setSelectedPanel(null);
+
+  const clearOptions = () => setOptions([]);
 
   return (
     <div data-testid="seo-component">
@@ -97,7 +99,10 @@ export const SeoMetaTags = () => {
                 selected={previewSelected}
                 onSelect={setSelectedPanel}
               />
-              <GenerateButton onTextGenerated={setOptions}></GenerateButton>
+              <GenerateButton
+                onTextGenerated={setOptions}
+                disabled={panelOpen}
+              ></GenerateButton>
             </Stack>
           </Grid>
         </Grid>
@@ -109,14 +114,17 @@ export const SeoMetaTags = () => {
               placeholder={placeholder}
               value={inputValue}
               variant="standard"
-              disabled={textfieldDisabled}
+              disabled={panelOpen}
             />
-            {hasOptions && (
-              <TitleOptions
-                options={options}
-                onTitleSelected={titleSelected}
-              ></TitleOptions>
-            )}
+            <AnimatePresence>
+              {hasOptions && (
+                <TitleOptions
+                  options={options}
+                  onTitleSelected={titleSelected}
+                  onCancel={clearOptions}
+                ></TitleOptions>
+              )}
+            </AnimatePresence>
             <AnimatePresence>
               {insightsSelected && (
                 <InsightsPanel value={inputValue} onClose={hidePanels} />
