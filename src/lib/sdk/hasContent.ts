@@ -1,6 +1,6 @@
 import type { ContentFieldExtension } from "dc-extensions-sdk";
 import pointer from "json-pointer";
-import { getParams } from "../../lib";
+import { getParams } from "..";
 
 export const hasContent = (
   sdk: ContentFieldExtension,

@@ -1,6 +1,5 @@
 import type { ContentFieldExtension } from "dc-extensions-sdk";
-import { EVENTS, isEmptyString } from "../../lib";
-import { getText } from "./getText";
+import { EVENTS, getText, isEmptyString } from "../../lib";
 
 export const generateValues = async (
   sdk: ContentFieldExtension

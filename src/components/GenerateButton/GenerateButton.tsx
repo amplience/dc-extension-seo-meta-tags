@@ -1,35 +1,26 @@
 import { Button, ButtonProps } from "@mui/material";
 import type { ContentFieldExtension } from "dc-extensions-sdk";
 // import { generateValues } from "./generateValues";
-import { useEffect, useState } from "react";
-import { hasContent } from "./hasContent";
+import { useContext } from "react";
 import { track } from "../../lib/gainsight";
 import { EXTENSION_NAME, getParams } from "../../lib";
+import { ContentFieldExtensionContext } from "../../hooks/ContentFieldExtensionContext";
 
 export const GenerateButton = ({
-  sdk,
   onTextGenerated,
-  disabled,
   ...props
 }: ButtonProps & {
-  sdk: ContentFieldExtension;
   onTextGenerated: { (v: string[]): void };
 }) => {
-  const [canGenerate, setCanGenerate] = useState(false);
+  const { sdk, canGenerate, readOnly } = useContext(
+    ContentFieldExtensionContext
+  ) as ContentFieldExtensionContext & { sdk: ContentFieldExtension };
 
   const trackingParams = {
     name: EXTENSION_NAME,
     category: "Extension",
     type: getParams(sdk).type,
   };
-
-  useEffect(() => {
-    const enableButtonIfContentInForm = (form: Record<string, unknown>) =>
-      setCanGenerate(hasContent(sdk, form));
-
-    sdk.form.getValue().then(enableButtonIfContentInForm).catch();
-    sdk.form.onFormValueChange(enableButtonIfContentInForm);
-  }, [sdk]);
 
   const handleClick = async () => {
     // const values = await generateValues(sdk);
@@ -45,7 +36,7 @@ export const GenerateButton = ({
     <Button
       onClick={handleClick}
       variant="outlined"
-      disabled={disabled || !canGenerate}
+      disabled={readOnly || !canGenerate}
       {...props}
     >
       Generate
