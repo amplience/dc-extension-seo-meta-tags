@@ -95,10 +95,10 @@ export const SeoMetaTags = () => {
                 selected={insightsSelected}
                 onSelect={setSelectedPanel}
               />
-              <PreviewButton
+              {/* <PreviewButton
                 selected={previewSelected}
                 onSelect={setSelectedPanel}
-              />
+              /> */}
               <GenerateButton
                 onTextGenerated={setOptions}
                 disabled={panelOpen}
