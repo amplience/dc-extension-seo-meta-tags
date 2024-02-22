@@ -12,7 +12,7 @@ import { TitleOptions } from "../TitleOptions/TitleOptions";
 import { useTheme } from "@mui/material";
 import { InsightsPanel } from "../InsightsPanel/InsightsPanel";
 import { InsightsButton } from "../InsightsButton";
-import { PreviewButton } from "../PreviewButton";
+// import { PreviewButton } from "../PreviewButton";
 import { AnimatePresence } from "framer-motion";
 
 export const SeoMetaTags = () => {
@@ -33,7 +33,7 @@ export const SeoMetaTags = () => {
     "insights" | "preview" | null
   >(null);
   const insightsSelected = selectedPanel === "insights";
-  const previewSelected = selectedPanel === "preview";
+  // const previewSelected = selectedPanel === "preview";
   const hasOptions = options.length > 0;
   const panelOpen = selectedPanel !== null;
 

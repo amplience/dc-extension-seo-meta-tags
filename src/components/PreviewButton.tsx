@@ -1,4 +1,3 @@
-import type { ButtonProps } from "@mui/material";
 import PreviewIcon from "../assets/preview-icon.svg?react";
 import { ToggleButton } from "./ToggleButton";
 import { useContext, useState } from "react";
@@ -9,7 +8,7 @@ export const PreviewButton = ({
   selected,
   onSelect,
   ...props
-}: ButtonProps & {
+}: unknown & {
   selected: boolean;
   onSelect: { (s: string | null): void };
 }) => {

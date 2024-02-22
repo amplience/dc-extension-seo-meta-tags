@@ -1,12 +1,12 @@
 import { ContentFieldExtension, init } from "dc-extensions-sdk";
-import { generateValue } from "./generateValues";
+import { generateValues } from "./generateValues";
 
-describe("generateValue", () => {
+describe("generateValues", () => {
   it("Should return null if there isn't any text", async () => {
     const sdk = await init<ContentFieldExtension>();
     (sdk.form.getValue as jest.Mock).mockResolvedValue({});
 
-    const result = await generateValue(sdk);
+    const result = await generateValues(sdk);
 
     expect(result).toBe(null);
   });
@@ -19,7 +19,7 @@ describe("generateValue", () => {
 
     (sdk.connection.request as jest.Mock).mockRejectedValue("Could not mutate");
 
-    const result = await generateValue(sdk);
+    const result = await generateValues(sdk);
 
     expect(result).toBe(null);
   });
@@ -35,7 +35,7 @@ describe("generateValue", () => {
       data: "Possibly THE best article in the world... ever",
     });
 
-    const result = await generateValue(sdk);
+    const result = await generateValues(sdk);
 
     expect(result).toBe("Possibly THE best article in the world... ever");
   });

@@ -2,7 +2,7 @@ import { ContentFieldExtension, init } from "dc-extensions-sdk";
 import { WithContentFieldExtension } from "./withContentFieldExtension";
 import { render, waitFor } from "@testing-library/react";
 import { useContext } from "react";
-import { ContentFieldExtensionContext } from "./useContentFieldExtension";
+import { ContentFieldExtensionContext } from "./ContentFieldExtensionContext";
 
 jest.mock("dc-extensions-sdk", () => {
   const originalModule = jest.requireActual("../__mocks__/dc-extensions-sdk");

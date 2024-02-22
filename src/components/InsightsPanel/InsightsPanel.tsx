@@ -31,8 +31,8 @@ const Insights = ({
   const isPositive = type === "positive";
   const icon = isPositive ? <PlusIcon /> : <MinusIcon />;
   const backgroundColor = isPositive
-    ? theme.palette.success.A100
-    : theme.palette.error.A100;
+    ? theme.palette.success.light
+    : theme.palette.error.light;
 
   useEffect(() => {}, []);
 

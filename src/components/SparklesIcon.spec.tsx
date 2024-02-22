@@ -4,7 +4,7 @@ import { SparklesIcon } from "./SparklesIcon";
 
 describe("SparklesIcon", () => {
   it("Should have disabled colour if incative", () => {
-    render(<SparklesIcon inactive={true} />);
+    render(<SparklesIcon />);
 
     const icon = screen.getByTestId("icon");
 

@@ -1,5 +1,10 @@
 export declare global {
   interface Window {
-    aptrinsic?: unknown;
+    aptrinsic: {
+      (...args: unknown[]): void;
+      q?: unknown[];
+      p?: string;
+      c?: { allowCrossDomain: boolean };
+    };
   }
 }

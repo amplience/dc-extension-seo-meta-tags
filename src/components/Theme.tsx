@@ -59,9 +59,9 @@ const theme = extendTheme({
         },
         error: {
           main: "#FF3366",
-          A100: "rgba(255, 51, 102, 0.03)",
+          light: "rgba(255, 51, 102, 0.03)",
         },
-        success: { main: "#66CC00", A100: "rgba(0, 255, 71, 0.03)" },
+        success: { main: "#66CC00", light: "rgba(0, 255, 71, 0.03)" },
       },
     },
   },

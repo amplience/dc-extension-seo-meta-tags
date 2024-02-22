@@ -16,9 +16,7 @@ describe("GenerateButton", () => {
       content: "some content",
     });
 
-    render(
-      <GenerateButton onTextGenerated={jest.fn()} disabled={true} sdk={sdk} />
-    );
+    render(<GenerateButton onTextGenerated={jest.fn()} disabled={true} />);
 
     const btn = screen.getByRole("button");
 
@@ -35,11 +33,7 @@ describe("GenerateButton", () => {
     });
 
     render(
-      <GenerateButton
-        onTextGenerated={jest.fn()}
-        data-id="can you see me?"
-        sdk={sdk}
-      />
+      <GenerateButton onTextGenerated={jest.fn()} data-id="can you see me?" />
     );
     const btn = screen.getByRole("button");
     await waitFor(() => {
@@ -51,7 +45,7 @@ describe("GenerateButton", () => {
 
     (sdk.form.getValue as jest.Mock).mockResolvedValue({});
 
-    render(<GenerateButton onTextGenerated={jest.fn()} sdk={sdk} />);
+    render(<GenerateButton onTextGenerated={jest.fn()} />);
     const btn = screen.getByRole("button");
 
     await waitFor(() => {
@@ -66,7 +60,7 @@ describe("GenerateButton", () => {
       content: "some content",
     });
 
-    render(<GenerateButton onTextGenerated={jest.fn()} sdk={sdk} />);
+    render(<GenerateButton onTextGenerated={jest.fn()} />);
     const btn = screen.getByRole("button");
 
     await waitFor(() => {
@@ -96,7 +90,7 @@ describe("GenerateButton", () => {
 
     (sdk.connection.request as jest.Mock).mockRejectedValue("no bueno");
 
-    render(<GenerateButton onTextGenerated={onTextGenerated} sdk={sdk} />);
+    render(<GenerateButton onTextGenerated={onTextGenerated} />);
     const btn = screen.getByRole("button");
 
     await waitFor(() => {
@@ -119,7 +113,7 @@ describe("GenerateButton", () => {
       data: "this is the description",
     });
 
-    render(<GenerateButton onTextGenerated={onTextGenerated} sdk={sdk} />);
+    render(<GenerateButton onTextGenerated={onTextGenerated} />);
     const btn = screen.getByRole("button");
 
     await waitFor(() => {

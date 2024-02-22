@@ -1,4 +1,3 @@
-import type { ButtonProps } from "@mui/material";
 import InsightsIcon from "../assets/insights-icon.svg?react";
 import { ToggleButton } from "./ToggleButton";
 import { isEmptyString } from "ramda-adjunct";
@@ -9,9 +8,9 @@ export const InsightsButton = ({
   selected,
   onSelect,
   ...props
-}: ButtonProps & {
+}: unknown & {
   selected: boolean;
-  onSelect: { (s: string | null): void };
+  onSelect: { (s: "insights" | null): void };
 }) => {
   const { sdk } = useContext(ContentFieldExtensionContext);
   const [disabled, setDisabled] = useState(true);
