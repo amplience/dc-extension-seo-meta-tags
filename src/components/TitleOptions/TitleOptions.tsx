@@ -55,7 +55,7 @@ export const TitleOptions = ({
             {options.map(TitleOption)}
           </RadioGroup>
         </Grid>
-        <Grid item spacing={2}>
+        <Grid item>
           <Stack direction="row" spacing={2} marginTop={2}>
             <Button variant="outlined" onClick={onCancel}>
               Cancel

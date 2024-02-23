@@ -1,10 +1,12 @@
-// import type { ReactElement, ReactNode } from "react";
 import { act, render, screen, waitFor } from "@testing-library/react";
-import { WithContentFieldExtension } from "../../hooks/withContentFieldExtension";
 import { SeoMetaTags } from "./SeoMetaTags";
 import { ContentFieldExtension, init } from "dc-extensions-sdk";
-import { ReactElement, ReactNode } from "react";
 import userEvent from "@testing-library/user-event";
+import { wrapper } from "../../__mocks__/wrapper";
+
+jest.mock("../../lib/gainsight/track.ts", () => ({
+  track: jest.fn(),
+}));
 
 jest.mock("dc-extensions-sdk", () => {
   const originalModule = jest.requireActual(
@@ -13,13 +15,6 @@ jest.mock("dc-extensions-sdk", () => {
   jest.spyOn(originalModule, "init");
   return originalModule;
 });
-
-const wrapper = ({ children }: { children: ReactNode }) => (
-  // @TODO: Use <Theme> as well. Needs jest DOM I think?
-  <WithContentFieldExtension>
-    {children as ReactElement}
-  </WithContentFieldExtension>
-);
 
 describe("SeoMetaTags", () => {
   it("Should set the title colour to grey if inactive", async () => {
@@ -76,7 +71,7 @@ describe("SeoMetaTags", () => {
       content: "rich text",
     });
     (sdk.connection.request as jest.Mock).mockResolvedValue({
-      data: "Generated title",
+      data: ["Generated title"],
     });
 
     (init as jest.Mock).mockResolvedValue(sdk);
@@ -87,9 +82,17 @@ describe("SeoMetaTags", () => {
       screen.getByTestId("seo-component");
     });
 
-    const btn = screen.getByRole("button");
+    const btn = screen.getByText("Generate");
 
     await userEvent.click(btn);
+
+    const radio = screen.getByRole("radio");
+
+    await userEvent.click(radio);
+
+    const select = screen.getByText("Select");
+
+    await userEvent.click(select);
 
     expect(sdk.field.setValue).toHaveBeenCalledWith("Generated title");
   });
@@ -116,7 +119,7 @@ describe("SeoMetaTags", () => {
     });
   });
 
-  it("Should disable the button and icon if the form is readonly", async () => {
+  it("Should disable the generate button and icon if the form is readonly", async () => {
     const sdk = await init<ContentFieldExtension>();
 
     (sdk.field.getValue as jest.Mock).mockResolvedValue("");
@@ -133,8 +136,8 @@ describe("SeoMetaTags", () => {
       screen.getByTestId("seo-component");
     });
 
-    const icon = screen.getByTestId("icon");
-    const btn = screen.getByRole("button");
+    const icon = screen.getByTestId("sparkles");
+    const btn = screen.getByText("Generate");
 
     act(() => {
       (
@@ -143,7 +146,7 @@ describe("SeoMetaTags", () => {
     });
 
     await waitFor(() => {
-      expect(icon.style.color).toEqual("rgb(217, 217, 217)");
+      expect(icon.style.color).toEqual("rgb(229, 229, 229)");
       expect(btn).toHaveProperty("disabled", true);
     });
   });

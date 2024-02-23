@@ -1,6 +1,6 @@
 import { Button, ButtonProps } from "@mui/material";
 import type { ContentFieldExtension } from "dc-extensions-sdk";
-// import { generateValues } from "./generateValues";
+import { generateValues } from "./generateValues";
 import { useContext } from "react";
 import { track } from "../../lib/gainsight";
 import { EXTENSION_NAME, getParams } from "../../lib";
@@ -24,8 +24,7 @@ export const GenerateButton = ({
   };
 
   const handleClick = async () => {
-    // const values = await generateValues(sdk);
-    const values = ["title one", "title two", "title three"];
+    const values = await generateValues(sdk);
 
     if (values) {
       track(window, "SEO generation", trackingParams);

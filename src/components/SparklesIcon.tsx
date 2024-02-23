@@ -6,8 +6,10 @@ import { ContentFieldExtensionContext } from "../hooks/ContentFieldExtensionCont
 export const SparklesIcon = () => {
   const theme = useTheme();
   const { readOnly, canGenerate } = useContext(ContentFieldExtensionContext);
+
   return (
     <Icon
+      data-testid="sparkles"
       style={{
         color:
           readOnly || !canGenerate
