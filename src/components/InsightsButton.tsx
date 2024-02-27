@@ -32,6 +32,7 @@ export const InsightsButton = ({
       onClick={handleClick}
       selected={selected}
       disabled={disabled}
+      data-testid="insightsBtn"
       {...props}
     >
       <InsightsIcon />

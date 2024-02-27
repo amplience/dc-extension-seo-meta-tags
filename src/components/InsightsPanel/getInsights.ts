@@ -1,18 +1,20 @@
 import type { ContentFieldExtension } from "dc-extensions-sdk";
-import { EVENTS, RESPONSE_STORE, getText, isEmptyString } from "../../lib";
+import { EVENTS, RESPONSE_STORE, isEmptyString } from "../../lib";
 import localforage from "localforage";
 
-type Insights = {
+export type Insights = {
   overall: number;
   characters: number;
   readability: number;
   accessibility: number;
+  positive: string[];
+  negative: string[];
 };
 
 export const getInsights = async (
   sdk: ContentFieldExtension
 ): Promise<Insights | null> => {
-  const text = await getText(sdk);
+  const text = (await sdk.field.getValue()) as string;
 
   if (isEmptyString(text)) {
     return null;
@@ -35,16 +37,5 @@ export const getInsights = async (
     store.setItem(text, data);
   }
 
-  // return data;
-  // @TODO: remove when we have a BE
-  return new Promise((resolve) => {
-    setTimeout(() => {
-      resolve({
-        overall: 60,
-        characters: 10,
-        readability: 100,
-        accessibility: 50,
-      });
-    }, 2000);
-  });
+  return data;
 };

@@ -198,4 +198,205 @@ describe("SeoMetaTags", () => {
 
     expect(title).toBeInTheDocument();
   });
+
+  it("Should show insights panel when button pressed", async () => {
+    const sdk = await init<ContentFieldExtension>();
+
+    (sdk.field.getValue as jest.Mock).mockResolvedValue("text");
+    (sdk.form.getValue as jest.Mock).mockResolvedValue({
+      content: "test",
+    });
+
+    (sdk.connection.request as jest.Mock).mockResolvedValue({
+      data: {
+        overall: 100,
+        characters: 50,
+        readability: 50,
+        accessibility: 20,
+      },
+    });
+
+    (init as jest.Mock).mockResolvedValue(sdk);
+
+    render(<SeoMetaTags />, { wrapper });
+
+    await waitFor(() => {
+      const insightsBtn = screen.getByTestId("insightsBtn");
+      expect(insightsBtn).toBeEnabled();
+    });
+
+    const insightsBtn = screen.getByTestId("insightsBtn");
+    await userEvent.click(insightsBtn);
+
+    await waitFor(() => {
+      expect(screen.getByText("SEO scoring & insights")).toBeInTheDocument();
+    });
+  });
+
+  it("Should hide the insight panel when insights button pressed again", async () => {
+    const sdk = await init<ContentFieldExtension>();
+
+    (sdk.field.getValue as jest.Mock).mockResolvedValue("text");
+    (sdk.form.getValue as jest.Mock).mockResolvedValue({
+      content: "test",
+    });
+
+    (sdk.connection.request as jest.Mock).mockResolvedValue({
+      overall: 100,
+      characters: 50,
+      readability: 50,
+      accessibility: 20,
+    });
+
+    (init as jest.Mock).mockResolvedValue(sdk);
+
+    render(<SeoMetaTags />, { wrapper });
+
+    await waitFor(() => {
+      expect(screen.getByTestId("insightsBtn")).toBeEnabled();
+    });
+
+    await userEvent.click(screen.getByTestId("insightsBtn"));
+
+    await waitFor(() => {
+      expect(screen.getByTestId("insightsPanel")).toBeInTheDocument();
+    });
+
+    await userEvent.click(screen.getByTestId("insightsBtn"));
+
+    await waitFor(() => {
+      expect(screen.queryByTestId("insightsPanel")).not.toBeInTheDocument();
+    });
+  });
+
+  it("Should hide panel when 'x' is pressed on panel", async () => {
+    const sdk = await init<ContentFieldExtension>();
+
+    (sdk.field.getValue as jest.Mock).mockResolvedValue("text");
+    (sdk.form.getValue as jest.Mock).mockResolvedValue({
+      content: "test",
+    });
+
+    (sdk.connection.request as jest.Mock).mockResolvedValue({
+      data: {
+        overall: 100,
+        characters: 50,
+        readability: 50,
+        accessibility: 20,
+      },
+    });
+
+    (init as jest.Mock).mockResolvedValue(sdk);
+
+    render(<SeoMetaTags />, { wrapper });
+
+    await waitFor(() => {
+      const insightsBtn = screen.getByTestId("insightsBtn");
+      expect(insightsBtn).toBeEnabled();
+    });
+
+    const insightsBtn = screen.getByTestId("insightsBtn");
+    await userEvent.click(insightsBtn);
+
+    await waitFor(() => {
+      expect(screen.getByText("SEO scoring & insights")).toBeInTheDocument();
+    });
+
+    await waitFor(() => {
+      expect(screen.getByTestId("closeCard")).toBeEnabled();
+    });
+
+    await userEvent.click(screen.getByTestId("closeCard"));
+
+    await waitFor(() => {
+      expect(screen.queryByTestId("insightsPanel")).not.toBeInTheDocument();
+    });
+  });
+
+  it("Should disable the generate button and text field when insights or preview panels are open", async () => {
+    const sdk = await init<ContentFieldExtension>();
+
+    (sdk.field.getValue as jest.Mock).mockResolvedValue("text");
+    (sdk.form.getValue as jest.Mock).mockResolvedValue({
+      content: "test",
+    });
+
+    (sdk.connection.request as jest.Mock).mockResolvedValue({
+      data: {
+        overall: 100,
+        characters: 50,
+        readability: 50,
+        accessibility: 20,
+      },
+    });
+
+    (init as jest.Mock).mockResolvedValue(sdk);
+
+    render(<SeoMetaTags />, { wrapper });
+
+    await waitFor(() => {
+      expect(screen.getByTestId("insightsBtn")).toBeEnabled();
+    });
+
+    await userEvent.click(screen.getByTestId("insightsBtn"));
+  });
+
+  it("Should show title options when title generated", async () => {
+    const sdk = await init<ContentFieldExtension>();
+
+    (sdk.field.getValue as jest.Mock).mockResolvedValue("text");
+    (sdk.form.getValue as jest.Mock).mockResolvedValue({
+      content: "test",
+    });
+    (sdk.connection.request as jest.Mock).mockResolvedValue({
+      data: ["Generated title"],
+    });
+
+    (init as jest.Mock).mockResolvedValue(sdk);
+
+    render(<SeoMetaTags />, { wrapper });
+
+    await waitFor(() => {
+      screen.getByTestId("seo-component");
+    });
+
+    const btn = screen.getByText("Generate");
+
+    await userEvent.click(btn);
+
+    expect(screen.getByRole("radio")).toBeInTheDocument();
+  });
+
+  it("Should hide title options when cancel pressed", async () => {
+    const sdk = await init<ContentFieldExtension>();
+
+    (sdk.field.getValue as jest.Mock).mockResolvedValue("text");
+    (sdk.form.getValue as jest.Mock).mockResolvedValue({
+      content: "test",
+    });
+    (sdk.connection.request as jest.Mock).mockResolvedValue({
+      data: ["Generated title"],
+    });
+
+    (init as jest.Mock).mockResolvedValue(sdk);
+
+    render(<SeoMetaTags />, { wrapper });
+
+    await waitFor(() => {
+      screen.getByTestId("seo-component");
+    });
+
+    const btn = screen.getByText("Generate");
+
+    await userEvent.click(btn);
+
+    expect(screen.getByRole("radio")).toBeInTheDocument();
+
+    const cancel = screen.getByText("Cancel");
+    await userEvent.click(cancel);
+
+    await waitFor(() => {
+      expect(screen.queryByRole("radio")).not.toBeInTheDocument();
+    });
+  });
 });

@@ -4,8 +4,6 @@ import {
   ToggleButtonProps,
 } from "@mui/material";
 import { styled, useTheme } from "@mui/material";
-import { useContext } from "react";
-import { ContentFieldExtensionContext } from "../hooks/ContentFieldExtensionContext";
 
 export const ToggleButton = ({
   tooltip,
@@ -15,9 +13,7 @@ export const ToggleButton = ({
   tooltip: string;
   disabled: boolean;
 }) => {
-  const { canGenerate } = useContext(ContentFieldExtensionContext);
   const theme = useTheme();
-  const isDisabled = disabled || !canGenerate;
   const ToggleButton = styled(ToggleBase)({
     width: "32px",
     height: "32px",
@@ -36,7 +32,7 @@ export const ToggleButton = ({
     },
   });
 
-  return isDisabled ? (
+  return disabled ? (
     <ToggleButton size="small" disabled={true} {...props}></ToggleButton>
   ) : (
     <Tooltip title={tooltip} placement="bottom">

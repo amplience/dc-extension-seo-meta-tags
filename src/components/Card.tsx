@@ -25,6 +25,7 @@ const CloseBtn = (props: IconButtonProps) => {
       disableRipple={true}
       size="small"
       sx={{ stroke: theme.palette.grey[200] }}
+      data-testid="closeCard"
       {...props}
     >
       <CloseIcon />
@@ -38,7 +39,10 @@ const Title = ({ title, info }: { title: string; info?: string }) => {
       <span>{title}</span>
       {info && (
         <Tooltip title={info} placement="top">
-          <Box sx={{ display: "flex", "&:hover": { cursor: "pointer" } }}>
+          <Box
+            sx={{ display: "flex", "&:hover": { cursor: "pointer" } }}
+            data-testid="info"
+          >
             <InfoIcon />
           </Box>
         </Tooltip>
@@ -87,7 +91,9 @@ export const Card = ({
           {loading ? (
             <Grid container justifyContent="center">
               <Grid item>
-                <LoadingIcon />
+                <span data-testid="loader">
+                  <LoadingIcon />
+                </span>
               </Grid>
             </Grid>
           ) : (

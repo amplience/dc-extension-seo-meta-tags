@@ -2,6 +2,7 @@ export const init = async <T>() => {
   const sdk = {
     connection: {
       request: jest.fn(),
+      emit: jest.fn(),
     },
     field: {
       getValue: jest.fn(),
