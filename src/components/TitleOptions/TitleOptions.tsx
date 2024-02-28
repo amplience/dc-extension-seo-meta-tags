@@ -10,7 +10,7 @@ import {
 import { isEmpty } from "ramda";
 import { useState } from "react";
 import { withValue } from "../../lib";
-import { motion } from "framer-motion";
+import { FadeGrow } from "../animation/FadeGrow";
 
 const TitleOption = (title: string) => (
   <FormControlLabel
@@ -41,11 +41,7 @@ export const TitleOptions = ({
   const [selectedValue, setSelectedValue] = useState<string>("");
 
   return (
-    <motion.div
-      initial={{ height: 0, opacity: 0 }}
-      animate={{ height: "auto", opacity: 1 }}
-      exit={{ height: 0, opacity: 0 }}
-    >
+    <FadeGrow layoutId="options">
       <Grid container direction="column" color={theme.palette.grey[200]}>
         <Grid item>
           <RadioGroup
@@ -70,6 +66,6 @@ export const TitleOptions = ({
           </Stack>
         </Grid>
       </Grid>
-    </motion.div>
+    </FadeGrow>
   );
 };

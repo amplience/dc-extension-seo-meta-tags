@@ -8,18 +8,20 @@ import { isNil } from "ramda";
 export const InsightsButton = ({
   selected,
   onSelect,
+  disabled,
   ...props
 }: unknown & {
+  disabled?: boolean;
   selected: boolean;
   onSelect: { (s: "insights" | null): void };
 }) => {
   const { sdk } = useContext(ContentFieldExtensionContext);
-  const [disabled, setDisabled] = useState(true);
+  const [noTitle, setNoTitle] = useState(true);
 
   sdk?.field
     .getValue()
     .then((value) =>
-      setDisabled(isNil(value) || isEmptyString(value as string))
+      setNoTitle(isNil(value) || isEmptyString(value as string))
     );
 
   const handleClick = () => onSelect(selected ? null : "insights");
@@ -31,7 +33,7 @@ export const InsightsButton = ({
       value="insights"
       onClick={handleClick}
       selected={selected}
-      disabled={disabled}
+      disabled={disabled || noTitle}
       data-testid="insightsBtn"
       {...props}
     >

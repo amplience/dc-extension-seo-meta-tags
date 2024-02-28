@@ -10,7 +10,7 @@ import { getColour } from "./getColour";
 export const Chart = ({ percentage }: { percentage: number }) => {
   const theme = useTheme();
 
-  const colour = getColour<CircularProgressProps["color"]>(percentage);
+  const colour = getColour(percentage) as CircularProgressProps["color"];
 
   return (
     <Box sx={{ position: "relative", display: "inline-flex" }}>

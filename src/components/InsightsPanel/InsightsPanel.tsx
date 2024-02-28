@@ -18,8 +18,9 @@ import { Insights, getInsights } from "./getInsights";
 import { AnimatePresence, motion } from "framer-motion";
 import { Card } from "../Card";
 import { getColour } from "./getColour";
+import { FadeGrow } from "../animation/FadeGrow";
 
-const Insights = ({
+const InsightBox = ({
   insights,
   type,
 }: {
@@ -88,12 +89,7 @@ export const InsightsPanel = ({
   const viewInsights = () => setInsightsVisible(!insightsVisible);
 
   return (
-    <motion.div
-      key="panel"
-      initial={{ height: 0 }}
-      animate={{ height: "auto" }}
-      exit={{ height: 0 }}
-    >
+    <FadeGrow layoutId="panel">
       <div data-testid="insightsPanel">
         <Card
           title="SEO Scoring & Insights"
@@ -172,13 +168,7 @@ export const InsightsPanel = ({
                 </Grid>
                 <AnimatePresence>
                   {insightsVisible && (
-                    <motion.div
-                      layout
-                      key="insights"
-                      initial={{ opacity: 0, height: 0 }}
-                      animate={{ opacity: 1, height: "auto" }}
-                      exit={{ opacity: 0, height: 0 }}
-                    >
+                    <FadeGrow layoutId="insights">
                       <Grid
                         container
                         spacing={2}
@@ -186,19 +176,19 @@ export const InsightsPanel = ({
                         flexWrap="nowrap"
                       >
                         <Grid item flexGrow={1} xs={6}>
-                          <Insights
+                          <InsightBox
                             type="positive"
                             insights={results.positive}
-                          ></Insights>
+                          ></InsightBox>
                         </Grid>
                         <Grid item flexGrow={1} xs={6}>
-                          <Insights
+                          <InsightBox
                             type="negative"
                             insights={results.negative}
-                          ></Insights>
+                          ></InsightBox>
                         </Grid>
                       </Grid>
-                    </motion.div>
+                    </FadeGrow>
                   )}
                 </AnimatePresence>
               </motion.div>
@@ -206,6 +196,6 @@ export const InsightsPanel = ({
           </AnimatePresence>
         </Card>
       </div>
-    </motion.div>
+    </FadeGrow>
   );
 };

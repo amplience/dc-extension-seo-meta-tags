@@ -15,7 +15,7 @@ import {
 import CloseIcon from "../assets/close-icon.svg?react";
 import InfoIcon from "../assets/info-icon.svg?react";
 import LoadingIcon from "../assets/loading-icon.svg?react";
-import { motion } from "framer-motion";
+import { FadeGrow } from "./animation/FadeGrow";
 
 const CloseBtn = (props: IconButtonProps) => {
   const theme = useTheme();
@@ -76,12 +76,7 @@ export const Card = ({
   });
 
   return (
-    <motion.div
-      layout
-      initial={{ opacity: 0, height: 0 }}
-      animate={{ opacity: 1, height: "auto" }}
-      exit={{ opacity: 0, height: 0 }}
-    >
+    <FadeGrow key="card">
       <CardBase variant="outlined">
         <CardHeader
           title={<Title title={title} info={info} />}
@@ -101,6 +96,6 @@ export const Card = ({
           )}
         </CardContent>
       </CardBase>
-    </motion.div>
+    </FadeGrow>
   );
 };
