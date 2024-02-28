@@ -8,4 +8,8 @@ export const generateTitlePrompt = (content: string) => [
     role: "USER",
     content,
   },
+  {
+    role: "SYSTEM",
+    content: "All variations should be unique",
+  },
 ];
