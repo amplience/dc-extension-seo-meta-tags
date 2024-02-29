@@ -76,7 +76,7 @@ export const Card = ({
   });
 
   return (
-    <FadeGrow key="card">
+    <FadeGrow layoutId="card">
       <CardBase variant="outlined">
         <CardHeader
           title={<Title title={title} info={info} />}
