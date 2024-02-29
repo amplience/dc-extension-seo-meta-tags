@@ -61,6 +61,7 @@ export const GenerateButton = ({
             variant="outlined"
             disabled={disabled || readOnly || !canGenerate}
             sx={{ width: "92px" }}
+            data-id={`seo-generate-${trackingParams.type}`}
             {...props}
           >
             Generate
