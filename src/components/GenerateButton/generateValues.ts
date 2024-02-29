@@ -1,9 +1,8 @@
 import type { ContentFieldExtension } from "dc-extensions-sdk";
-import { EVENTS, getParams, getText, isEmptyString } from "../../lib";
+import { EVENTS, getParams, getData, getText, isEmptyString } from "../../lib";
 import { generateDescriptionPrompt } from "./generateDescriptionPrompt";
 import { generateTitlePrompt } from "./generateTitlePrompt";
 import { getMutation } from "../../lib/graphql/getMutation";
-import { path } from "ramda";
 import { safeParse } from "../../lib/json/safeParse";
 
 export const generateValues = async (
@@ -25,7 +24,7 @@ export const generateValues = async (
   return (await sdk.connection
     .request(EVENTS.MUTATION, mutation)
     .then((response) => {
-      const variants = path(["data", "generateSEOText", "variants"], response);
+      const variants = getData(response);
       return variants.map((variant: string) =>
         safeParse<string>(variant, variant)
       );

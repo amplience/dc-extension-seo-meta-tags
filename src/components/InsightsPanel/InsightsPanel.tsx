@@ -78,7 +78,9 @@ export const InsightsPanel = ({
 
   useEffect(() => {
     getInsights(sdk).then((results) => {
-      setLoading(false);
+      setTimeout(() => {
+        setLoading(false);
+      }, 1000);
       if (results) {
         setResults(results);
       } else {
@@ -97,7 +99,7 @@ export const InsightsPanel = ({
         loading={loading}
         onClose={onClose}
       >
-        {!loading && results && (
+        {results && (
           <>
             <Typography variant="body1" component="p" marginBottom={2}>
               <Typography variant="subtitle" component="span">
@@ -114,15 +116,17 @@ export const InsightsPanel = ({
                 color={theme.palette.text.primary}
                 marginBottom={0.5}
               >
-                Overall score: <b>{results.overall}/100</b>
+                Overall score: <b>{results.overallScore}/100</b>
               </Typography>
 
               <LinearProgress
                 variant="determinate"
                 color={
-                  getColour(results.overall) as LinearProgressProps["color"]
+                  getColour(
+                    results.overallScore
+                  ) as LinearProgressProps["color"]
                 }
-                value={results.overall}
+                value={results.overallScore}
               />
             </Box>
             <Grid
@@ -133,19 +137,19 @@ export const InsightsPanel = ({
               height={45}
             >
               <Grid item container alignItems="center" gap={1}>
-                <Chart percentage={results.characters}></Chart>
+                <Chart percentage={results.charactersScore}></Chart>
                 <Typography variant="title" fontWeight={500}>
                   Character count
                 </Typography>
               </Grid>
               <Grid item container alignItems="center" gap={1}>
-                <Chart percentage={results.readability}></Chart>
+                <Chart percentage={results.readabilityScore}></Chart>
                 <Typography variant="title" fontWeight={500}>
                   Readability
                 </Typography>
               </Grid>
               <Grid item flexGrow={1} container alignItems="center" gap={1}>
-                <Chart percentage={results.accessibility}></Chart>
+                <Chart percentage={results.accessibilityScore}></Chart>
                 <Typography variant="title" fontWeight={500}>
                   Accessiblity
                 </Typography>
@@ -167,13 +171,13 @@ export const InsightsPanel = ({
               {insightsVisible && (
                 <FadeGrow layoutId="insights">
                   <Grid container spacing={2} marginTop={0.1} flexWrap="nowrap">
-                    <Grid item flexGrow={1} xs={6}>
+                    <Grid item container flexGrow={1} xs={6}>
                       <InsightBox
                         type="positive"
                         insights={results.positive}
                       ></InsightBox>
                     </Grid>
-                    <Grid item flexGrow={1} xs={6}>
+                    <Grid item container flexGrow={1} xs={6}>
                       <InsightBox
                         type="negative"
                         insights={results.negative}

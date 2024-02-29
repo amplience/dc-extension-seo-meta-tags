@@ -12,9 +12,9 @@ import { useState } from "react";
 import { withValue } from "../../lib";
 import { FadeGrow } from "../animation/FadeGrow";
 
-const TitleOption = (title: string) => (
+const TitleOption = ({ index, title }: { index: number; title: string }) => (
   <FormControlLabel
-    key={title}
+    key={index}
     value={title}
     control={
       <Radio
@@ -48,7 +48,9 @@ export const TitleOptions = ({
             onChange={withValue(setSelectedValue)}
             value={selectedValue}
           >
-            {options.map(TitleOption)}
+            {options.map((option, idx) => (
+              <TitleOption index={idx} title={option} />
+            ))}
           </RadioGroup>
         </Grid>
         <Grid item>
