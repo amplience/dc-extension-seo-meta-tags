@@ -63,5 +63,5 @@ export const getInsights = async (
     store.setItem(text, insights);
   }
 
-  return insights;
+  return insights as Insights;
 };
