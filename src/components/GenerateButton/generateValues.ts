@@ -4,6 +4,7 @@ import { generateDescriptionPrompt } from "./generateDescriptionPrompt";
 import { generateTitlePrompt } from "./generateTitlePrompt";
 import { getMutation } from "../../lib/graphql/getMutation";
 import { safeParse } from "../../lib/json/safeParse";
+import { uniq } from "ramda";
 
 export const generateValues = async (
   sdk: ContentFieldExtension
@@ -25,8 +26,8 @@ export const generateValues = async (
     .request(EVENTS.MUTATION, mutation)
     .then((response) => {
       const variants = getData(response);
-      return variants.map((variant: string) =>
-        safeParse<string>(variant, variant)
+      return uniq(
+        variants.map((variant: string) => safeParse<string>(variant, variant))
       );
     })
     .catch(() => null)) as string[] | null;

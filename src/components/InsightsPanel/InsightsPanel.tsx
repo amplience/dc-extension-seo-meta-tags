@@ -134,21 +134,40 @@ export const InsightsPanel = ({
               gap={2}
               alignItems="center"
               flexWrap="nowrap"
-              height={45}
+              minHeight={45}
             >
-              <Grid item container alignItems="center" gap={1}>
+              <Grid
+                item
+                container
+                alignItems="center"
+                justifyContent="center"
+                gap={1}
+              >
                 <Chart percentage={results.charactersScore}></Chart>
                 <Typography variant="title" fontWeight={500}>
-                  Character count
+                  {upperFirst(type)} Length
                 </Typography>
               </Grid>
-              <Grid item container alignItems="center" gap={1}>
+              <Grid
+                item
+                container
+                alignItems="center"
+                justifyContent="center"
+                gap={1}
+              >
                 <Chart percentage={results.readabilityScore}></Chart>
                 <Typography variant="title" fontWeight={500}>
                   Readability
                 </Typography>
               </Grid>
-              <Grid item flexGrow={1} container alignItems="center" gap={1}>
+              <Grid
+                item
+                flexGrow={1}
+                container
+                alignItems="center"
+                justifyContent="center"
+                gap={1}
+              >
                 <Chart percentage={results.accessibilityScore}></Chart>
                 <Typography variant="title" fontWeight={500}>
                   Accessiblity

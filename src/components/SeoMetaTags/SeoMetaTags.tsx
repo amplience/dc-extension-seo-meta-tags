@@ -34,12 +34,12 @@ export const SeoMetaTags = () => {
   const [generating, setGenerating] = useState(false);
   const title = getTitle(sdk);
   const description = getDescription(sdk);
-  const placeholder = getPlaceholder(sdk);
   const theme = useTheme();
   const [selectedPanel, setSelectedPanel] = useState<
     "insights" | "preview" | null
   >(null);
   const [initialised, setInitialised] = useState(false);
+  const [placeholder, setPlaceholder] = useState(getPlaceholder(sdk));
   const insightsSelected = selectedPanel === "insights";
   // const previewSelected = selectedPanel === "preview";
   const hasOptions = options.length > 0;
@@ -60,15 +60,18 @@ export const SeoMetaTags = () => {
     sdk.field.setValue(inputValue);
   }, [sdk, initialised, setInitialised, inputValue]);
 
-  const titleSelected = (title: string) => {
-    setOptions([]);
-    setInputValue(title);
-    sdk.field.setValue(title);
+  const optionSelected = (option: string) => {
+    clearOptions();
+    setInputValue(option);
+    sdk.field.setValue(option);
   };
 
   const hidePanels = () => setSelectedPanel(null);
 
-  const clearOptions = () => setOptions([]);
+  const clearOptions = () => {
+    setOptions([]);
+    setPlaceholder(getPlaceholder(sdk));
+  };
 
   const generationStarted = () => setGenerating(true);
   const generationComplete = () => setGenerating(false);
@@ -138,6 +141,7 @@ export const SeoMetaTags = () => {
                     value={inputValue}
                     variant="standard"
                     disabled={panelOpen}
+                    sx={{ color: theme.palette.grey[200] }}
                   />
                 </Fade>
               )}
@@ -151,7 +155,8 @@ export const SeoMetaTags = () => {
               {hasOptions && (
                 <TitleOptions
                   options={options}
-                  onTitleSelected={titleSelected}
+                  onSelected={optionSelected}
+                  onChange={setPlaceholder}
                   onCancel={clearOptions}
                 ></TitleOptions>
               )}

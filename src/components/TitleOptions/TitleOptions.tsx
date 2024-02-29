@@ -12,9 +12,9 @@ import { useState } from "react";
 import { withValue } from "../../lib";
 import { FadeGrow } from "../animation/FadeGrow";
 
-const TitleOption = ({ index, title }: { index: number; title: string }) => (
+const TitleOption = (title: string) => (
   <FormControlLabel
-    key={index}
+    key={title}
     value={title}
     control={
       <Radio
@@ -30,27 +30,32 @@ const TitleOption = ({ index, title }: { index: number; title: string }) => (
 
 export const TitleOptions = ({
   options,
-  onTitleSelected,
+  onSelected,
   onCancel,
+  onChange,
 }: {
   options: string[];
-  onTitleSelected: { (s: string): void };
+  onSelected: { (s: string): void };
   onCancel: { (): void };
+  onChange: { (s: string): void };
 }) => {
   const theme = useTheme();
   const [selectedValue, setSelectedValue] = useState<string>("");
+
+  const optionSelected = (option: string) => {
+    setSelectedValue(option);
+    onChange(option);
+  };
 
   return (
     <FadeGrow layoutId="options">
       <Grid container direction="column" color={theme.palette.grey[200]}>
         <Grid item>
           <RadioGroup
-            onChange={withValue(setSelectedValue)}
+            onChange={withValue(optionSelected)}
             value={selectedValue}
           >
-            {options.map((option, idx) => (
-              <TitleOption index={idx} title={option} />
-            ))}
+            {options.map(TitleOption)}
           </RadioGroup>
         </Grid>
         <Grid item>
@@ -61,7 +66,7 @@ export const TitleOptions = ({
             <Button
               variant="contained"
               disabled={isEmpty(selectedValue)}
-              onClick={() => onTitleSelected(selectedValue)}
+              onClick={() => onSelected(selectedValue)}
             >
               Select
             </Button>
