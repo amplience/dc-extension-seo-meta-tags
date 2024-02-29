@@ -3,6 +3,7 @@ import {
   Button,
   Grid,
   LinearProgress,
+  LinearProgressProps,
   Typography,
   useTheme,
 } from "@mui/material";
@@ -89,113 +90,102 @@ export const InsightsPanel = ({
   const viewInsights = () => setInsightsVisible(!insightsVisible);
 
   return (
-    <FadeGrow layoutId="panel">
-      <div data-testid="insightsPanel">
-        <Card
-          title="SEO Scoring & Insights"
-          info="Description"
-          loading={loading}
-          onClose={onClose}
-        >
-          <AnimatePresence>
-            {!loading && results && (
-              <motion.div
-                key="details"
-                initial={{ opacity: 0, height: 20 }}
-                animate={{ opacity: 1, height: "auto" }}
+    <div data-testid="insightsPanel">
+      <Card
+        title="SEO Scoring & Insights"
+        info="Description"
+        loading={loading}
+        onClose={onClose}
+      >
+        {!loading && results && (
+          <>
+            <Typography variant="body1" component="p" marginBottom={2}>
+              <Typography variant="subtitle" component="span">
+                Showing results for meta {type}:
+              </Typography>
+              <br />
+              <b>"{value}"</b>
+            </Typography>
+            <Box marginBottom={2}>
+              <Typography
+                variant="title"
+                component="h2"
+                fontWeight={500}
+                color={theme.palette.text.primary}
+                marginBottom={0.5}
               >
-                <Typography variant="body1" component="p" marginBottom={2}>
-                  <Typography variant="subtitle" component="span">
-                    Showing results for meta {type}:
-                  </Typography>
-                  <br />
-                  <b>"{value}"</b>
-                </Typography>
-                <Box marginBottom={2}>
-                  <Typography
-                    variant="title"
-                    component="h2"
-                    fontWeight={500}
-                    color={theme.palette.text.primary}
-                    marginBottom={0.5}
-                  >
-                    Overall score: <b>{results.overall}/100</b>
-                  </Typography>
+                Overall score: <b>{results.overall}/100</b>
+              </Typography>
 
-                  <LinearProgress
-                    variant="determinate"
-                    color={getColour(results.overall)}
-                    value={results.overall}
-                  />
-                </Box>
-                <Grid
-                  container
-                  gap={2}
-                  alignItems="center"
-                  flexWrap="nowrap"
-                  height={45}
+              <LinearProgress
+                variant="determinate"
+                color={
+                  getColour(results.overall) as LinearProgressProps["color"]
+                }
+                value={results.overall}
+              />
+            </Box>
+            <Grid
+              container
+              gap={2}
+              alignItems="center"
+              flexWrap="nowrap"
+              height={45}
+            >
+              <Grid item container alignItems="center" gap={1}>
+                <Chart percentage={results.characters}></Chart>
+                <Typography variant="title" fontWeight={500}>
+                  Character count
+                </Typography>
+              </Grid>
+              <Grid item container alignItems="center" gap={1}>
+                <Chart percentage={results.readability}></Chart>
+                <Typography variant="title" fontWeight={500}>
+                  Readability
+                </Typography>
+              </Grid>
+              <Grid item flexGrow={1} container alignItems="center" gap={1}>
+                <Chart percentage={results.accessibility}></Chart>
+                <Typography variant="title" fontWeight={500}>
+                  Accessiblity
+                </Typography>
+              </Grid>
+              <Grid item flexShrink={0}>
+                <Button
+                  onClick={viewInsights}
+                  variant="outlined"
+                  sx={{
+                    borderColor: theme.palette.grey[500],
+                    color: theme.palette.grey[200],
+                  }}
                 >
-                  <Grid item container alignItems="center" gap={1}>
-                    <Chart percentage={results.characters}></Chart>
-                    <Typography variant="title" fontWeight={500}>
-                      Character count
-                    </Typography>
+                  {btnText}
+                </Button>
+              </Grid>
+            </Grid>
+            <AnimatePresence>
+              {insightsVisible && (
+                <FadeGrow layoutId="insights">
+                  <Grid container spacing={2} marginTop={0.1} flexWrap="nowrap">
+                    <Grid item flexGrow={1} xs={6}>
+                      <InsightBox
+                        type="positive"
+                        insights={results.positive}
+                      ></InsightBox>
+                    </Grid>
+                    <Grid item flexGrow={1} xs={6}>
+                      <InsightBox
+                        type="negative"
+                        insights={results.negative}
+                      ></InsightBox>
+                    </Grid>
                   </Grid>
-                  <Grid item container alignItems="center" gap={1}>
-                    <Chart percentage={results.readability}></Chart>
-                    <Typography variant="title" fontWeight={500}>
-                      Readability
-                    </Typography>
-                  </Grid>
-                  <Grid item flexGrow={1} container alignItems="center" gap={1}>
-                    <Chart percentage={results.accessibility}></Chart>
-                    <Typography variant="title" fontWeight={500}>
-                      Accessiblity
-                    </Typography>
-                  </Grid>
-                  <Grid item flexShrink={0}>
-                    <Button
-                      onClick={viewInsights}
-                      variant="outlined"
-                      sx={{
-                        borderColor: theme.palette.grey[500],
-                        color: theme.palette.grey[200],
-                      }}
-                    >
-                      {btnText}
-                    </Button>
-                  </Grid>
-                </Grid>
-                <AnimatePresence>
-                  {insightsVisible && (
-                    <FadeGrow layoutId="insights">
-                      <Grid
-                        container
-                        spacing={2}
-                        marginTop={0.1}
-                        flexWrap="nowrap"
-                      >
-                        <Grid item flexGrow={1} xs={6}>
-                          <InsightBox
-                            type="positive"
-                            insights={results.positive}
-                          ></InsightBox>
-                        </Grid>
-                        <Grid item flexGrow={1} xs={6}>
-                          <InsightBox
-                            type="negative"
-                            insights={results.negative}
-                          ></InsightBox>
-                        </Grid>
-                      </Grid>
-                    </FadeGrow>
-                  )}
-                </AnimatePresence>
-              </motion.div>
-            )}
-          </AnimatePresence>
-        </Card>
-      </div>
-    </FadeGrow>
+                </FadeGrow>
+              )}
+            </AnimatePresence>
+          </>
+        )}
+      </Card>
+    </div>
   );
 };
