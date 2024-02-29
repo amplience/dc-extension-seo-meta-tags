@@ -5,10 +5,9 @@ import { useContext, useState } from "react";
 import { track } from "../../lib/gainsight";
 import { EXTENSION_NAME, getParams } from "../../lib";
 import { ContentFieldExtensionContext } from "../../hooks/ContentFieldExtensionContext";
-import { LayoutGroup, motion } from "framer-motion";
+import { LayoutGroup } from "framer-motion";
 import Loader from "../../assets/loading-icon.svg?react";
 import { Fade } from "../animation/Fade";
-import { max } from "ramda";
 
 export const GenerateButton = ({
   onTextGenerated,
@@ -17,9 +16,9 @@ export const GenerateButton = ({
   disabled,
   ...props
 }: ButtonProps & {
-  onTextGenerated: { (v: string[]): void };
-  onStartGeneration: { (): void };
-  onFinishGeneration: { (): void };
+  onTextGenerated?: { (v: string[]): void };
+  onStartGeneration?: { (): void };
+  onFinishGeneration?: { (): void };
 }) => {
   const { sdk, canGenerate, readOnly } = useContext(
     ContentFieldExtensionContext
@@ -33,16 +32,16 @@ export const GenerateButton = ({
   };
 
   const handleClick = async () => {
-    onStartGeneration();
+    onStartGeneration?.();
     setGenerating(true);
     const values = await generateValues(sdk);
 
     if (values) {
       track(window, "SEO generation", trackingParams);
-      onTextGenerated(values);
+      onTextGenerated?.(values);
     }
 
-    onFinishGeneration();
+    onFinishGeneration?.();
     setGenerating(false);
   };
 
