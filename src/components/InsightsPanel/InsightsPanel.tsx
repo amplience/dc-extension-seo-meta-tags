@@ -16,7 +16,7 @@ import { ContentFieldExtensionContext } from "../../hooks/ContentFieldExtensionC
 import { Chart } from "./Chart";
 import upperFirst from "lodash/upperFirst";
 import { Insights, getInsights } from "./getInsights";
-import { AnimatePresence, motion } from "framer-motion";
+import { AnimatePresence } from "framer-motion";
 import { Card } from "../Card";
 import { getColour } from "./getColour";
 import { FadeGrow } from "../animation/FadeGrow";
