@@ -9,7 +9,8 @@ describe("TitleOptions", () => {
     render(
       <TitleOptions
         options={options}
-        onTitleSelected={jest.fn()}
+        onSelected={jest.fn()}
+        onChange={jest.fn()}
         onCancel={jest.fn()}
       />
     );
@@ -25,7 +26,8 @@ describe("TitleOptions", () => {
     render(
       <TitleOptions
         options={options}
-        onTitleSelected={jest.fn()}
+        onSelected={jest.fn()}
+        onChange={jest.fn()}
         onCancel={cancelFn}
       />
     );
@@ -41,7 +43,8 @@ describe("TitleOptions", () => {
     render(
       <TitleOptions
         options={options}
-        onTitleSelected={jest.fn()}
+        onSelected={jest.fn()}
+        onChange={jest.fn()}
         onCancel={jest.fn()}
       />
     );
@@ -55,7 +58,8 @@ describe("TitleOptions", () => {
     render(
       <TitleOptions
         options={options}
-        onTitleSelected={selectFn}
+        onSelected={selectFn}
+        onChange={jest.fn()}
         onCancel={jest.fn()}
       />
     );
