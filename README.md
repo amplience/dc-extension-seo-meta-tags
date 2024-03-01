@@ -1,30 +1,91 @@
-# React + TypeScript + Vite
+# Automatic Meta Tags
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+> AI powered title and description generation for use in [Amplience Dynamic Content](https://amplience.com/dynamic-content)
 
-Currently, two official plugins are available:
+![Screenshot](media/screenshot.png)
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+This extension is designed to generate title and description meta tags based off the content of your content items.
 
-## Expanding the ESLint configuration
+> Note; This extension is a [**LABS PREVIEW**](https://amplience.com/developers/docs/knowledge-center/amplience-labs) for use as is without support or warranty.
 
-If you are developing a production application, we recommend updating the configuration to enable type aware lint rules:
+## How to Install
 
-- Configure the top-level `parserOptions` property like this:
+This extension must be [registered](https://amplience.com/developers/docs/integrations/extensions/register-use) against a hub with in the Dynamic Content application (Development -> Extensions).
 
-```js
-export default {
-  // other rules...
-  parserOptions: {
-    ecmaVersion: 'latest',
-    sourceType: 'module',
-    project: ['./tsconfig.json', './tsconfig.node.json'],
-    tsconfigRootDir: __dirname,
+![Settings](media/settings.png)
+
+- Category: Content Field
+- Label: Seo Meta Tags
+- Name: seo-meta-tags (needs to be unique with the hub)
+- URL: https://seo-meta-tags.extensions.content.amplience.net
+- Description: (can be left blank, if you wish)
+- Initial height: 200
+
+### Permissions
+
+![Permissions](media/settings.png)
+
+#### API permissions:
+
+- Read access
+- Modify access
+
+#### Sandbox permissions:
+
+- Allow same origin
+- Allow pop-ups
+
+## Assigning the Extension to a Schema
+
+To use the SEO meta tags extension, simply associate it with a string field in you content type schema.
+
+The string field should be configure to use the `ui:extension` keyword and should use the name that was used to register the extension. The `type` and `sources` parameters must be included to inform the extension which meta tag the contents of the field will be used to populate and which fields contain the text to base the meta tag on.
+
+- The `type` parameter can be either `title` or `description`
+- The `sources` parameter should be an array containing valid [JSON pointers](https://datatracker.ietf.org/doc/html/rfc6901)
+
+We recommend that you use `instance` parameters so that the extension only needs to be registered once (see below).
+
+```json
+{
+  "title": {
+    "type": "string",
+    "ui:extension": {
+      "name": "seo-meta-tags",
+      "params": {
+        "type": "title",
+        "sources": ["/intro", "/body"]
+      }
+    }
   },
+  "description": {
+    "type": "string",
+    "ui:extension": {
+      "name": "seo-meta-tags",
+      "params": {
+        "type": "description",
+        "sources": ["/intro", "/body"]
+      }
+    }
+  },
+  "intro": {
+    "title": "Intro",
+    "type": "string"
+  },
+  "body": {
+    "title": "Body",
+    "type": "string"
+  }
 }
 ```
 
-- Replace `plugin:@typescript-eslint/recommended` to `plugin:@typescript-eslint/recommended-type-checked` or `plugin:@typescript-eslint/strict-type-checked`
-- Optionally add `plugin:@typescript-eslint/stylistic-type-checked`
-- Install [eslint-plugin-react](https://github.com/jsx-eslint/eslint-plugin-react) and add `plugin:react/recommended` & `plugin:react/jsx-runtime` to the `extends` list
+## Limitations
+
+- This extension is only compatible with hubs that are linked to an organization. Accounts that have not yet [migrated](https://amplience.com/developers/docs/knowledge-center/faqs/account/) from legacy permissions will not see the AI caption feature
+- This extension is in [**LABS PREVIEW**](https://amplience.com/developers/docs/knowledge-center/amplience-labs) for use as is without support or warranty
+
+## How to run locally
+
+- `npm i`
+- `npm run build`
+- `npm run preview`
