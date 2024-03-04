@@ -6,7 +6,7 @@
 
 This extension is designed to generate title and description meta tags based off the content of your content items.
 
-> Note; This extension is a [**LABS PREVIEW**](https://amplience.com/developers/docs/knowledge-center/amplience-labs) for use as is without support or warranty.
+> **Note:** This extension is a [**LABS PREVIEW**](https://amplience.com/developers/docs/knowledge-center/amplience-labs) for use as is without support or warranty
 
 ## How to Install
 
@@ -39,12 +39,12 @@ This extension must be [registered](https://amplience.com/developers/docs/integr
 
 To use the SEO meta tags extension, simply associate it with a string field in you content type schema.
 
-The string field should be configure to use the `ui:extension` keyword and should use the name that was used to register the extension. The `type` and `sources` parameters must be included to inform the extension which meta tag the contents of the field will be used to populate and which fields contain the text to base the meta tag on.
+The string field should be configured to use the `ui:extension` keyword with the `name` that was used to register the extension. The `type` parameter must be included to inform the extension what type of meta tag to generate and the `sources` parameter must be included to tell the extension which fields to base the meta tag on.
 
 - The `type` parameter can be either `title` or `description`
 - The `sources` parameter should be an array containing valid [JSON pointers](https://datatracker.ietf.org/doc/html/rfc6901)
 
-We recommend that you use `instance` parameters so that the extension only needs to be registered once (see below).
+We recommend that you use instance parameters so that the extension only needs to be registered once (see below).
 
 ```json
 {
