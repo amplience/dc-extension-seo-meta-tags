@@ -4,6 +4,8 @@ import { isEmptyString } from "ramda-adjunct";
 import { useContext, useState } from "react";
 import { ContentFieldExtensionContext } from "../hooks/ContentFieldExtensionContext";
 import { isNil } from "ramda";
+import { getParams } from "../lib";
+import { ContentFieldExtension } from "dc-extensions-sdk";
 
 export const InsightsButton = ({
   selected,
@@ -15,8 +17,12 @@ export const InsightsButton = ({
   selected: boolean;
   onSelect: { (s: "insights" | null): void };
 }) => {
-  const { sdk } = useContext(ContentFieldExtensionContext);
+  const { sdk } = useContext(
+    ContentFieldExtensionContext
+  ) as ContentFieldExtensionContext & { sdk: ContentFieldExtension };
   const [noTitle, setNoTitle] = useState(true);
+
+  const extensionType = getParams(sdk).type;
 
   sdk?.field
     .getValue()
@@ -35,6 +41,7 @@ export const InsightsButton = ({
       selected={selected}
       disabled={disabled || noTitle}
       data-testid="insightsBtn"
+      data-id={`seo-insights-${extensionType}`}
       {...props}
     >
       <InsightsIcon />
