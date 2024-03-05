@@ -411,4 +411,34 @@ describe("SeoMetaTags", () => {
       expect(screen.queryByRole("radio")).not.toBeInTheDocument();
     });
   });
+
+  it.only("Should show error message if there is an error", async () => {
+    const sdk = await init<ContentFieldExtension>();
+
+    (sdk.field.getValue as jest.Mock).mockResolvedValue("text");
+    (sdk.form.getValue as jest.Mock).mockResolvedValue({
+      content: "test",
+    });
+    (sdk.connection.request as jest.Mock).mockRejectedValue({
+      data: {
+        errors: [{ extension: { code: "INSUFFICIENT_CREDITS" } }],
+      },
+    });
+
+    (init as jest.Mock).mockResolvedValue(sdk);
+
+    render(<SeoMetaTags />, { wrapper });
+
+    await waitFor(() => {
+      screen.getByTestId("seo-component");
+    });
+
+    const btn = screen.getByText("Generate");
+
+    await userEvent.click(btn);
+
+    expect(
+      screen.getByText(/You're out of Amplience Credits/)
+    ).toBeInTheDocument();
+  });
 });

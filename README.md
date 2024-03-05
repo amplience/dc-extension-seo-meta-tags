@@ -4,7 +4,7 @@
 
 ![Screenshot](media/screenshot.png)
 
-This extension is designed to generate title and description meta tags based off the content of your content items.
+This extension is designed to generate title and description meta tags based on the content of your content items.
 
 > **Note:** This extension is a [**LABS PREVIEW**](https://amplience.com/developers/docs/knowledge-center/amplience-labs) for use as is without support or warranty
 
@@ -16,14 +16,14 @@ This extension must be [registered](https://amplience.com/developers/docs/integr
 
 - Category: Content Field
 - Label: Seo Meta Tags
-- Name: seo-meta-tags (needs to be unique with the hub)
+- Name: seo-meta-tags (needs to be unique within the hub)
 - URL: https://seo-meta-tags.extensions.content.amplience.net
 - Description: (can be left blank, if you wish)
 - Initial height: 200
 
 ### Permissions
 
-![Permissions](media/settings.png)
+![Permissions](media/permissions.png)
 
 #### API permissions:
 
