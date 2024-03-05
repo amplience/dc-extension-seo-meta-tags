@@ -412,7 +412,7 @@ describe("SeoMetaTags", () => {
     });
   });
 
-  it.only("Should show error message if there is an error", async () => {
+  it("Should show error message if there is an error", async () => {
     const sdk = await init<ContentFieldExtension>();
 
     (sdk.field.getValue as jest.Mock).mockResolvedValue("text");
@@ -421,7 +421,7 @@ describe("SeoMetaTags", () => {
     });
     (sdk.connection.request as jest.Mock).mockRejectedValue({
       data: {
-        errors: [{ extension: { code: "INSUFFICIENT_CREDITS" } }],
+        errors: [{ extensions: { code: "INSUFFICIENT_CREDITS" } }],
       },
     });
 

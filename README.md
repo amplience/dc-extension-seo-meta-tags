@@ -39,12 +39,12 @@ This extension must be [registered](https://amplience.com/developers/docs/integr
 
 To use the SEO meta tags extension simply associate it with a string field in you content type schema.
 
-The string field should be configured to use the `ui:extension` keyword with the `name` that was used to register the extension. The `type` parameter must be included to inform the extension what type of meta tag to generate and the `sources` parameter must be included to tell the extension which fields to base the meta tag on.
+The string field should be configured to use the `ui:extension` property with the `name` property set to the name that was used to register the extension. The `type` parameter must be included to inform the extension what type of meta tag to generate and the `sources` parameter must be included to tell the extension which fields to base the meta tag on.
 
 - The `type` parameter can be either `title` or `description`
 - The `sources` parameter should be an array containing valid [JSON pointers](https://datatracker.ietf.org/doc/html/rfc6901)
 
-We recommend that you use instance parameters so that the extension only needs to be registered once (see below).
+> We recommend that you use instance parameters so that the extension only needs to be registered once (see below).
 
 ```json
 {
