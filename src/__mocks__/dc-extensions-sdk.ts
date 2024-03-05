@@ -31,6 +31,9 @@ export const init = async <T>() => {
         sources: ["/content"],
       },
     },
+    hub: {
+      organizationId: "abc123",
+    },
   } as T;
 
   return sdk;

@@ -22,6 +22,7 @@ import { InsightsButton } from "../InsightsButton";
 // import { PreviewButton } from "../PreviewButton";
 import { AnimatePresence, LayoutGroup } from "framer-motion";
 import { Fade } from "../animation/Fade";
+import { ErrorMessage } from "../ErrorMessage.";
 
 export const SeoMetaTags = () => {
   const { sdk, readOnly } = useContext(
@@ -40,15 +41,16 @@ export const SeoMetaTags = () => {
   >(null);
   const [initialised, setInitialised] = useState(false);
   const [placeholder, setPlaceholder] = useState(getPlaceholder(sdk));
+  const [error, setError] = useState<string | null>(null);
   const insightsSelected = selectedPanel === "insights";
   // const previewSelected = selectedPanel === "preview";
   const hasOptions = options.length > 0;
   const panelOpen = selectedPanel !== null;
 
   useEffect(() => {
-    (sdk.field.getValue() as Promise<string | undefined>).then((val = "") => {
-      setInputValue(val);
-    });
+    (sdk.field.getValue() as Promise<string | undefined>).then((val = "") =>
+      setInputValue(val)
+    );
   }, [sdk]);
 
   useEffect(() => {
@@ -73,7 +75,10 @@ export const SeoMetaTags = () => {
     setPlaceholder(getPlaceholder(sdk));
   };
 
-  const generationStarted = () => setGenerating(true);
+  const generationStarted = () => {
+    setGenerating(true);
+    setError(null);
+  };
   const generationComplete = () => setGenerating(false);
 
   // TEST:
@@ -97,13 +102,27 @@ export const SeoMetaTags = () => {
             >
               {title}
             </Typography>
-            <Stack direction="row" spacing={0.5}>
-              <Typography variant="subtitle">{description}</Typography>
+
+            <Stack direction="row" spacing={2}>
+              <LayoutGroup>
+                {!error && (
+                  <Fade layoutId="descrpition">
+                    <Typography variant="subtitle">{description}</Typography>
+                  </Fade>
+                )}
+                {error && (
+                  <Fade layoutId="error">
+                    <ErrorMessage error={error} />
+                  </Fade>
+                )}
+              </LayoutGroup>
+
               <Link
                 href="https://amplience.com/developers/docs/knowledge-center/amplience-labs"
                 target="_blank"
                 underline="none"
                 variant="link"
+                lineHeight={2}
               >
                 Amplience Labs Preview
               </Link>
@@ -124,6 +143,7 @@ export const SeoMetaTags = () => {
                 onStartGeneration={generationStarted}
                 onFinishGeneration={generationComplete}
                 onTextGenerated={setOptions}
+                onError={setError}
                 disabled={panelOpen || hasOptions}
               ></GenerateButton>
             </Stack>

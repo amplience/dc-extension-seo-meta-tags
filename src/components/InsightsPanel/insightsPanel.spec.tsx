@@ -16,12 +16,18 @@ jest.mock("dc-extensions-sdk", () => {
 
 const insights = {
   data: {
-    overall: 81,
-    characters: 10,
-    readability: 20,
-    accessibility: 30,
-    positive: ["a", "b", "c"],
-    negative: ["d", "e", "f"],
+    generateSEOText: {
+      variants: [
+        JSON.stringify({
+          overallScore: 81,
+          charactersScore: 10,
+          readabilityScore: 20,
+          accessibilityScore: 30,
+          positive: ["a", "b", "c"],
+          negative: ["d", "e", "f"],
+        }),
+      ],
+    },
   },
 };
 

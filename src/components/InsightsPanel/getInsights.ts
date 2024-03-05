@@ -57,7 +57,7 @@ export const getInsights = async (
         safeParse(null, data)
       );
     })
-    .catch(() => ({ data: null }));
+    .catch(() => null);
 
   if (insights) {
     store.setItem(text, insights);

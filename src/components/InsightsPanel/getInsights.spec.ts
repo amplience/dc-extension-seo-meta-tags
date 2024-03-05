@@ -61,9 +61,14 @@ describe("getInsights", () => {
       readability: 81,
       accessibility: 81,
     };
+
     (sdk.field.getValue as jest.Mock).mockResolvedValue("something");
     (sdk.connection.request as jest.Mock).mockResolvedValue({
-      data: response,
+      data: {
+        generateSEOText: {
+          variants: [JSON.stringify(response)],
+        },
+      },
     });
 
     const insights = await getInsights(sdk);
@@ -81,7 +86,11 @@ describe("getInsights", () => {
     };
     (sdk.field.getValue as jest.Mock).mockResolvedValue("something");
     (sdk.connection.request as jest.Mock).mockResolvedValue({
-      data: response,
+      data: {
+        generateSEOText: {
+          variants: [JSON.stringify(response)],
+        },
+      },
     });
     const forage = {
       async getItem() {},

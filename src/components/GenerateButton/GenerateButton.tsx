@@ -1,9 +1,9 @@
-import { Box, Button, ButtonProps } from "@mui/material";
+import { Box, Button } from "@mui/material";
 import type { ContentFieldExtension } from "dc-extensions-sdk";
 import { generateValues } from "./generateValues";
 import { useContext, useState } from "react";
 import { track } from "../../lib/gainsight";
-import { EXTENSION_NAME, getParams } from "../../lib";
+import { EXTENSION_NAME, getError, getParams } from "../../lib";
 import { ContentFieldExtensionContext } from "../../hooks/ContentFieldExtensionContext";
 import { LayoutGroup } from "framer-motion";
 import Loader from "../../assets/loading-icon.svg?react";
@@ -13,14 +13,17 @@ export const GenerateButton = ({
   onTextGenerated,
   onStartGeneration,
   onFinishGeneration,
+  onError,
   disabled,
   ...props
-}: ButtonProps & {
-  onTextGenerated?: { (v: string[]): void };
-  onStartGeneration?: { (): void };
-  onFinishGeneration?: { (): void };
+}: unknown & {
+  disabled?: boolean;
+  onTextGenerated: { (v: string[]): void };
+  onStartGeneration: { (): void };
+  onFinishGeneration: { (): void };
+  onError: { (e: string): void };
 }) => {
-  const { sdk, canGenerate, readOnly } = useContext(
+  const { sdk, readOnly } = useContext(
     ContentFieldExtensionContext
   ) as ContentFieldExtensionContext & { sdk: ContentFieldExtension };
   const [generating, setGenerating] = useState(false);
@@ -32,16 +35,20 @@ export const GenerateButton = ({
   };
 
   const handleClick = async () => {
-    onStartGeneration?.();
+    onStartGeneration();
     setGenerating(true);
-    const values = await generateValues(sdk);
+    try {
+      const values = await generateValues(sdk);
 
-    if (values) {
-      track(window, "SEO generation", trackingParams);
-      onTextGenerated?.(values);
+      if (values) {
+        track(window, "SEO generation", trackingParams);
+        onTextGenerated(values);
+      }
+    } catch (e) {
+      onError(getError(e));
     }
 
-    onFinishGeneration?.();
+    onFinishGeneration();
     setGenerating(false);
   };
 
@@ -49,7 +56,7 @@ export const GenerateButton = ({
     <LayoutGroup>
       {generating && (
         <Fade layoutId="loader">
-          <Box sx={{ margin: "5px 33px" }}>
+          <Box sx={{ margin: "5px 33px" }} data-testid="loader">
             <Loader />
           </Box>
         </Fade>
@@ -59,7 +66,7 @@ export const GenerateButton = ({
           <Button
             onClick={handleClick}
             variant="outlined"
-            disabled={disabled || readOnly || !canGenerate}
+            disabled={disabled || readOnly}
             sx={{ width: "92px" }}
             {...props}
           >

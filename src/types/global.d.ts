@@ -7,4 +7,9 @@ export declare global {
       c?: { allowCrossDomain: boolean };
     };
   }
+
+  type SdkError = {
+    code: string;
+    message: string;
+  };
 }

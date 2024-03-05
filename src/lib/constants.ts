@@ -5,3 +5,9 @@ export enum EVENTS {
 
 export const EXTENSION_NAME = "dc-extension-seo-meta-tags";
 export const RESPONSE_STORE = "responses";
+
+export enum ERRORS {
+  INSUFFICIENT_CREDITS = "You're out of Amplience Credits. You can still use the field to compose text yourself.",
+  NO_CONTENT = "Generation failed as there is no content in the associated text field(s)",
+  SYSTEM_ERROR = "Generation failed.",
+}

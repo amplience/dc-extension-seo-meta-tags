@@ -1,5 +1,12 @@
 import type { ContentFieldExtension } from "dc-extensions-sdk";
-import { EVENTS, getParams, getData, getText, isEmptyString } from "../../lib";
+import {
+  EVENTS,
+  getParams,
+  getData,
+  getText,
+  isEmptyString,
+  toSdkError,
+} from "../../lib";
 import { generateDescriptionPrompt } from "./generateDescriptionPrompt";
 import { generateTitlePrompt } from "./generateTitlePrompt";
 import { getMutation } from "../../lib/graphql/getMutation";
@@ -19,16 +26,15 @@ export const generateValues = async (
   const mutation = getMutation(hubId, 5, prompt);
 
   if (isEmptyString(text)) {
-    return null;
+    return Promise.reject(toSdkError("NO_CONTENT"));
   }
 
-  return (await sdk.connection
+  return await sdk.connection
     .request(EVENTS.MUTATION, mutation)
     .then((response) => {
       const variants = getData(response);
       return uniq(
         variants.map((variant: string) => safeParse<string>(variant, variant))
       );
-    })
-    .catch(() => null)) as string[] | null;
+    });
 };

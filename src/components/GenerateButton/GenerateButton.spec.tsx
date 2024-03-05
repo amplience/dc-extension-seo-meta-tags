@@ -27,7 +27,15 @@ describe("GenerateButton", () => {
       content: "some content",
     });
 
-    render(<GenerateButton onTextGenerated={jest.fn()} />, { wrapper });
+    render(
+      <GenerateButton
+        onTextGenerated={jest.fn()}
+        onStartGeneration={jest.fn()}
+        onFinishGeneration={jest.fn()}
+        onError={jest.fn()}
+      />,
+      { wrapper }
+    );
 
     await waitFor(() => {
       const btn = screen.getByRole("button");
@@ -57,7 +65,13 @@ describe("GenerateButton", () => {
     (init as jest.Mock).mockResolvedValue(sdk);
 
     const { rerender } = render(
-      <GenerateButton onTextGenerated={jest.fn()} disabled={false} />,
+      <GenerateButton
+        onTextGenerated={jest.fn()}
+        disabled={false}
+        onStartGeneration={jest.fn()}
+        onFinishGeneration={jest.fn()}
+        onError={jest.fn()}
+      />,
       {
         wrapper,
       }
@@ -68,7 +82,15 @@ describe("GenerateButton", () => {
       expect(btn).toHaveProperty("disabled", false);
     });
 
-    rerender(<GenerateButton onTextGenerated={jest.fn()} disabled={true} />);
+    rerender(
+      <GenerateButton
+        onTextGenerated={jest.fn()}
+        disabled={true}
+        onStartGeneration={jest.fn()}
+        onFinishGeneration={jest.fn()}
+        onError={jest.fn()}
+      />
+    );
 
     await waitFor(() => {
       const btn = screen.getByRole("button");
@@ -86,7 +108,13 @@ describe("GenerateButton", () => {
     });
 
     render(
-      <GenerateButton onTextGenerated={jest.fn()} data-id="can you see me?" />,
+      <GenerateButton
+        onTextGenerated={jest.fn()}
+        data-id="can you see me?"
+        onStartGeneration={jest.fn()}
+        onFinishGeneration={jest.fn()}
+        onError={jest.fn()}
+      />,
       {
         wrapper,
       }
@@ -94,21 +122,6 @@ describe("GenerateButton", () => {
     await waitFor(() => {
       const btn = screen.getByRole("button");
       expect(btn.dataset.id).toEqual("can you see me?");
-    });
-  });
-
-  it("Should be disabled if there is no content in the form", async () => {
-    const sdk = await init<ContentFieldExtension>();
-
-    (init as jest.Mock).mockResolvedValue(sdk);
-
-    (sdk.form.getValue as jest.Mock).mockResolvedValue({});
-
-    render(<GenerateButton onTextGenerated={jest.fn()} />, { wrapper });
-
-    await waitFor(() => {
-      const btn = screen.getByRole("button");
-      expect(btn).toHaveProperty("disabled", true);
     });
   });
 
@@ -124,7 +137,15 @@ describe("GenerateButton", () => {
 
     (sdk.connection.request as jest.Mock).mockRejectedValue("no bueno");
 
-    render(<GenerateButton onTextGenerated={onTextGenerated} />, { wrapper });
+    render(
+      <GenerateButton
+        onTextGenerated={onTextGenerated}
+        onStartGeneration={jest.fn()}
+        onFinishGeneration={jest.fn()}
+        onError={jest.fn()}
+      />,
+      { wrapper }
+    );
 
     await waitFor(() => {
       const btn = screen.getByRole("button");
@@ -150,10 +171,22 @@ describe("GenerateButton", () => {
     });
 
     (sdk.connection.request as jest.Mock).mockResolvedValue({
-      data: "this is the description",
+      data: {
+        generateSEOText: {
+          variants: ["this is the description"],
+        },
+      },
     });
 
-    render(<GenerateButton onTextGenerated={onTextGenerated} />, { wrapper });
+    render(
+      <GenerateButton
+        onTextGenerated={onTextGenerated}
+        onStartGeneration={jest.fn()}
+        onFinishGeneration={jest.fn()}
+        onError={jest.fn()}
+      />,
+      { wrapper }
+    );
 
     await waitFor(() => {
       const btn = screen.getByRole("button");
@@ -165,7 +198,162 @@ describe("GenerateButton", () => {
 
       userEvent.click(btn);
       expect(track).toHaveBeenCalled();
-      expect(onTextGenerated).toHaveBeenCalledWith("this is the description");
+      expect(onTextGenerated).toHaveBeenCalledWith(["this is the description"]);
+    });
+  });
+
+  it("Should call onStartGeneration when clicked", async () => {
+    const sdk = await init<ContentFieldExtension>();
+    const onStartGeneration = jest.fn();
+
+    (init as jest.Mock).mockResolvedValue(sdk);
+
+    (sdk.form.getValue as jest.Mock).mockResolvedValue({
+      content: "some content",
+    });
+
+    render(
+      <GenerateButton
+        onTextGenerated={jest.fn()}
+        onStartGeneration={onStartGeneration}
+        onFinishGeneration={jest.fn()}
+        onError={jest.fn()}
+      />,
+      { wrapper }
+    );
+
+    await waitFor(() => {
+      const btn = screen.getByRole("button");
+      expect(btn).toHaveProperty("disabled", false);
+    });
+
+    await waitFor(() => {
+      const btn = screen.getByRole("button");
+
+      userEvent.click(btn);
+
+      expect(onStartGeneration).toHaveBeenCalled();
+    });
+  });
+
+  it("Should call onFinishGeneration when generation finished", async () => {
+    const sdk = await init<ContentFieldExtension>();
+    const onFinishGeneration = jest.fn();
+
+    (init as jest.Mock).mockResolvedValue(sdk);
+
+    (sdk.form.getValue as jest.Mock).mockResolvedValue({
+      content: "some content",
+    });
+
+    (sdk.connection.request as jest.Mock).mockResolvedValue({
+      data: {
+        generateSEOText: {
+          variants: ["this is the description"],
+        },
+      },
+    });
+
+    render(
+      <GenerateButton
+        onTextGenerated={jest.fn()}
+        onStartGeneration={jest.fn()}
+        onFinishGeneration={onFinishGeneration}
+        onError={jest.fn()}
+      />,
+      { wrapper }
+    );
+
+    await waitFor(() => {
+      const btn = screen.getByRole("button");
+      expect(btn).toHaveProperty("disabled", false);
+    });
+
+    await waitFor(() => {
+      const btn = screen.getByRole("button");
+
+      userEvent.click(btn);
+
+      expect(onFinishGeneration).toHaveBeenCalled();
+    });
+  });
+
+  it("Should call onError if there is an error", async () => {
+    const sdk = await init<ContentFieldExtension>();
+    const onError = jest.fn();
+
+    (init as jest.Mock).mockResolvedValue(sdk);
+
+    (sdk.form.getValue as jest.Mock).mockResolvedValue({
+      content: "some content",
+    });
+
+    (sdk.connection.request as jest.Mock).mockRejectedValue({});
+
+    render(
+      <GenerateButton
+        onTextGenerated={jest.fn()}
+        onStartGeneration={jest.fn()}
+        onFinishGeneration={jest.fn()}
+        onError={onError}
+      />,
+      { wrapper }
+    );
+
+    await waitFor(() => {
+      const btn = screen.getByRole("button");
+      expect(btn).toHaveProperty("disabled", false);
+    });
+
+    await waitFor(() => {
+      const btn = screen.getByRole("button");
+
+      userEvent.click(btn);
+
+      expect(onError).toHaveBeenCalledWith("Generation failed.");
+    });
+  });
+
+  it("Should show loader when generating", async () => {
+    const sdk = await init<ContentFieldExtension>();
+
+    (init as jest.Mock).mockResolvedValue(sdk);
+
+    (sdk.form.getValue as jest.Mock).mockResolvedValue({
+      content: "some content",
+    });
+
+    (sdk.connection.request as jest.Mock).mockResolvedValue({
+      data: {
+        generateSEOText: {
+          variants: ["this is the description"],
+        },
+      },
+    });
+
+    render(
+      <GenerateButton
+        onTextGenerated={jest.fn()}
+        onStartGeneration={jest.fn()}
+        onFinishGeneration={jest.fn()}
+        onError={jest.fn()}
+      />,
+      { wrapper }
+    );
+
+    await waitFor(() => {
+      const btn = screen.getByRole("button");
+      expect(btn).toHaveProperty("disabled", false);
+    });
+
+    await waitFor(() => {
+      expect(screen.getByRole("button")).toBeInTheDocument();
+    });
+
+    userEvent.click(screen.getByRole("button"));
+
+    await waitFor(() => {
+      expect(screen.getByTestId("loader")).toBeInTheDocument();
     });
   });
 });

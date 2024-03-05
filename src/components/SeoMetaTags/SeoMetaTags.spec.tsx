@@ -71,7 +71,11 @@ describe("SeoMetaTags", () => {
       content: "rich text",
     });
     (sdk.connection.request as jest.Mock).mockResolvedValue({
-      data: ["Generated title"],
+      data: {
+        generateSEOText: {
+          variants: ["Generated title"],
+        },
+      },
     });
 
     (init as jest.Mock).mockResolvedValue(sdk);
@@ -349,7 +353,11 @@ describe("SeoMetaTags", () => {
       content: "test",
     });
     (sdk.connection.request as jest.Mock).mockResolvedValue({
-      data: ["Generated title"],
+      data: {
+        generateSEOText: {
+          variants: ["Generated title"],
+        },
+      },
     });
 
     (init as jest.Mock).mockResolvedValue(sdk);
@@ -375,7 +383,11 @@ describe("SeoMetaTags", () => {
       content: "test",
     });
     (sdk.connection.request as jest.Mock).mockResolvedValue({
-      data: ["Generated title"],
+      data: {
+        generateSEOText: {
+          variants: ["Generated title"],
+        },
+      },
     });
 
     (init as jest.Mock).mockResolvedValue(sdk);

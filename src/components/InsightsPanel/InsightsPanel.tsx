@@ -78,9 +78,8 @@ export const InsightsPanel = ({
 
   useEffect(() => {
     getInsights(sdk).then((results) => {
-      setTimeout(() => {
-        setLoading(false);
-      }, 1000);
+      setLoading(false);
+
       if (results) {
         setResults(results);
       } else {
