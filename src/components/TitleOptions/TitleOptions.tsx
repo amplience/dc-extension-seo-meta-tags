@@ -17,14 +17,14 @@ const TitleOption = (title: string) => (
     key={title}
     value={title}
     sx={{
-      marginBottom: "4px",
+      marginBottom: "8px",
       alignItems: "start",
     }}
     control={
       <Radio
         size="small"
         sx={{
-          padding: "5px 10px",
+          padding: "2px 10px 0",
         }}
       />
     }

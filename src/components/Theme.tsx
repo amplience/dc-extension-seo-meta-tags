@@ -105,6 +105,7 @@ const theme = extendTheme({
           textTransform: "none",
           fontSize: "14px",
           height: "32px",
+          boxShadow: "none",
           "&:disabled": {
             color: theme.vars.palette.grey[400],
             backgroundColor: theme.vars.palette.grey[500],
@@ -113,6 +114,7 @@ const theme = extendTheme({
           "&:hover": {
             color: "#FFF",
             backgroundColor: theme.vars.palette.primary.main,
+            boxShadow: "none",
           },
         }),
       },
