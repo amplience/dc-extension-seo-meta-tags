@@ -94,14 +94,13 @@ export const SeoMetaTags = () => {
       </Grid>
       <Grid container item direction="column">
         <Grid item container spacing={1} flexWrap="nowrap" alignItems="end">
-          <Grid item container flexGrow={1}>
+          <Grid item container flexGrow={1} direction="column">
             <Typography
               variant="title"
               color={readOnly ? theme.palette.grey[300] : ""}
             >
               {title}
             </Typography>
-
             <Stack direction="row" spacing={2}>
               <LayoutGroup>
                 {!error && (
