@@ -81,21 +81,20 @@ export const SeoMetaTags = () => {
   };
   const generationComplete = () => setGenerating(false);
 
-  // TEST:
-  // SeoMetaTags
-  // getMutation
-  // generateValues
-  // generateButton
-  // insightsbutton
-
   return (
-    <div data-testid="seo-component">
-      <Grid container direction="column">
+    <Grid
+      container
+      data-testid="seo-component"
+      flexWrap="nowrap"
+      spacing={2}
+      paddingBottom={2}
+    >
+      <Grid item>
+        <SparklesIcon />
+      </Grid>
+      <Grid container item direction="column">
         <Grid item container spacing={1} flexWrap="nowrap" alignItems="end">
-          <Grid item>
-            <SparklesIcon />
-          </Grid>
-          <Grid item flexGrow={1}>
+          <Grid item container flexGrow={1}>
             <Typography
               variant="title"
               color={readOnly ? theme.palette.grey[300] : ""}
@@ -107,7 +106,18 @@ export const SeoMetaTags = () => {
               <LayoutGroup>
                 {!error && (
                   <Fade layoutId="descrpition">
-                    <Typography variant="subtitle">{description}</Typography>
+                    <Typography variant="subtitle">
+                      {description}{" "}
+                      <Link
+                        href="https://amplience.com/developers/docs/knowledge-center/amplience-labs"
+                        target="_blank"
+                        underline="none"
+                        variant="link"
+                        sx={{ whiteSpace: "nowrap" }}
+                      >
+                        Amplience Labs Preview
+                      </Link>
+                    </Typography>
                   </Fade>
                 )}
                 {error && (
@@ -116,16 +126,6 @@ export const SeoMetaTags = () => {
                   </Fade>
                 )}
               </LayoutGroup>
-
-              <Link
-                href="https://amplience.com/developers/docs/knowledge-center/amplience-labs"
-                target="_blank"
-                underline="none"
-                variant="link"
-                lineHeight={2}
-              >
-                Amplience Labs Preview
-              </Link>
             </Stack>
           </Grid>
           <Grid item>
@@ -189,6 +189,6 @@ export const SeoMetaTags = () => {
           </Stack>
         </Grid>
       </Grid>
-    </div>
+    </Grid>
   );
 };
