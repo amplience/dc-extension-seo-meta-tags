@@ -16,6 +16,10 @@ const TitleOption = (title: string) => (
   <FormControlLabel
     key={title}
     value={title}
+    sx={{
+      marginBottom: "4px",
+      alignItems: "start",
+    }}
     control={
       <Radio
         size="small"

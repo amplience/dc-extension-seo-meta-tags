@@ -9,8 +9,8 @@ import {
 import localforage from "localforage";
 import { getMutation } from "../../lib/graphql/getMutation";
 import { generateInisghtsPrompt } from "./generateInsightsPrompt";
-import { round } from "ramda-adjunct";
-import { evolve } from "ramda";
+import { isArray, isNumber, isString, round } from "ramda-adjunct";
+import { all, allPass, evolve, where } from "ramda";
 
 export type Insights = {
   overallScore: number;
@@ -20,6 +20,17 @@ export type Insights = {
   positive: string[];
   negative: string[];
 };
+
+const isArrayOfStrings = allPass([isArray, all(isString)]);
+
+const responseIsOk = where({
+  overallScore: isNumber,
+  charactersScore: isNumber,
+  readabilityScore: isNumber,
+  accessibilityScore: isNumber,
+  positive: isArrayOfStrings,
+  negative: isArrayOfStrings,
+});
 
 export const getInsights = async (
   sdk: ContentFieldExtension
@@ -59,7 +70,7 @@ export const getInsights = async (
     })
     .catch(() => null);
 
-  if (insights) {
+  if (responseIsOk(insights)) {
     store.setItem(text, insights);
   }
 
