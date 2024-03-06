@@ -1,3 +1,4 @@
+export * from "./chatGpt";
 export * from "./constants";
 export * from "./events";
 export * from "./gainsight";

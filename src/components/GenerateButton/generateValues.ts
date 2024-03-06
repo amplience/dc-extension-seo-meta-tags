@@ -11,7 +11,8 @@ import { generateDescriptionPrompt } from "./generateDescriptionPrompt";
 import { generateTitlePrompt } from "./generateTitlePrompt";
 import { getMutation } from "../../lib/graphql/getMutation";
 import { safeParse } from "../../lib/json/safeParse";
-import { uniq } from "ramda";
+import { uniq, when } from "ramda";
+import { responseHasError } from "../../lib/chatGpt/responseHasError";
 
 export const generateValues = async (
   sdk: ContentFieldExtension
@@ -36,5 +37,8 @@ export const generateValues = async (
       return uniq(
         variants.map((variant: string) => safeParse<string>(variant, variant))
       );
-    });
+    })
+    .then(
+      when(responseHasError, () => Promise.reject(toSdkError("BAD_CONTENT")))
+    );
 };

@@ -105,4 +105,24 @@ describe("generateValues", () => {
 
     expect(result).toEqual(["Possibly THE best article in the world... ever"]);
   });
+
+  it("Should return a 'BAD_CONTENT' error if the API response has an error", async () => {
+    const sdk = await init<ContentFieldExtension>();
+
+    (sdk.form.getValue as jest.Mock).mockResolvedValue({
+      content: "A really interesting article",
+    });
+
+    (sdk.connection.request as jest.Mock).mockResolvedValue({
+      data: {
+        generateSEOText: {
+          variants: ["[ERROR]"],
+        },
+      },
+    });
+
+    expect(generateValues(sdk)).rejects.toEqual({
+      data: { errors: [{ extensions: { code: "BAD_CONTENT" } }] },
+    });
+  });
 });

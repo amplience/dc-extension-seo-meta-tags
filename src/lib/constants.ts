@@ -10,4 +10,5 @@ export enum ERRORS {
   INSUFFICIENT_CREDITS = "You're out of Amplience Credits. You can still use the field to compose text yourself.",
   NO_CONTENT = "Generation failed as there is no content in the associated text field(s)",
   SYSTEM_ERROR = "Generation failed.",
+  BAD_CONTENT = "Could not generate a response for the content provided.",
 }
