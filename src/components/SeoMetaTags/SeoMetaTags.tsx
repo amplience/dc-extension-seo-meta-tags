@@ -1,19 +1,11 @@
 import { useContext, useEffect, useState } from "react";
-import {
-  Grid,
-  LinearProgress,
-  Link,
-  Stack,
-  TextField,
-  Typography,
-} from "@mui/material";
+import { Grid, LinearProgress, Link, Stack, Typography } from "@mui/material";
 import { SparklesIcon } from "../SparklesIcon";
 import { ContentFieldExtensionContext } from "../../hooks/ContentFieldExtensionContext";
 import { GenerateButton } from "../GenerateButton/GenerateButton";
 import { ContentFieldExtension } from "dc-extensions-sdk";
 import { getTitle } from "./getTitle";
 import { getDescription } from "./getDescription";
-import { withValue } from "../../lib/events/withValue";
 import { getPlaceholder } from "./getPlaceholder";
 import { TitleOptions } from "../TitleOptions/TitleOptions";
 import { useTheme } from "@mui/material";
@@ -23,6 +15,7 @@ import { InsightsButton } from "../InsightsButton";
 import { AnimatePresence, LayoutGroup } from "framer-motion";
 import { Fade } from "../animation/Fade";
 import { ErrorMessage } from "../ErrorMessage.";
+import { TextField } from "./TextField";
 
 export const SeoMetaTags = () => {
   const { sdk, readOnly } = useContext(
@@ -39,9 +32,8 @@ export const SeoMetaTags = () => {
   const [selectedPanel, setSelectedPanel] = useState<
     "insights" | "preview" | null
   >(null);
-  const [initialised, setInitialised] = useState(false);
   const [placeholder, setPlaceholder] = useState(getPlaceholder(sdk));
-  const [error, setError] = useState<string | null>(null);
+  const [generationError, setGenerationError] = useState<string | null>(null);
   const insightsSelected = selectedPanel === "insights";
   // const previewSelected = selectedPanel === "preview";
   const hasOptions = options.length > 0;
@@ -53,14 +45,9 @@ export const SeoMetaTags = () => {
     );
   }, [sdk]);
 
-  useEffect(() => {
-    if (!initialised) {
-      setInitialised(true);
-      return;
-    }
-
-    sdk.field.setValue(inputValue);
-  }, [sdk, initialised, setInitialised, inputValue]);
+  const fieldChanged = (value: string) => {
+    sdk.field.setValue(value);
+  };
 
   const optionSelected = (option: string) => {
     clearOptions();
@@ -77,7 +64,7 @@ export const SeoMetaTags = () => {
 
   const generationStarted = () => {
     setGenerating(true);
-    setError(null);
+    setGenerationError(null);
   };
   const generationComplete = () => setGenerating(false);
 
@@ -103,7 +90,7 @@ export const SeoMetaTags = () => {
             </Typography>
             <Stack direction="row" spacing={2}>
               <LayoutGroup>
-                {!error && (
+                {!generationError && (
                   <Fade layoutId="descrpition">
                     <Typography variant="subtitle">
                       {description}{" "}
@@ -119,9 +106,9 @@ export const SeoMetaTags = () => {
                     </Typography>
                   </Fade>
                 )}
-                {error && (
+                {generationError && (
                   <Fade layoutId="error">
-                    <ErrorMessage error={error} />
+                    <ErrorMessage error={generationError} />
                   </Fade>
                 )}
               </LayoutGroup>
@@ -142,7 +129,7 @@ export const SeoMetaTags = () => {
                 onStartGeneration={generationStarted}
                 onFinishGeneration={generationComplete}
                 onTextGenerated={setOptions}
-                onError={setError}
+                onError={setGenerationError}
                 disabled={panelOpen || hasOptions}
               ></GenerateButton>
             </Stack>
@@ -154,21 +141,10 @@ export const SeoMetaTags = () => {
               {!generating && (
                 <Fade layoutId="textField">
                   <TextField
-                    fullWidth
-                    onChange={withValue(setInputValue)}
+                    disabled={panelOpen}
                     placeholder={placeholder}
                     value={inputValue}
-                    variant="standard"
-                    disabled={panelOpen}
-                    inputProps={{
-                      sx: {
-                        color: theme.palette.grey[200],
-                        "&::placeholder": {
-                          color: theme.palette.grey[600],
-                          opacity: 1,
-                        },
-                      },
-                    }}
+                    onChange={fieldChanged}
                   />
                 </Fade>
               )}
