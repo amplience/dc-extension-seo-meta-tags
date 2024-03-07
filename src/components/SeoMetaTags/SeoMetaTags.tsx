@@ -112,7 +112,7 @@ export const SeoMetaTags = () => {
                         target="_blank"
                         underline="none"
                         variant="link"
-                        sx={{ whiteSpace: "nowrap" }}
+                        sx={{ whiteSpace: "nowrap", fontSize: "12px" }}
                       >
                         Amplience Labs Preview
                       </Link>
