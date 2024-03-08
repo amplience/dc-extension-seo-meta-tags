@@ -18,7 +18,7 @@ import { getPlaceholder } from "./getPlaceholder";
 import { TitleOptions } from "../TitleOptions/TitleOptions";
 import { useTheme } from "@mui/material";
 import { InsightsPanel } from "../InsightsPanel/InsightsPanel";
-// import { InsightsButton } from "../InsightsButton";
+import { InsightsButton } from "../InsightsButton";
 // import { PreviewButton } from "../PreviewButton";
 import { AnimatePresence, LayoutGroup } from "framer-motion";
 import { Fade } from "../animation/Fade";
@@ -129,11 +129,11 @@ export const SeoMetaTags = () => {
           </Grid>
           <Grid item>
             <Stack direction="row" spacing={1}>
-              {/* <InsightsButton
+              <InsightsButton
                 selected={insightsSelected}
                 onSelect={setSelectedPanel}
                 disabled={hasOptions}
-              /> */}
+              />
               {/* <PreviewButton
                 selected={previewSelected}
                 onSelect={setSelectedPanel}
