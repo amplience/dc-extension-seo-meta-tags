@@ -16,6 +16,23 @@ jest.mock("dc-extensions-sdk", () => {
   return originalModule;
 });
 
+const insights = {
+  data: {
+    generateSEOText: {
+      variants: [
+        JSON.stringify({
+          overallScore: 81,
+          charactersScore: 10,
+          readabilityScore: 20,
+          accessibilityScore: 30,
+          positive: ["a", "b", "c"],
+          negative: ["d", "e", "f"],
+        }),
+      ],
+    },
+  },
+};
+
 describe("SeoMetaTags", () => {
   it("Should set the title colour to grey if inactive", async () => {
     const sdk = await init<ContentFieldExtension>();
@@ -211,14 +228,7 @@ describe("SeoMetaTags", () => {
       content: "test",
     });
 
-    (sdk.connection.request as jest.Mock).mockResolvedValue({
-      data: {
-        overall: 100,
-        characters: 50,
-        readability: 50,
-        accessibility: 20,
-      },
-    });
+    (sdk.connection.request as jest.Mock).mockResolvedValue(insights);
 
     (init as jest.Mock).mockResolvedValue(sdk);
 
@@ -245,12 +255,7 @@ describe("SeoMetaTags", () => {
       content: "test",
     });
 
-    (sdk.connection.request as jest.Mock).mockResolvedValue({
-      overall: 100,
-      characters: 50,
-      readability: 50,
-      accessibility: 20,
-    });
+    (sdk.connection.request as jest.Mock).mockResolvedValue(insights);
 
     (init as jest.Mock).mockResolvedValue(sdk);
 
@@ -281,14 +286,7 @@ describe("SeoMetaTags", () => {
       content: "test",
     });
 
-    (sdk.connection.request as jest.Mock).mockResolvedValue({
-      data: {
-        overall: 100,
-        characters: 50,
-        readability: 50,
-        accessibility: 20,
-      },
-    });
+    (sdk.connection.request as jest.Mock).mockResolvedValue(insights);
 
     (init as jest.Mock).mockResolvedValue(sdk);
 
@@ -325,14 +323,7 @@ describe("SeoMetaTags", () => {
       content: "test",
     });
 
-    (sdk.connection.request as jest.Mock).mockResolvedValue({
-      data: {
-        overall: 100,
-        characters: 50,
-        readability: 50,
-        accessibility: 20,
-      },
-    });
+    (sdk.connection.request as jest.Mock).mockResolvedValue(insights);
 
     (init as jest.Mock).mockResolvedValue(sdk);
 
@@ -343,6 +334,11 @@ describe("SeoMetaTags", () => {
     });
 
     await userEvent.click(screen.getByTestId("insightsBtn"));
+
+    await waitFor(() => {
+      expect(screen.getByTestId("generateBtn")).toBeDisabled();
+      expect(screen.getByRole("textbox")).toBeDisabled();
+    });
   });
 
   it("Should show title options when title generated", async () => {

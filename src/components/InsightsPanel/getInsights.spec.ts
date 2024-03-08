@@ -19,10 +19,12 @@ describe("getInsights", () => {
   it("Should return previous response if set", async () => {
     const sdk = await init<ContentFieldExtension>();
     const prev = {
-      overall: 99,
-      characters: 99,
-      readability: 99,
-      accessibility: 99,
+      overallScore: 1,
+      charactersScore: 1,
+      readabilityScore: 1,
+      accessibilityScore: 1,
+      positive: ["amazing"],
+      negative: ["awful"],
     };
 
     (sdk.field.getValue as jest.Mock).mockResolvedValue("something");
@@ -56,10 +58,12 @@ describe("getInsights", () => {
   it("Should return insights", async () => {
     const sdk = await init<ContentFieldExtension>();
     const response = {
-      overall: 81,
-      characters: 81,
-      readability: 81,
-      accessibility: 81,
+      overallScore: 1,
+      charactersScore: 1,
+      readabilityScore: 1,
+      accessibilityScore: 1,
+      positive: ["amazing"],
+      negative: ["awful"],
     };
 
     (sdk.field.getValue as jest.Mock).mockResolvedValue("something");
@@ -79,10 +83,12 @@ describe("getInsights", () => {
   it("Should store reponse", async () => {
     const sdk = await init<ContentFieldExtension>();
     const response = {
-      overall: 1,
-      characters: 1,
-      readability: 1,
-      accessibility: 1,
+      overallScore: 1,
+      charactersScore: 1,
+      readabilityScore: 1,
+      accessibilityScore: 1,
+      positive: ["amazing"],
+      negative: ["awful"],
     };
     (sdk.field.getValue as jest.Mock).mockResolvedValue("something");
     (sdk.connection.request as jest.Mock).mockResolvedValue({

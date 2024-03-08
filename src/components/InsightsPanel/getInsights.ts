@@ -9,7 +9,7 @@ import {
 import localforage from "localforage";
 import { getMutation } from "../../lib/graphql/getMutation";
 import { generateInisghtsPrompt } from "./generateInsightsPrompt";
-import { isArray, isNumber, isString, round } from "ramda-adjunct";
+import { isArray, isNumber, isObject, isString, round } from "ramda-adjunct";
 import { all, allPass, evolve, where } from "ramda";
 
 export type Insights = {
@@ -23,14 +23,17 @@ export type Insights = {
 
 const isArrayOfStrings = allPass([isArray, all(isString)]);
 
-const responseIsOk = where({
-  overallScore: isNumber,
-  charactersScore: isNumber,
-  readabilityScore: isNumber,
-  accessibilityScore: isNumber,
-  positive: isArrayOfStrings,
-  negative: isArrayOfStrings,
-});
+const responseIsOk = allPass([
+  isObject,
+  where({
+    overallScore: isNumber,
+    charactersScore: isNumber,
+    readabilityScore: isNumber,
+    accessibilityScore: isNumber,
+    positive: isArrayOfStrings,
+    negative: isArrayOfStrings,
+  }),
+]);
 
 export const getInsights = async (
   sdk: ContentFieldExtension
