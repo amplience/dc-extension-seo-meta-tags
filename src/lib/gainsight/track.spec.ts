@@ -2,7 +2,7 @@ import { track } from ".";
 
 describe("track", () => {
   it("Should track if aptrinsic initialised", () => {
-    const window = { aptrinsic: jest.fn() } as Window;
+    const window = { aptrinsic: jest.fn() } as unknown as Window;
 
     track(window, "someEvent", { test: "value" });
 

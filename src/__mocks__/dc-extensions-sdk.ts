@@ -2,6 +2,7 @@ export const init = async <T>() => {
   const sdk = {
     connection: {
       request: jest.fn(),
+      emit: jest.fn(),
     },
     field: {
       getValue: jest.fn(),
@@ -29,6 +30,9 @@ export const init = async <T>() => {
         type: "description",
         sources: ["/content"],
       },
+    },
+    hub: {
+      organizationId: "abc123",
     },
   } as T;
 

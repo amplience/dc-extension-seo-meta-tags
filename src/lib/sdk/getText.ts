@@ -1,5 +1,5 @@
 import pointer from "json-pointer";
-import { getParams } from "../../lib";
+import { getParams } from "..";
 import type { ContentFieldExtension } from "dc-extensions-sdk";
 
 export const getText = async (sdk: ContentFieldExtension) => {

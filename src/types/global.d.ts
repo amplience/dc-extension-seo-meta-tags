@@ -1,6 +1,15 @@
 export declare global {
   interface Window {
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    aptrinsic?: any;
+    aptrinsic: {
+      (...args: unknown[]): void;
+      q?: unknown[];
+      p?: string;
+      c?: { allowCrossDomain: boolean };
+    };
   }
+
+  type SdkError = {
+    code: string;
+    message: string;
+  };
 }

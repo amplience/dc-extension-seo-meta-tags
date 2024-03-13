@@ -1,0 +1,44 @@
+import type { ContentFieldExtension } from "dc-extensions-sdk";
+import {
+  EVENTS,
+  getParams,
+  getData,
+  getText,
+  isEmptyString,
+  toSdkError,
+} from "../../lib";
+import { generateDescriptionPrompt } from "./generateDescriptionPrompt";
+import { generateTitlePrompt } from "./generateTitlePrompt";
+import { getMutation } from "../../lib/graphql/getMutation";
+import { safeParse } from "../../lib/json/safeParse";
+import { uniq, when } from "ramda";
+import { responseHasError } from "../../lib/chatGpt/responseHasError";
+
+export const generateValues = async (
+  sdk: ContentFieldExtension
+): Promise<string[] | null> => {
+  const text = await getText(sdk);
+  const { type } = getParams(sdk);
+  const hubId = sdk.hub.organizationId as string;
+  const prompt =
+    type === "description"
+      ? generateDescriptionPrompt(text)
+      : generateTitlePrompt(text);
+  const mutation = getMutation(hubId, 5, prompt);
+
+  if (isEmptyString(text)) {
+    return Promise.reject(toSdkError("NO_CONTENT"));
+  }
+
+  return await sdk.connection
+    .request(EVENTS.MUTATION, mutation)
+    .then((response) => {
+      const variants = getData(response);
+      return uniq(
+        variants.map((variant: string) => safeParse<string>(variant, variant))
+      );
+    })
+    .then(
+      when(responseHasError, () => Promise.reject(toSdkError("BAD_CONTENT")))
+    );
+};

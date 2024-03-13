@@ -1,4 +1,8 @@
 import { CssBaseline } from "@mui/material";
+import "@fontsource/ibm-plex-sans/300.css";
+import "@fontsource/ibm-plex-sans/400.css";
+import "@fontsource/ibm-plex-sans/500.css";
+import "@fontsource/ibm-plex-sans/700.css";
 
 import {
   Experimental_CssVarsProvider as CssVarsProvider,
@@ -37,7 +41,7 @@ const theme = extendTheme({
     light: {
       palette: {
         text: {
-          primary: "rgb(51, 51, 51)",
+          primary: "#808080",
         },
         primary: {
           main: "#039BE5",
@@ -50,10 +54,14 @@ const theme = extendTheme({
           400: "#CCCCCC",
           500: "#E5E5E5",
           600: "#666",
+          700: "#f4f4f5",
+          800: "#bfbfbf",
         },
         error: {
           main: "#FF3366",
+          light: "rgba(255, 51, 102, 0.03)",
         },
+        success: { main: "#66CC00", light: "rgba(0, 255, 71, 0.03)" },
       },
     },
   },
@@ -70,7 +78,7 @@ const theme = extendTheme({
         {
           props: { variant: "subtitle" },
           style: ({ theme }) => ({
-            fontSize: "11px",
+            fontSize: "12px",
             color: theme.palette.grey[600],
           }),
         },
@@ -97,6 +105,7 @@ const theme = extendTheme({
           textTransform: "none",
           fontSize: "14px",
           height: "32px",
+          boxShadow: "none",
           "&:disabled": {
             color: theme.vars.palette.grey[400],
             backgroundColor: theme.vars.palette.grey[500],
@@ -105,6 +114,7 @@ const theme = extendTheme({
           "&:hover": {
             color: "#FFF",
             backgroundColor: theme.vars.palette.primary.main,
+            boxShadow: "none",
           },
         }),
       },
