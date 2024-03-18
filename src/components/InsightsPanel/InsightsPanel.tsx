@@ -139,42 +139,46 @@ export const InsightsPanel = ({
               flexWrap="nowrap"
               minHeight={45}
             >
-              <Grid
-                item
-                container
-                alignItems="center"
-                justifyContent="center"
-                gap={1}
-              >
-                <Chart percentage={results.charactersScore}></Chart>
-                <Typography variant="title" fontWeight={500}>
-                  {upperFirst(type)} Length
-                </Typography>
-              </Grid>
-              <Grid
-                item
-                container
-                alignItems="center"
-                justifyContent="center"
-                gap={1}
-              >
-                <Chart percentage={results.readabilityScore}></Chart>
-                <Typography variant="title" fontWeight={500}>
-                  Readability
-                </Typography>
-              </Grid>
-              <Grid
-                item
-                flexGrow={1}
-                container
-                alignItems="center"
-                justifyContent="center"
-                gap={1}
-              >
-                <Chart percentage={results.accessibilityScore}></Chart>
-                <Typography variant="title" fontWeight={500}>
-                  Accessiblity
-                </Typography>
+              <Grid container gap={4}>
+                <Grid
+                  item
+                  container
+                  alignItems="center"
+                  justifyContent="center"
+                  width="auto"
+                  gap={1}
+                >
+                  <Chart percentage={results.charactersScore}></Chart>
+                  <Typography variant="title" fontWeight={500}>
+                    {upperFirst(type)} Length
+                  </Typography>
+                </Grid>
+                <Grid
+                  item
+                  container
+                  alignItems="center"
+                  justifyContent="center"
+                  gap={1}
+                  width="auto"
+                >
+                  <Chart percentage={results.readabilityScore}></Chart>
+                  <Typography variant="title" fontWeight={500}>
+                    Readability
+                  </Typography>
+                </Grid>
+                <Grid
+                  item
+                  container
+                  alignItems="center"
+                  justifyContent="center"
+                  gap={1}
+                  width="auto"
+                >
+                  <Chart percentage={results.accessibilityScore}></Chart>
+                  <Typography variant="title" fontWeight={500}>
+                    Accessiblity
+                  </Typography>
+                </Grid>
               </Grid>
               <Grid item flexShrink={0}>
                 <Button
