@@ -101,6 +101,7 @@ export const InsightsPanel = ({
         info={description}
         loading={loading}
         onClose={onClose}
+        sx={{ minHeight: "160px" }}
       >
         {results && (
           <>
@@ -139,7 +140,7 @@ export const InsightsPanel = ({
               flexWrap="nowrap"
               minHeight={45}
             >
-              <Grid container gap={4}>
+              <Grid container gap={4} flexWrap="nowrap">
                 <Grid
                   item
                   container
