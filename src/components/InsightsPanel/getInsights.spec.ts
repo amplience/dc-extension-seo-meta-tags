@@ -59,7 +59,7 @@ describe("getInsights", () => {
     const sdk = await init<ContentFieldExtension>();
     const response = {
       overallScore: 1,
-      charactersScore: 1,
+      charactersScore: 19,
       readabilityScore: 1,
       accessibilityScore: 1,
       positive: ["amazing"],
@@ -84,7 +84,7 @@ describe("getInsights", () => {
     const sdk = await init<ContentFieldExtension>();
     const response = {
       overallScore: 1,
-      charactersScore: 1,
+      charactersScore: 19,
       readabilityScore: 1,
       accessibilityScore: 1,
       positive: ["amazing"],
