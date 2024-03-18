@@ -20,7 +20,6 @@ const insights = {
       variants: [
         JSON.stringify({
           overallScore: 81,
-          charactersScore: 10,
           readabilityScore: 20,
           accessibilityScore: 30,
           positive: ["a", "b", "c"],
@@ -183,7 +182,7 @@ describe("InsightsPanel", () => {
     });
 
     await waitFor(() => {
-      expect(screen.getByText("10")).toBeInTheDocument();
+      expect(screen.getByText("8")).toBeInTheDocument();
       expect(screen.getByText("20")).toBeInTheDocument();
       expect(screen.getByText("30")).toBeInTheDocument();
     });

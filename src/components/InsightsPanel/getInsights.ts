@@ -87,6 +87,7 @@ export const getInsights = async (
     )
     .then((response) => {
       const data = getData(response)[0];
+
       return pipe(
         evolve({
           overallScore: round,
