@@ -1,7 +1,5 @@
 import { ContentFieldExtension } from "dc-extensions-sdk";
 import { getParams } from "../../lib";
-import { cond } from "ramda";
-import { inRange } from "ramda-adjunct";
 import { CharacterCountGrade } from "./calculateCharacterCountScore";
 
 export const generateInisghtsPrompt = (
