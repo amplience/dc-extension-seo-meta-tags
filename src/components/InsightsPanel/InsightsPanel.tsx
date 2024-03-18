@@ -119,7 +119,10 @@ export const InsightsPanel = ({
                 color={theme.palette.text.primary}
                 marginBottom={0.5}
               >
-                Overall score: <b>{results.overallScore}/100</b>
+                Overall score:{" "}
+                <b style={{ color: theme.palette.grey[200] }}>
+                  {results.overallScore}/100
+                </b>
               </Typography>
 
               <LinearProgress
