@@ -3,14 +3,16 @@ import {
   EVENTS,
   RESPONSE_STORE,
   getData,
+  getParams,
   isEmptyString,
   safeParse,
 } from "../../lib";
 import localforage from "localforage";
 import { getMutation } from "../../lib/graphql/getMutation";
 import { generateInisghtsPrompt } from "./generateInsightsPrompt";
-import { isArray, isNumber, isString, round } from "ramda-adjunct";
-import { all, allPass, evolve, where } from "ramda";
+import { isArray, isNumber, isObject, isString, round } from "ramda-adjunct";
+import { all, allPass, assoc, evolve, pipe, where } from "ramda";
+import { calculateCharacterCountScore } from "./calculateCharacterCountScore";
 
 export type Insights = {
   overallScore: number;
@@ -23,18 +25,36 @@ export type Insights = {
 
 const isArrayOfStrings = allPass([isArray, all(isString)]);
 
-const responseIsOk = where({
-  overallScore: isNumber,
-  charactersScore: isNumber,
-  readabilityScore: isNumber,
-  accessibilityScore: isNumber,
-  positive: isArrayOfStrings,
-  negative: isArrayOfStrings,
-});
+const responseIsOk = allPass([
+  isObject,
+  where({
+    overallScore: isNumber,
+    charactersScore: isNumber,
+    readabilityScore: isNumber,
+    accessibilityScore: isNumber,
+    positive: isArrayOfStrings,
+    negative: isArrayOfStrings,
+  }),
+]);
+
+const titleScores = {
+  optimal: { low: 45, high: 60 },
+  belowOptimal: { low: 1, high: 44 },
+  aboveOptimal: { low: 61, high: 99 },
+  excessive: 100,
+};
+
+const descriptionScores = {
+  optimal: { low: 45, high: 60 },
+  belowOptimal: { low: 1, high: 44 },
+  aboveOptimal: { low: 61, high: 99 },
+  excessive: 100,
+};
 
 export const getInsights = async (
   sdk: ContentFieldExtension
 ): Promise<Insights | null> => {
+  const { type } = getParams(sdk);
   const text = (await sdk.field.getValue()) as string;
   const hubId = sdk.hub.organizationId as string;
 
@@ -51,24 +71,32 @@ export const getInsights = async (
     return previousResponse;
   }
 
+  const characterCountGrade = calculateCharacterCountScore(
+    type === "title" ? titleScores : descriptionScores,
+    text
+  );
+
   const insights = await sdk.connection
     .request(
       EVENTS.MUTATION,
-      getMutation(hubId, 1, generateInisghtsPrompt(text))
+      getMutation(
+        hubId,
+        1,
+        generateInisghtsPrompt(sdk, characterCountGrade, text)
+      )
     )
     .then((response) => {
       const data = getData(response)[0];
-      return evolve(
-        {
+
+      return pipe(
+        evolve({
           overallScore: round,
-          charactersScore: round,
           readabilityScore: round,
           accessibilityScore: round,
-        },
-        safeParse(null, data)
-      );
-    })
-    .catch(() => null);
+        }),
+        assoc("charactersScore", characterCountGrade.score)
+      )(safeParse(null, data));
+    });
 
   if (responseIsOk(insights)) {
     store.setItem(text, insights);
