@@ -88,12 +88,9 @@ export const getInsights = async (
       )
     )
     .then(
-      when(pipe(getData, responseHasError), () =>
-        Promise.reject(toSdkError("BAD_CONTENT"))
-      )
+      when(responseHasError, () => Promise.reject(toSdkError("BAD_CONTENT")))
     )
     .then((response) => {
-      console.log("should not be here...", response);
       const data = getData(response)[0];
 
       return pipe(
