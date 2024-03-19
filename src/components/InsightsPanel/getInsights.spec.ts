@@ -44,17 +44,6 @@ describe("getInsights", () => {
     expect(insights).toEqual(prev);
   });
 
-  it("Should return null if error", async () => {
-    const sdk = await init<ContentFieldExtension>();
-    (sdk.field.getValue as jest.Mock).mockResolvedValue("something");
-
-    (sdk.connection.request as jest.Mock).mockRejectedValue("Nooooo!");
-
-    const insights = await getInsights(sdk);
-
-    expect(insights).toEqual(null);
-  });
-
   it("Should return insights", async () => {
     const sdk = await init<ContentFieldExtension>();
     const response = {

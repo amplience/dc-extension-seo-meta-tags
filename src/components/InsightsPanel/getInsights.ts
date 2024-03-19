@@ -96,8 +96,7 @@ export const getInsights = async (
         }),
         assoc("charactersScore", characterCountGrade.score)
       )(safeParse(null, data));
-    })
-    .catch(() => null);
+    });
 
   if (responseIsOk(insights)) {
     store.setItem(text, insights);
