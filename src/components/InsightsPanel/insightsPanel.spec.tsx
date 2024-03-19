@@ -3,7 +3,6 @@ import { InsightsPanel } from "./InsightsPanel";
 import { wrapper } from "../../__mocks__/wrapper";
 import { init, ContentFieldExtension } from "dc-extensions-sdk";
 import userEvent from "@testing-library/user-event";
-// import userEvent from "@testing-library/user-event";
 
 jest.mock("dc-extensions-sdk", () => {
   const originalModule = jest.requireActual(
