@@ -56,7 +56,9 @@ const InsightBox = ({
       </Typography>
       <ul style={{ paddingLeft: "21px" }}>
         {insights.map((insight) => (
-          <li key={insight}>{insight}</li>
+          <li key={insight} style={{ marginBottom: "10px" }}>
+            {insight}
+          </li>
         ))}
       </ul>
     </Box>
