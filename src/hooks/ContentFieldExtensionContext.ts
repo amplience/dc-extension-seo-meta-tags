@@ -5,6 +5,7 @@ export type ContentFieldExtensionContext = {
   sdk: ContentFieldExtension | null;
   canGenerate: boolean;
   readOnly: boolean;
+  sharedWorker: SharedWorker | null;
 };
 
 export const ContentFieldExtensionContext =
@@ -12,4 +13,5 @@ export const ContentFieldExtensionContext =
     sdk: null,
     canGenerate: false,
     readOnly: false,
+    sharedWorker: null,
   });

@@ -10,7 +10,6 @@ import {
 import { SparklesIcon } from "../SparklesIcon";
 import { ContentFieldExtensionContext } from "../../hooks/ContentFieldExtensionContext";
 import { GenerateButton } from "../GenerateButton/GenerateButton";
-import { ContentFieldExtension } from "dc-extensions-sdk";
 import { getTitle } from "./getTitle";
 import { getDescription } from "./getDescription";
 import { withValue } from "../../lib/events/withValue";
@@ -19,39 +18,40 @@ import { TitleOptions } from "../TitleOptions/TitleOptions";
 import { useTheme } from "@mui/material";
 import { InsightsPanel } from "../InsightsPanel/InsightsPanel";
 import { InsightsButton } from "../InsightsButton";
-// import { PreviewButton } from "../PreviewButton";
+import { PreviewButton } from "../PreviewButton";
 import { AnimatePresence, LayoutGroup } from "framer-motion";
 import { Fade } from "../animation/Fade";
 import { ErrorMessage } from "../ErrorMessage.";
+import { PreviewPanel } from "../PreviewPanel/PreviewPanel";
+import { postValue } from "./postValue";
 
 export const SeoMetaTags = () => {
-  const { sdk, readOnly } = useContext(
+  const { sdk, readOnly, sharedWorker } = useContext(
     ContentFieldExtensionContext
-  ) as ContentFieldExtensionContext & {
-    sdk: ContentFieldExtension;
-  };
+  );
   const [inputValue, setInputValue] = useState("");
   const [options, setOptions] = useState<string[]>([]);
   const [generating, setGenerating] = useState(false);
-  const title = getTitle(sdk);
-  const description = getDescription(sdk);
+  const title = getTitle(sdk!);
+  const description = getDescription(sdk!);
   const theme = useTheme();
   const [selectedPanel, setSelectedPanel] = useState<
     "insights" | "preview" | null
   >(null);
   const [initialised, setInitialised] = useState(false);
-  const [placeholder, setPlaceholder] = useState(getPlaceholder(sdk));
+  const [placeholder, setPlaceholder] = useState(getPlaceholder(sdk!));
   const [error, setError] = useState<string | null>(null);
   const insightsSelected = selectedPanel === "insights";
-  // const previewSelected = selectedPanel === "preview";
+  const previewSelected = selectedPanel === "preview";
   const hasOptions = options.length > 0;
   const panelOpen = selectedPanel !== null;
 
   useEffect(() => {
-    (sdk.field.getValue() as Promise<string | undefined>).then((val = "") =>
-      setInputValue(val)
-    );
-  }, [sdk]);
+    (sdk!.field.getValue() as Promise<string | undefined>).then((val = "") => {
+      setInputValue(val);
+      postValue(sharedWorker!, sdk!, val);
+    });
+  }, [sdk, sharedWorker]);
 
   useEffect(() => {
     if (!initialised) {
@@ -59,20 +59,21 @@ export const SeoMetaTags = () => {
       return;
     }
 
-    sdk.field.setValue(inputValue);
-  }, [sdk, initialised, setInitialised, inputValue]);
+    sdk!.field.setValue(inputValue);
+    postValue(sharedWorker!, sdk!, inputValue);
+  }, [sdk, sharedWorker, initialised, setInitialised, inputValue]);
 
   const optionSelected = (option: string) => {
     clearOptions();
     setInputValue(option);
-    sdk.field.setValue(option);
+    sdk!.field.setValue(option);
   };
 
   const hidePanels = () => setSelectedPanel(null);
 
   const clearOptions = () => {
     setOptions([]);
-    setPlaceholder(getPlaceholder(sdk));
+    setPlaceholder(getPlaceholder(sdk!));
   };
 
   const generationStarted = () => {
@@ -92,7 +93,7 @@ export const SeoMetaTags = () => {
       <Grid item>
         <SparklesIcon />
       </Grid>
-      <Grid container item direction="column">
+      <Grid container item direction="column" overflow="hidden">
         <Grid item container spacing={1} flexWrap="nowrap" alignItems="end">
           <Grid item container flexGrow={1} direction="column">
             <Typography
@@ -134,10 +135,11 @@ export const SeoMetaTags = () => {
                 onSelect={setSelectedPanel}
                 disabled={hasOptions}
               />
-              {/* <PreviewButton
+              <PreviewButton
                 selected={previewSelected}
                 onSelect={setSelectedPanel}
-              /> */}
+                disabled={hasOptions}
+              />
               <GenerateButton
                 onStartGeneration={generationStarted}
                 onFinishGeneration={generationComplete}
@@ -148,7 +150,7 @@ export const SeoMetaTags = () => {
             </Stack>
           </Grid>
         </Grid>
-        <Grid item>
+        <Grid item maxWidth="100%!important">
           <Stack spacing={3} marginTop={1}>
             <LayoutGroup>
               {!generating && (
@@ -191,6 +193,14 @@ export const SeoMetaTags = () => {
             <AnimatePresence>
               {insightsSelected && (
                 <InsightsPanel value={inputValue} onClose={hidePanels} />
+              )}
+            </AnimatePresence>
+            <AnimatePresence>
+              {previewSelected && (
+                <PreviewPanel
+                  value={inputValue}
+                  onClose={hidePanels}
+                ></PreviewPanel>
               )}
             </AnimatePresence>
           </Stack>

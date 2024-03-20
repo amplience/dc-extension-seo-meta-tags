@@ -3,26 +3,28 @@ import { ToggleButton } from "./ToggleButton";
 import { useContext, useState } from "react";
 import { ContentFieldExtensionContext } from "../hooks/ContentFieldExtensionContext";
 import { getParams, isEmptyString } from "../lib";
-import { ContentFieldExtension } from "dc-extensions-sdk";
+import { isNil } from "ramda";
 
 export const PreviewButton = ({
   selected,
+  disabled,
   onSelect,
   ...props
 }: unknown & {
+  disabled: boolean;
   selected: boolean;
-  onSelect: { (s: string | null): void };
+  onSelect: { (s: "preview" | null): void };
 }) => {
-  const { sdk } = useContext(
-    ContentFieldExtensionContext
-  ) as ContentFieldExtensionContext & { sdk: ContentFieldExtension };
-  const [disabled, setDisabled] = useState(true);
+  const { sdk } = useContext(ContentFieldExtensionContext);
+  const [noValue, setNoValue] = useState(true);
 
-  const extensionType = getParams(sdk).type;
+  const extensionType = getParams(sdk!).type;
 
-  sdk?.field
+  sdk!.field
     .getValue()
-    .then((value) => setDisabled(isEmptyString(value as string)));
+    .then((value) =>
+      setNoValue(isNil(value) || isEmptyString(value as string))
+    );
 
   const handleClick = () => onSelect(selected ? null : "preview");
 
@@ -33,7 +35,7 @@ export const PreviewButton = ({
       value="preview"
       onClick={handleClick}
       selected={selected}
-      disabled={disabled}
+      disabled={disabled || noValue}
       data-id={`seo-preview-${extensionType}`}
       {...props}
     >

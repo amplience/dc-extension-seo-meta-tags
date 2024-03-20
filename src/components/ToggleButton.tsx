@@ -11,7 +11,7 @@ export const ToggleButton = ({
   ...props
 }: ToggleButtonProps & {
   tooltip: string;
-  disabled: boolean;
+  disabled?: boolean;
 }) => {
   const theme = useTheme();
   const ToggleButton = styled(ToggleBase)({

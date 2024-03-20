@@ -5,7 +5,6 @@ import { useContext, useState } from "react";
 import { ContentFieldExtensionContext } from "../hooks/ContentFieldExtensionContext";
 import { isNil } from "ramda";
 import { getParams } from "../lib";
-import { ContentFieldExtension } from "dc-extensions-sdk";
 
 export const InsightsButton = ({
   selected,
@@ -17,29 +16,24 @@ export const InsightsButton = ({
   selected: boolean;
   onSelect: { (s: "insights" | null): void };
 }) => {
-  const { sdk } = useContext(
-    ContentFieldExtensionContext
-  ) as ContentFieldExtensionContext & { sdk: ContentFieldExtension };
-  const [noTitle, setNoTitle] = useState(true);
+  const { sdk } = useContext(ContentFieldExtensionContext);
+  const [noValue, setNoValue] = useState(true);
 
-  const extensionType = getParams(sdk).type;
+  const extensionType = getParams(sdk!).type;
 
-  sdk?.field
+  sdk!.field
     .getValue()
-    .then((value) =>
-      setNoTitle(isNil(value) || isEmptyString(value as string))
-    );
+    .then((value) => setNoValue(isNil(value) || isEmptyString(value)));
 
   const handleClick = () => onSelect(selected ? null : "insights");
 
   return (
     <ToggleButton
       tooltip="SEO scoring & insights"
-      size="small"
       value="insights"
       onClick={handleClick}
       selected={selected}
-      disabled={disabled || noTitle}
+      disabled={disabled || noValue}
       data-testid="insightsBtn"
       data-id={`seo-insights-${extensionType}`}
       {...props}

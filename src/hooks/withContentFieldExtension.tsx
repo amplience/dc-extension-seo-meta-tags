@@ -1,7 +1,7 @@
 import { ContentFieldExtension, init } from "dc-extensions-sdk";
 import { ReactElement, useEffect, useState } from "react";
 import { ContentFieldExtensionContext } from "./ContentFieldExtensionContext";
-import { hasContent } from "../lib";
+import { getParams, hasContent } from "../lib";
 
 export const WithContentFieldExtension = ({
   children,
@@ -11,6 +11,7 @@ export const WithContentFieldExtension = ({
   const [sdk, setSdk] = useState<ContentFieldExtension>();
   const [canGenerate, setCanGenerate] = useState(false);
   const [readOnly, setReadonly] = useState(false);
+  const [sharedWorker, setSharedWorker] = useState<SharedWorker | null>(null);
 
   useEffect(() => {
     init<ContentFieldExtension>()
@@ -18,6 +19,15 @@ export const WithContentFieldExtension = ({
       .catch((e) => {
         console.error("Could not initialise SDK", e);
       });
+
+    setSharedWorker(
+      new SharedWorker(
+        new URL("../workers/shared.worker.ts", import.meta.url),
+        {
+          type: "module",
+        }
+      )
+    );
   }, []);
 
   useEffect(() => {
@@ -37,7 +47,7 @@ export const WithContentFieldExtension = ({
   return (
     sdk && (
       <ContentFieldExtensionContext.Provider
-        value={{ sdk, canGenerate, readOnly }}
+        value={{ sdk, canGenerate, readOnly, sharedWorker }}
       >
         {children}
       </ContentFieldExtensionContext.Provider>

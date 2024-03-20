@@ -58,7 +58,7 @@ export const getInsights = async (
 ): Promise<Insights | null> => {
   const { type } = getParams(sdk);
   const text = (await sdk.field.getValue()) as string;
-  const hubId = sdk.hub.organizationId as string;
+  const hubId = sdk.hub.organizationId;
 
   if (isEmptyString(text)) {
     return null;
@@ -82,7 +82,7 @@ export const getInsights = async (
     .request(
       EVENTS.MUTATION,
       getMutation(
-        hubId,
+        hubId!,
         1,
         generateInisghtsPrompt(sdk, characterCountGrade, text)
       )

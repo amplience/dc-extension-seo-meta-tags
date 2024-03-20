@@ -86,6 +86,7 @@ export const InsightsPanel = ({
     setError(null);
     getInsights(sdk)
       .then((results) => {
+        console.log(results);
         if (results) {
           setResults(results);
         } else {

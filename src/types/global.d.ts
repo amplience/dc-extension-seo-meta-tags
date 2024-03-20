@@ -12,4 +12,10 @@ export declare global {
     code: string;
     message: string;
   };
+
+  type WorkerMessage = {
+    type: "title" | "description";
+    sources: string[];
+    value: string;
+  };
 }

@@ -17,6 +17,7 @@ import InfoIcon from "../assets/info-icon.svg?react";
 import LoadingIcon from "../assets/loading-icon.svg?react";
 import { FadeGrow } from "./animation/FadeGrow";
 import { LayoutGroup } from "framer-motion";
+import { ReactElement } from "react";
 
 const CloseBtn = (props: IconButtonProps) => {
   const theme = useTheme();
@@ -57,12 +58,14 @@ export const Card = ({
   children,
   title,
   info,
+  action,
   onClose,
 }: CardProps & {
   loading?: boolean;
   title: string;
   info?: string;
-  onClose: { (): void };
+  action?: ReactElement;
+  onClose?: { (): void };
 }) => {
   const theme = useTheme();
 
@@ -81,7 +84,12 @@ export const Card = ({
       <CardBase variant="outlined">
         <CardHeader
           title={<Title title={title} info={info} />}
-          action={<CloseBtn onClick={onClose} disabled={loading} />}
+          action={
+            <Stack direction="row" gap={2}>
+              {action}
+              <CloseBtn onClick={onClose} disabled={loading} />
+            </Stack>
+          }
         ></CardHeader>
         <CardContent>
           <LayoutGroup>
