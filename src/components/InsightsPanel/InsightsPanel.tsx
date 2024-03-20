@@ -56,7 +56,9 @@ const InsightBox = ({
       </Typography>
       <ul style={{ paddingLeft: "21px" }}>
         {insights.map((insight) => (
-          <li key={insight}>{insight}</li>
+          <li key={insight} style={{ marginBottom: "10px" }}>
+            {insight}
+          </li>
         ))}
       </ul>
     </Box>
@@ -120,7 +122,10 @@ export const InsightsPanel = ({
                 color={theme.palette.text.primary}
                 marginBottom={0.5}
               >
-                Overall score: <b>{results.overallScore}/100</b>
+                Overall score:{" "}
+                <b style={{ color: theme.palette.grey[200] }}>
+                  {results.overallScore}/100
+                </b>
               </Typography>
 
               <LinearProgress
