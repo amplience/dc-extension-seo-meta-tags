@@ -8,12 +8,19 @@ import { useContext, useEffect, useState } from "react";
 import { ContentFieldExtensionContext } from "../../hooks/ContentFieldExtensionContext";
 import { getParams } from "../../lib";
 import { ToggleButton } from "../ToggleButton";
+import { evolve, when } from "ramda";
+import { isNilOrEmpty } from "ramda-adjunct";
+
+type View = "desktop" | "mobile";
 
 const info = `This preview is an example of what your meta data may look like when populated in Google search.
 
 Google recommends a maximum title length of up to 60 characters and a maximum description length of 160.`;
 
-type View = "desktop" | "mobile";
+const defaultTitle =
+  "Page title to outline the page's content (up to 60 chars)";
+const defaultDescription =
+  "A page's meta description tag is meant to give the user an idea of the content that exists within the page. (up to 160 chars)";
 
 export const PreviewSelector = ({
   selected,
@@ -71,14 +78,25 @@ export const PreviewPanel = ({
 }) => {
   const { sdk, seoValues } = useContext(ContentFieldExtensionContext);
   const [view, setView] = useState<View>("desktop");
-  const [preview, setPreview] = useState({ title: "", description: "" });
+  const [preview, setPreview] = useState({
+    title: defaultTitle,
+    description: defaultDescription,
+  });
 
   useEffect(() => {
     const { type } = getParams(sdk!);
-    setPreview({
-      ...seoValues,
-      [type]: value,
-    });
+    const updatedPreview = evolve(
+      {
+        title: when(isNilOrEmpty, () => defaultTitle),
+        description: when(isNilOrEmpty, () => defaultDescription),
+      },
+      {
+        ...seoValues,
+        [type]: value,
+      }
+    );
+
+    setPreview(updatedPreview);
   }, [sdk, value, seoValues]);
 
   return (
