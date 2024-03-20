@@ -151,7 +151,6 @@ export const InsightsPanel = ({
               flexWrap="nowrap"
               minHeight={45}
             >
-<<<<<<< HEAD
               <Grid container gap={4} flexWrap="nowrap">
                 <Grid
                   item
@@ -189,47 +188,9 @@ export const InsightsPanel = ({
                 >
                   <Chart percentage={results.accessibilityScore}></Chart>
                   <Typography variant="title" fontWeight={500}>
-                    Accessiblity
+                    Accessibility
                   </Typography>
                 </Grid>
-=======
-              <Grid
-                item
-                container
-                alignItems="center"
-                justifyContent="center"
-                gap={1}
-              >
-                <Chart percentage={results.charactersScore}></Chart>
-                <Typography variant="title" fontWeight={500}>
-                  {upperFirst(type)} Length
-                </Typography>
-              </Grid>
-              <Grid
-                item
-                container
-                alignItems="center"
-                justifyContent="center"
-                gap={1}
-              >
-                <Chart percentage={results.readabilityScore}></Chart>
-                <Typography variant="title" fontWeight={500}>
-                  Readability
-                </Typography>
-              </Grid>
-              <Grid
-                item
-                flexGrow={1}
-                container
-                alignItems="center"
-                justifyContent="center"
-                gap={1}
-              >
-                <Chart percentage={results.accessibilityScore}></Chart>
-                <Typography variant="title" fontWeight={500}>
-                  Accessibility
-                </Typography>
->>>>>>> main
               </Grid>
               <Grid item flexShrink={0}>
                 <Button
