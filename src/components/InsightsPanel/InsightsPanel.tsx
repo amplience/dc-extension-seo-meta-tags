@@ -9,7 +9,7 @@ import {
 } from "@mui/material";
 import PlusIcon from "../../assets/plus-icon.svg?react";
 import MinusIcon from "../../assets/minus-icon.svg?react";
-import { EVENTS, getParams } from "../../lib";
+import { getError, getParams, toSdkError } from "../../lib";
 import { ContentFieldExtension } from "dc-extensions-sdk";
 import { useContext, useEffect, useState } from "react";
 import { ContentFieldExtensionContext } from "../../hooks/ContentFieldExtensionContext";
@@ -81,18 +81,24 @@ export const InsightsPanel = ({
   const btnText = insightsVisible ? "Hide insights" : "View insights";
   const [loading, setLoading] = useState(true);
   const [results, setResults] = useState<Insights>();
+  const [error, setError] = useState<string | null>(null);
 
-  useEffect(() => {
-    getInsights(sdk).then((results) => {
-      setLoading(false);
+  const loadInsights = () => {
+    setLoading(true);
+    setError(null);
+    getInsights(sdk)
+      .then((results) => {
+        if (results) {
+          setResults(results);
+        } else {
+          setError(getError(toSdkError("BAD_CONTENT")));
+        }
+      })
+      .catch((e) => setError(getError(e)))
+      .finally(() => setLoading(false));
+  };
 
-      if (results) {
-        setResults(results);
-      } else {
-        sdk.connection.emit(EVENTS.ERROR_TOAST, "Could not get insights");
-      }
-    });
-  }, [sdk]);
+  useEffect(loadInsights, [sdk]);
 
   const viewInsights = () => setInsightsVisible(!insightsVisible);
 
@@ -145,6 +151,7 @@ export const InsightsPanel = ({
               flexWrap="nowrap"
               minHeight={45}
             >
+<<<<<<< HEAD
               <Grid container gap={4} flexWrap="nowrap">
                 <Grid
                   item
@@ -185,6 +192,44 @@ export const InsightsPanel = ({
                     Accessiblity
                   </Typography>
                 </Grid>
+=======
+              <Grid
+                item
+                container
+                alignItems="center"
+                justifyContent="center"
+                gap={1}
+              >
+                <Chart percentage={results.charactersScore}></Chart>
+                <Typography variant="title" fontWeight={500}>
+                  {upperFirst(type)} Length
+                </Typography>
+              </Grid>
+              <Grid
+                item
+                container
+                alignItems="center"
+                justifyContent="center"
+                gap={1}
+              >
+                <Chart percentage={results.readabilityScore}></Chart>
+                <Typography variant="title" fontWeight={500}>
+                  Readability
+                </Typography>
+              </Grid>
+              <Grid
+                item
+                flexGrow={1}
+                container
+                alignItems="center"
+                justifyContent="center"
+                gap={1}
+              >
+                <Chart percentage={results.accessibilityScore}></Chart>
+                <Typography variant="title" fontWeight={500}>
+                  Accessibility
+                </Typography>
+>>>>>>> main
               </Grid>
               <Grid item flexShrink={0}>
                 <Button
@@ -220,6 +265,21 @@ export const InsightsPanel = ({
               )}
             </AnimatePresence>
           </>
+        )}
+        {error && (
+          <Grid container justifyContent="center">
+            <Grid item textAlign="center">
+              <p style={{ color: theme.palette.grey[200] }}>
+                <b>Sorry, something went wrong.</b>
+              </p>
+              <p>[ERROR] {error}</p>
+              <p>
+                <Button variant="contained" onClick={loadInsights}>
+                  Retry
+                </Button>
+              </p>
+            </Grid>
+          </Grid>
         )}
       </Card>
     </div>
