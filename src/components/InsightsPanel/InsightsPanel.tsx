@@ -184,7 +184,7 @@ export const InsightsPanel = ({
               >
                 <Chart percentage={results.accessibilityScore}></Chart>
                 <Typography variant="title" fontWeight={500}>
-                  Accessiblity
+                  Accessibility
                 </Typography>
               </Grid>
               <Grid item flexShrink={0}>
