@@ -48,7 +48,8 @@ export const generateInisghtsPrompt = (
       "negative": ["Improvement area 1", "Improvement area 2", "Improvement area 3"]
       }
     2. Only respond with the json output.
-    3. Don't include any other commentary.`,
+    3. Don't include any other commentary.
+    4. If you don't understand the text, you will respond only with [ERROR] and nothing else`,
     },
   ];
 };
