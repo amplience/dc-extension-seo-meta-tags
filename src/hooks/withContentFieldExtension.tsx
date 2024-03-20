@@ -2,6 +2,7 @@ import { ContentFieldExtension, init } from "dc-extensions-sdk";
 import { ReactElement, useEffect, useState } from "react";
 import { ContentFieldExtensionContext } from "./ContentFieldExtensionContext";
 import { getParams, hasContent } from "../lib";
+import { isEmpty, symmetricDifference } from "ramda";
 
 export const WithContentFieldExtension = ({
   children,
@@ -11,7 +12,9 @@ export const WithContentFieldExtension = ({
   const [sdk, setSdk] = useState<ContentFieldExtension>();
   const [canGenerate, setCanGenerate] = useState(false);
   const [readOnly, setReadonly] = useState(false);
-  const [sharedWorker, setSharedWorker] = useState<SharedWorker | null>(null);
+  const [broadcastChannel, setBroadcastChannel] =
+    useState<BroadcastChannel | null>(null);
+  const [seoValues, setSeoValues] = useState({ title: "", description: "" });
 
   useEffect(() => {
     init<ContentFieldExtension>()
@@ -20,14 +23,7 @@ export const WithContentFieldExtension = ({
         console.error("Could not initialise SDK", e);
       });
 
-    setSharedWorker(
-      new SharedWorker(
-        new URL("../workers/shared.worker.ts", import.meta.url),
-        {
-          type: "module",
-        }
-      )
-    );
+    setBroadcastChannel(new BroadcastChannel("SEO"));
   }, []);
 
   useEffect(() => {
@@ -44,10 +40,28 @@ export const WithContentFieldExtension = ({
     sdk.form.onReadOnlyChange(setReadonly);
   }, [sdk]);
 
+  useEffect(() => {
+    if (!broadcastChannel || !sdk) {
+      return;
+    }
+
+    broadcastChannel.onmessage = ({ data }) => {
+      const { type, sources } = getParams(sdk);
+      const sameSrc = isEmpty(symmetricDifference(data.sources, sources));
+      const notSameType = type !== data.type;
+      if (sameSrc && notSameType) {
+        setSeoValues({
+          ...seoValues,
+          [data.type]: data.value,
+        });
+      }
+    };
+  }, [broadcastChannel, sdk, seoValues]);
+
   return (
     sdk && (
       <ContentFieldExtensionContext.Provider
-        value={{ sdk, canGenerate, readOnly, sharedWorker }}
+        value={{ sdk, canGenerate, readOnly, broadcastChannel, seoValues }}
       >
         {children}
       </ContentFieldExtensionContext.Provider>

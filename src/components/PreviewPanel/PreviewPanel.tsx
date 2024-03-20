@@ -8,7 +8,6 @@ import { useContext, useEffect, useState } from "react";
 import { ContentFieldExtensionContext } from "../../hooks/ContentFieldExtensionContext";
 import { getParams } from "../../lib";
 import { ToggleButton } from "../ToggleButton";
-import { isEmpty, symmetricDifference } from "ramda";
 
 const info = `This preview is an example of what your meta data may look like when populated in Google search.
 
@@ -70,29 +69,17 @@ export const PreviewPanel = ({
   value: string;
   onClose: { (): void };
 }) => {
-  const { sdk, sharedWorker } = useContext(ContentFieldExtensionContext);
-  const { type, sources } = getParams(sdk!);
+  const { sdk, seoValues } = useContext(ContentFieldExtensionContext);
   const [view, setView] = useState<View>("desktop");
   const [preview, setPreview] = useState({ title: "", description: "" });
 
   useEffect(() => {
+    const { type } = getParams(sdk!);
     setPreview({
-      ...preview,
+      ...seoValues,
       [type]: value,
     });
-  }, []);
-
-  sharedWorker!.port.onmessage = (event) => {
-    const { data } = event;
-    const sameSrc = isEmpty(symmetricDifference(data.sources, sources));
-    const notSameType = type !== data.type;
-    if (sameSrc && notSameType) {
-      setPreview({
-        ...preview,
-        [data.type]: data.value,
-      });
-    }
-  };
+  }, [sdk, value, seoValues]);
 
   return (
     <Card

@@ -13,9 +13,14 @@ export declare global {
     message: string;
   };
 
-  type WorkerMessage = {
+  type BroadcastMessage = {
     type: "title" | "description";
     sources: string[];
     value: string;
+  };
+
+  type SeoValues = {
+    title: string;
+    description: string;
   };
 }

@@ -26,7 +26,7 @@ import { PreviewPanel } from "../PreviewPanel/PreviewPanel";
 import { postValue } from "./postValue";
 
 export const SeoMetaTags = () => {
-  const { sdk, readOnly, sharedWorker } = useContext(
+  const { sdk, readOnly, broadcastChannel } = useContext(
     ContentFieldExtensionContext
   );
   const [inputValue, setInputValue] = useState("");
@@ -49,9 +49,9 @@ export const SeoMetaTags = () => {
   useEffect(() => {
     (sdk!.field.getValue() as Promise<string | undefined>).then((val = "") => {
       setInputValue(val);
-      postValue(sharedWorker!, sdk!, val);
+      postValue(broadcastChannel!, sdk!, val);
     });
-  }, [sdk, sharedWorker]);
+  }, [sdk, broadcastChannel]);
 
   useEffect(() => {
     if (!initialised) {
@@ -60,8 +60,8 @@ export const SeoMetaTags = () => {
     }
 
     sdk!.field.setValue(inputValue);
-    postValue(sharedWorker!, sdk!, inputValue);
-  }, [sdk, sharedWorker, initialised, setInitialised, inputValue]);
+    postValue(broadcastChannel!, sdk!, inputValue);
+  }, [sdk, broadcastChannel, initialised, setInitialised, inputValue]);
 
   const optionSelected = (option: string) => {
     clearOptions();
