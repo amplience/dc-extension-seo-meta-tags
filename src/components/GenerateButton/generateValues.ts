@@ -32,13 +32,13 @@ export const generateValues = async (
 
   return await sdk.connection
     .request(EVENTS.MUTATION, mutation)
+    .then(
+      when(responseHasError, () => Promise.reject(toSdkError("BAD_CONTENT")))
+    )
     .then((response) => {
       const variants = getData(response);
       return uniq(
         variants.map((variant: string) => safeParse<string>(variant, variant))
       );
-    })
-    .then(
-      when(responseHasError, () => Promise.reject(toSdkError("BAD_CONTENT")))
-    );
+    });
 };
