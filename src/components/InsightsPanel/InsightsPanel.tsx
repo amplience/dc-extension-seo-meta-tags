@@ -56,7 +56,9 @@ const InsightBox = ({
       </Typography>
       <ul style={{ paddingLeft: "21px" }}>
         {insights.map((insight) => (
-          <li key={insight}>{insight}</li>
+          <li key={insight} style={{ marginBottom: "10px" }}>
+            {insight}
+          </li>
         ))}
       </ul>
     </Box>
@@ -108,6 +110,7 @@ export const InsightsPanel = ({
         info={description}
         loading={loading}
         onClose={onClose}
+        sx={{ minHeight: "160px" }}
       >
         {results && (
           <>
@@ -126,7 +129,10 @@ export const InsightsPanel = ({
                 color={theme.palette.text.primary}
                 marginBottom={0.5}
               >
-                Overall score: <b>{results.overallScore}/100</b>
+                Overall score:{" "}
+                <b style={{ color: theme.palette.grey[200] }}>
+                  {results.overallScore}/100
+                </b>
               </Typography>
 
               <LinearProgress
@@ -146,42 +152,46 @@ export const InsightsPanel = ({
               flexWrap="nowrap"
               minHeight={45}
             >
-              <Grid
-                item
-                container
-                alignItems="center"
-                justifyContent="center"
-                gap={1}
-              >
-                <Chart percentage={results.charactersScore}></Chart>
-                <Typography variant="title" fontWeight={500}>
-                  {upperFirst(type)} Length
-                </Typography>
-              </Grid>
-              <Grid
-                item
-                container
-                alignItems="center"
-                justifyContent="center"
-                gap={1}
-              >
-                <Chart percentage={results.readabilityScore}></Chart>
-                <Typography variant="title" fontWeight={500}>
-                  Readability
-                </Typography>
-              </Grid>
-              <Grid
-                item
-                flexGrow={1}
-                container
-                alignItems="center"
-                justifyContent="center"
-                gap={1}
-              >
-                <Chart percentage={results.accessibilityScore}></Chart>
-                <Typography variant="title" fontWeight={500}>
-                  Accessiblity
-                </Typography>
+              <Grid container gap={4} flexWrap="nowrap">
+                <Grid
+                  item
+                  container
+                  alignItems="center"
+                  justifyContent="center"
+                  width="auto"
+                  gap={1}
+                >
+                  <Chart percentage={results.charactersScore}></Chart>
+                  <Typography variant="title" fontWeight={500}>
+                    {upperFirst(type)} Length
+                  </Typography>
+                </Grid>
+                <Grid
+                  item
+                  container
+                  alignItems="center"
+                  justifyContent="center"
+                  gap={1}
+                  width="auto"
+                >
+                  <Chart percentage={results.readabilityScore}></Chart>
+                  <Typography variant="title" fontWeight={500}>
+                    Readability
+                  </Typography>
+                </Grid>
+                <Grid
+                  item
+                  container
+                  alignItems="center"
+                  justifyContent="center"
+                  gap={1}
+                  width="auto"
+                >
+                  <Chart percentage={results.accessibilityScore}></Chart>
+                  <Typography variant="title" fontWeight={500}>
+                    Accessibility
+                  </Typography>
+                </Grid>
               </Grid>
               <Grid item flexShrink={0}>
                 <Button

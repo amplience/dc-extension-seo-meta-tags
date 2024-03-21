@@ -60,6 +60,7 @@ export const Card = ({
   info,
   action,
   onClose,
+  ...props
 }: CardProps & {
   loading?: boolean;
   title: string;
@@ -81,7 +82,7 @@ export const Card = ({
 
   return (
     <FadeGrow layoutId="card">
-      <CardBase variant="outlined">
+      <CardBase variant="outlined" {...props}>
         <CardHeader
           title={<Title title={title} info={info} />}
           action={
