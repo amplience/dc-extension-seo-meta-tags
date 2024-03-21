@@ -5,13 +5,15 @@ import {
   getData,
   getParams,
   isEmptyString,
+  responseHasError,
   safeParse,
+  toSdkError,
 } from "../../lib";
 import localforage from "localforage";
 import { getMutation } from "../../lib/graphql/getMutation";
 import { generateInisghtsPrompt } from "./generateInsightsPrompt";
 import { isArray, isNumber, isObject, isString, round } from "ramda-adjunct";
-import { all, allPass, assoc, evolve, pipe, where } from "ramda";
+import { all, allPass, assoc, evolve, pipe, when, where } from "ramda";
 import { calculateCharacterCountScore } from "./calculateCharacterCountScore";
 
 export type Insights = {
@@ -84,6 +86,9 @@ export const getInsights = async (
         1,
         generateInisghtsPrompt(sdk, characterCountGrade, text)
       )
+    )
+    .then(
+      when(responseHasError, () => Promise.reject(toSdkError("BAD_CONTENT")))
     )
     .then((response) => {
       const data = getData(response)[0];
