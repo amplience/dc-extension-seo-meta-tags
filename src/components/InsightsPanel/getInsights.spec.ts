@@ -6,6 +6,25 @@ describe("getInsights", () => {
   afterEach(() => {
     jest.restoreAllMocks();
   });
+
+  it("Should return a 'BAD_CONTENT' error if the API response has an error", async () => {
+    const sdk = await init<ContentFieldExtension>();
+
+    (sdk.field.getValue as jest.Mock).mockResolvedValue("something");
+
+    (sdk.connection.request as jest.Mock).mockResolvedValue({
+      data: {
+        generateSEOText: {
+          variants: ["[ERROR]"],
+        },
+      },
+    });
+
+    expect(getInsights(sdk)).rejects.toEqual({
+      data: { errors: [{ extensions: { code: "BAD_CONTENT" } }] },
+    });
+  });
+
   it("Should return null if text is empty", async () => {
     const sdk = await init<ContentFieldExtension>();
 
@@ -99,23 +118,5 @@ describe("getInsights", () => {
     await getInsights(sdk);
 
     expect(forage.setItem).toHaveBeenCalledWith("something", response);
-  });
-
-  it.only("Should return a 'BAD_CONTENT' error if the API response has an error", async () => {
-    const sdk = await init<ContentFieldExtension>();
-
-    (sdk.field.getValue as jest.Mock).mockResolvedValue("something");
-
-    (sdk.connection.request as jest.Mock).mockResolvedValue({
-      data: {
-        generateSEOText: {
-          variants: ["[ERROR]"],
-        },
-      },
-    });
-
-    expect(getInsights(sdk)).rejects.toEqual({
-      data: { errors: [{ extensions: { code: "BAD_CONTENT" } }] },
-    });
   });
 });

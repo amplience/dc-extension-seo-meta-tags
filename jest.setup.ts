@@ -15,3 +15,10 @@ Object.defineProperty(window, "matchMedia", {
 });
 
 Object.defineProperty(window, "scrollTo", { value: () => {}, writable: true });
+
+Object.defineProperty(window, "BroadcastChannel", {
+  writable: true,
+  value: class {
+    postMessage() {}
+  },
+});
