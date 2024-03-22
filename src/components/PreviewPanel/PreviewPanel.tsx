@@ -107,7 +107,7 @@ export const PreviewPanel = ({
       action={<PreviewSelector selected={view} onSelect={setView} />}
     >
       {view === "desktop" && (
-        <Grid container sx={previewStyles}>
+        <Grid container flexDirection="column" sx={previewStyles}>
           <Grid item>
             <div
               style={{
