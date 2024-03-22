@@ -10,7 +10,11 @@ import { getParams } from "../../lib";
 import { ToggleButton } from "../ToggleButton";
 import { evolve, when } from "ramda";
 import { isNilOrEmpty } from "ramda-adjunct";
+<<<<<<< HEAD
 import { AnimatePresence, LayoutGroup } from "framer-motion";
+=======
+import { AnimatePresence, LayoutGroup } from "framer-motion";
+>>>>>>> feature/TAR-117-preview
 import { Fade } from "../animation/Fade";
 
 type View = "desktop" | "mobile";
