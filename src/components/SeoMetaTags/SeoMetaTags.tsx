@@ -161,7 +161,7 @@ export const SeoMetaTags = () => {
                     placeholder={placeholder}
                     value={inputValue}
                     variant="standard"
-                    disabled={panelOpen}
+                    disabled={insightsSelected}
                     inputProps={{
                       sx: {
                         color: theme.palette.grey[200],
