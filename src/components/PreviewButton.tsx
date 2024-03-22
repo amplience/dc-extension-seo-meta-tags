@@ -36,6 +36,7 @@ export const PreviewButton = ({
       onClick={handleClick}
       selected={selected}
       disabled={disabled || noValue}
+      data-testid="previewBtn"
       data-id={`seo-preview-${extensionType}`}
       {...props}
     >
