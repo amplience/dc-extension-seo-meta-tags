@@ -28,6 +28,7 @@ const CloseBtn = (props: IconButtonProps) => {
       size="small"
       sx={{ stroke: theme.palette.grey[200] }}
       data-testid="closeCard"
+      aria-label="Close"
       {...props}
     >
       <CloseIcon />

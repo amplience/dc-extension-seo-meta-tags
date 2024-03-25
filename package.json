@@ -22,10 +22,12 @@
     "json-pointer": "^0.6.2",
     "localforage": "^1.10.0",
     "lodash": "^4.17.21",
+    "mui-chips-input": "^2.1.4",
     "ramda": "^0.29.1",
     "ramda-adjunct": "^4.1.1",
     "react": "^18.2.0",
-    "react-dom": "^18.2.0"
+    "react-dom": "^18.2.0",
+    "zod": "^3.22.4"
   },
   "devDependencies": {
     "@jest/globals": "^29.7.0",

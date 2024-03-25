@@ -13,6 +13,13 @@ import { getMutation } from "../../lib/graphql/getMutation";
 import { safeParse } from "../../lib/json/safeParse";
 import { uniq, when } from "ramda";
 import { responseHasError } from "../../lib/chatGpt/responseHasError";
+import { generateKeywordsPrompt } from "./generateKeywordsPrompts";
+
+const prompts = {
+  title: generateTitlePrompt,
+  description: generateDescriptionPrompt,
+  keywords: generateKeywordsPrompt,
+};
 
 export const generateValues = async (
   sdk: ContentFieldExtension
@@ -20,11 +27,9 @@ export const generateValues = async (
   const text = await getText(sdk);
   const { type } = getParams(sdk);
   const hubId = sdk.hub.organizationId;
-  const prompt =
-    type === "description"
-      ? generateDescriptionPrompt(text)
-      : generateTitlePrompt(text);
-  const mutation = getMutation(hubId!, 5, prompt);
+  const prompt = prompts[type](text) as Record<string, unknown>[];
+  const numVariants = type === "keywords" ? 1 : 5;
+  const mutation = getMutation(hubId!, numVariants, prompt);
 
   if (isEmptyString(text)) {
     return Promise.reject(toSdkError("NO_CONTENT"));

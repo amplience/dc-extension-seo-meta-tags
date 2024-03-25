@@ -1,18 +1,10 @@
 import { useContext, useEffect, useState } from "react";
-import {
-  Grid,
-  LinearProgress,
-  Link,
-  Stack,
-  TextField,
-  Typography,
-} from "@mui/material";
+import { Grid, LinearProgress, Link, Stack, Typography } from "@mui/material";
 import { SparklesIcon } from "../SparklesIcon";
 import { ContentFieldExtensionContext } from "../../hooks/ContentFieldExtensionContext";
 import { GenerateButton } from "../GenerateButton/GenerateButton";
 import { getTitle } from "./getTitle";
 import { getDescription } from "./getDescription";
-import { withValue } from "../../lib/events/withValue";
 import { getPlaceholder } from "./getPlaceholder";
 import { TitleOptions } from "../TitleOptions/TitleOptions";
 import { useTheme } from "@mui/material";
@@ -23,12 +15,16 @@ import { AnimatePresence, LayoutGroup } from "framer-motion";
 import { Fade } from "../animation/Fade";
 import { ErrorMessage } from "../ErrorMessage.";
 import { PreviewPanel } from "../PreviewPanel/PreviewPanel";
-import { postValue } from "./postValue";
+import { broadcastValue } from "./broadcastValue";
+import { TextField } from "./TextField";
+import { getParams } from "../../lib";
+import { KeywordsField } from "./KeywordsField";
 
 export const SeoMetaTags = () => {
   const { sdk, readOnly, broadcastChannel } = useContext(
     ContentFieldExtensionContext
   );
+  const { type } = getParams(sdk!);
   const [inputValue, setInputValue] = useState("");
   const [options, setOptions] = useState<string[]>([]);
   const [generating, setGenerating] = useState(false);
@@ -38,30 +34,25 @@ export const SeoMetaTags = () => {
   const [selectedPanel, setSelectedPanel] = useState<
     "insights" | "preview" | null
   >(null);
-  const [initialised, setInitialised] = useState(false);
   const [placeholder, setPlaceholder] = useState(getPlaceholder(sdk!));
-  const [error, setError] = useState<string | null>(null);
+  const [generationError, setGenerationError] = useState<string | null>(null);
   const insightsSelected = selectedPanel === "insights";
   const previewSelected = selectedPanel === "preview";
   const hasOptions = options.length > 0;
   const panelOpen = selectedPanel !== null;
+  const isKeywords = type === "keywords";
 
   useEffect(() => {
     (sdk!.field.getValue() as Promise<string | undefined>).then((val = "") => {
       setInputValue(val);
-      postValue(broadcastChannel!, sdk!, val);
+      broadcastValue(broadcastChannel!, sdk!, val);
     });
   }, [sdk, broadcastChannel]);
 
-  useEffect(() => {
-    if (!initialised) {
-      setInitialised(true);
-      return;
-    }
-
-    sdk!.field.setValue(inputValue);
-    postValue(broadcastChannel!, sdk!, inputValue);
-  }, [sdk, broadcastChannel, initialised, setInitialised, inputValue]);
+  const fieldChanged = (value: string) => {
+    setInputValue(value);
+    sdk!.field.setValue(value);
+  };
 
   const optionSelected = (option: string) => {
     clearOptions();
@@ -78,8 +69,18 @@ export const SeoMetaTags = () => {
 
   const generationStarted = () => {
     setGenerating(true);
-    setError(null);
+    setGenerationError(null);
   };
+
+  const textGenerated = (variants: string[]) => {
+    if (type === "keywords") {
+      sdk!.field.setValue(variants[0]);
+      setInputValue(variants[0]);
+    } else {
+      setOptions(variants);
+    }
+  };
+
   const generationComplete = () => setGenerating(false);
 
   return (
@@ -104,7 +105,7 @@ export const SeoMetaTags = () => {
             </Typography>
             <Stack direction="row" spacing={2}>
               <LayoutGroup>
-                {!error && (
+                {!generationError && (
                   <Fade layoutId="descrpition">
                     <Typography variant="subtitle">
                       {description}{" "}
@@ -120,9 +121,9 @@ export const SeoMetaTags = () => {
                     </Typography>
                   </Fade>
                 )}
-                {error && (
+                {generationError && (
                   <Fade layoutId="error">
-                    <ErrorMessage error={error} />
+                    <ErrorMessage error={generationError} />
                   </Fade>
                 )}
               </LayoutGroup>
@@ -143,8 +144,8 @@ export const SeoMetaTags = () => {
               <GenerateButton
                 onStartGeneration={generationStarted}
                 onFinishGeneration={generationComplete}
-                onTextGenerated={setOptions}
-                onError={setError}
+                onTextGenerated={textGenerated}
+                onError={setGenerationError}
                 disabled={panelOpen || hasOptions}
               ></GenerateButton>
             </Stack>
@@ -154,25 +155,18 @@ export const SeoMetaTags = () => {
           <Stack spacing={3} marginTop={1}>
             <LayoutGroup>
               {!generating && (
-                <Fade layoutId="textField">
-                  <TextField
-                    fullWidth
-                    onChange={withValue(setInputValue)}
-                    placeholder={placeholder}
-                    value={inputValue}
-                    variant="standard"
-                    disabled={insightsSelected}
-                    inputProps={{
-                      sx: {
-                        color: theme.palette.grey[200],
-                        "&::placeholder": {
-                          color: theme.palette.grey[600],
-                          opacity: 1,
-                        },
-                      },
-                    }}
-                  />
-                </Fade>
+                <div>
+                  {isKeywords ? (
+                    <KeywordsField value={inputValue} onChange={fieldChanged} />
+                  ) : (
+                    <TextField
+                      disabled={panelOpen}
+                      placeholder={placeholder}
+                      value={inputValue}
+                      onChange={fieldChanged}
+                    />
+                  )}
+                </div>
               )}
               {generating && (
                 <Fade layoutId="progress">
