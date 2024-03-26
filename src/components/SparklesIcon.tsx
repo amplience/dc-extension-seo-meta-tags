@@ -1,11 +1,11 @@
 import { useContext } from "react";
 import Icon from "../assets/sparkles-icon.svg?react";
 import { useTheme } from "@mui/material";
-import { ContentFieldExtensionContext } from "../hooks/ContentFieldExtensionContext";
+import { ExtensionContext } from "../hooks/ExtensionContext";
 
 export const SparklesIcon = () => {
   const theme = useTheme();
-  const { readOnly, canGenerate } = useContext(ContentFieldExtensionContext);
+  const { readOnly, canGenerate } = useContext(ExtensionContext);
 
   return (
     <Icon

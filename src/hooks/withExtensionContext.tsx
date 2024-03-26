@@ -1,10 +1,10 @@
 import { ContentFieldExtension, init } from "dc-extensions-sdk";
 import { ReactElement, useEffect, useState } from "react";
-import { ContentFieldExtensionContext } from "./ContentFieldExtensionContext";
+import { ExtensionContext } from "./ExtensionContext";
 import { getParams, hasContent } from "../lib";
 import { isEmpty, symmetricDifference } from "ramda";
 
-export const WithContentFieldExtension = ({
+export const WithExtensionContext = ({
   children,
 }: {
   children: ReactElement;
@@ -60,11 +60,11 @@ export const WithContentFieldExtension = ({
 
   return (
     sdk && (
-      <ContentFieldExtensionContext.Provider
+      <ExtensionContext.Provider
         value={{ sdk, canGenerate, readOnly, broadcastChannel, seoValues }}
       >
         {children}
-      </ContentFieldExtensionContext.Provider>
+      </ExtensionContext.Provider>
     )
   );
 };

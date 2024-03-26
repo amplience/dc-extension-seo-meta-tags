@@ -5,7 +5,7 @@ import WebPreviewIcon from "../../assets/web-preview-icon.svg?react";
 import MobilePreviewIcon from "../../assets/mobile-preview-icon.svg?react";
 import WorldIcon from "../../assets/world-icon.png";
 import { useContext, useEffect, useState } from "react";
-import { ContentFieldExtensionContext } from "../../hooks/ContentFieldExtensionContext";
+import { ExtensionContext } from "../../hooks/ExtensionContext";
 import { getParams } from "../../lib";
 import { ToggleButton } from "../ToggleButton";
 import { evolve, when } from "ramda";
@@ -80,7 +80,7 @@ export const PreviewPanel = ({
   value: string;
   onClose: { (): void };
 }) => {
-  const { sdk, seoValues } = useContext(ContentFieldExtensionContext);
+  const { sdk, seoValues } = useContext(ExtensionContext);
   const [view, setView] = useState<View>("desktop");
   const [preview, setPreview] = useState({
     title: defaultTitle,

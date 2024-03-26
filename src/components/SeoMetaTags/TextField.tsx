@@ -7,7 +7,7 @@ import {
 import { withValue } from "../../lib";
 import { useContext, useEffect, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
-import { ContentFieldExtensionContext } from "../../hooks/ContentFieldExtensionContext";
+import { ExtensionContext } from "../../hooks/ExtensionContext";
 import { validate } from "./validate";
 
 export const TextField = ({
@@ -21,7 +21,7 @@ export const TextField = ({
   value: string;
   onChange: { (s: string): void };
 }) => {
-  const { sdk, readOnly } = useContext(ContentFieldExtensionContext);
+  const { sdk, readOnly } = useContext(ExtensionContext);
   const theme = useTheme();
   const [validation, setValidation] = useState<{
     invalid: boolean;

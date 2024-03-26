@@ -1,7 +1,7 @@
 import PreviewIcon from "../assets/preview-icon.svg?react";
 import { ToggleButton } from "./ToggleButton";
 import { useContext, useState } from "react";
-import { ContentFieldExtensionContext } from "../hooks/ContentFieldExtensionContext";
+import { ExtensionContext } from "../hooks/ExtensionContext";
 import { getParams, isEmptyString } from "../lib";
 import { isNil } from "ramda";
 
@@ -15,7 +15,7 @@ export const PreviewButton = ({
   selected: boolean;
   onSelect: { (s: "preview" | null): void };
 }) => {
-  const { sdk } = useContext(ContentFieldExtensionContext);
+  const { sdk } = useContext(ExtensionContext);
   const [noValue, setNoValue] = useState(true);
 
   const extensionType = getParams(sdk!).type;

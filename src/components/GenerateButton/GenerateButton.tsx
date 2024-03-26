@@ -3,7 +3,7 @@ import { generateValues } from "./generateValues";
 import { useContext, useState } from "react";
 import { track } from "../../lib/gainsight";
 import { EXTENSION_NAME, getError, getParams } from "../../lib";
-import { ContentFieldExtensionContext } from "../../hooks/ContentFieldExtensionContext";
+import { ExtensionContext } from "../../hooks/ExtensionContext";
 import { LayoutGroup } from "framer-motion";
 import Loader from "../../assets/loading-icon.svg?react";
 import { Fade } from "../animation/Fade";
@@ -22,7 +22,7 @@ export const GenerateButton = ({
   onFinishGeneration: { (): void };
   onError: { (e: string): void };
 }) => {
-  const { sdk, readOnly } = useContext(ContentFieldExtensionContext);
+  const { sdk, readOnly } = useContext(ExtensionContext);
   const [generating, setGenerating] = useState(false);
 
   const trackingParams = {

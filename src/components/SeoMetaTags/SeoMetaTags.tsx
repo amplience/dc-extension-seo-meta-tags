@@ -1,7 +1,7 @@
 import { useContext, useEffect, useState } from "react";
 import { Grid, LinearProgress, Link, Stack, Typography } from "@mui/material";
 import { SparklesIcon } from "../SparklesIcon";
-import { ContentFieldExtensionContext } from "../../hooks/ContentFieldExtensionContext";
+import { ExtensionContext } from "../../hooks/ExtensionContext";
 import { GenerateButton } from "../GenerateButton/GenerateButton";
 import { getTitle } from "./getTitle";
 import { getDescription } from "./getDescription";
@@ -21,9 +21,7 @@ import { getParams } from "../../lib";
 import { KeywordsField } from "./KeywordsField";
 
 export const SeoMetaTags = () => {
-  const { sdk, readOnly, broadcastChannel } = useContext(
-    ContentFieldExtensionContext
-  );
+  const { sdk, readOnly, broadcastChannel } = useContext(ExtensionContext);
   const { type } = getParams(sdk!);
   const [inputValue, setInputValue] = useState("");
   const [options, setOptions] = useState<string[]>([]);

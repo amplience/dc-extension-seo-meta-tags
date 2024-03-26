@@ -8,7 +8,7 @@ describe("validate", () => {
     (sdk.field.schema as unknown) = {
       maxLength: 10,
       minLength: 5,
-      pattern: "^\\w+$",
+      pattern: `^[\\w\\s]+$`,
     };
 
     const result = validate(sdk, "this is ok");

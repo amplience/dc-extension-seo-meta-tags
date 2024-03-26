@@ -1,7 +1,7 @@
 import InsightsIcon from "../assets/insights-icon.svg?react";
 import { ToggleButton } from "./ToggleButton";
 import { useContext, useState } from "react";
-import { ContentFieldExtensionContext } from "../hooks/ContentFieldExtensionContext";
+import { ExtensionContext } from "../hooks/ExtensionContext";
 import { isEmpty, isNil } from "ramda";
 import { getParams } from "../lib";
 
@@ -15,7 +15,7 @@ export const InsightsButton = ({
   selected: boolean;
   onSelect: { (s: "insights" | null): void };
 }) => {
-  const { sdk } = useContext(ContentFieldExtensionContext);
+  const { sdk } = useContext(ExtensionContext);
   const [noValue, setNoValue] = useState(true);
 
   const extensionType = getParams(sdk!).type;

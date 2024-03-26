@@ -1,4 +1,4 @@
-import { Badge, IconButton, Tooltip, useTheme } from "@mui/material";
+import { IconButton, Tooltip, useTheme } from "@mui/material";
 import { isEmpty, map, pipe, reject, split, trim } from "ramda";
 import { Key, useContext, useEffect, useState } from "react";
 import CloseIcon from "../../assets/close-icon.svg?react";
@@ -7,7 +7,7 @@ import {
   MuiChipsInputChipComponent,
   MuiChipsInputChipProps,
 } from "mui-chips-input";
-import { ContentFieldExtensionContext } from "../../hooks/ContentFieldExtensionContext";
+import { ExtensionContext } from "../../hooks/ExtensionContext";
 import { AnimatePresence } from "framer-motion";
 import { Fade } from "../animation/Fade";
 import { FadeGrow } from "../animation/FadeGrow";
@@ -46,7 +46,7 @@ export const KeywordsField = ({
   value: string;
   onChange: { (v: string): void };
 }) => {
-  const { sdk } = useContext(ContentFieldExtensionContext);
+  const { sdk } = useContext(ExtensionContext);
   const theme = useTheme();
   const [keywords, setKeywords] = useState<string[]>([]);
   const [input, setInput] = useState("");
