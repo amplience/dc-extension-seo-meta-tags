@@ -30,7 +30,7 @@ export const PreviewButton = ({
 
   return (
     <ToggleButton
-      tooltip="SERP Preview"
+      tooltip="Google Web Preview"
       size="small"
       value="preview"
       onClick={handleClick}
