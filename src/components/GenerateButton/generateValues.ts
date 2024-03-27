@@ -13,7 +13,7 @@ import { getMutation } from "../../lib/graphql/getMutation";
 import { safeParse } from "../../lib/json/safeParse";
 import { uniq, when } from "ramda";
 import { responseHasError } from "../../lib/chatGpt/responseHasError";
-import { generateKeywordsPrompt } from "./generateKeywordsPrompts";
+import { generateKeywordsPrompt } from "./generateKeywordsPrompt";
 
 const prompts = {
   title: generateTitlePrompt,

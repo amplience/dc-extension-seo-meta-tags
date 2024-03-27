@@ -31,10 +31,10 @@ const Chip = (
         height: "24px",
         margin: 0,
       }}
-      {...props}
       deleteIcon={
         <CloseIcon style={{ stroke: theme.palette.grey[200], width: "14px" }} />
       }
+      {...props}
     />
   );
 };
@@ -69,9 +69,14 @@ export const KeywordsField = ({
     onChange(keywords.join(", "));
   };
 
+  const clearKeywords = () => {
+    setKeywords([]);
+    onChange("");
+  };
+
   return (
     <>
-      <div style={{ position: "relative" }}>
+      <div style={{ position: "relative" }} data-testid="keywords">
         <MuiChipsInput
           value={keywords}
           onChange={keywordsChanged}
@@ -104,6 +109,8 @@ export const KeywordsField = ({
                   }}
                   size="small"
                   disableRipple
+                  data-testid="clearAll"
+                  onClick={clearKeywords}
                 >
                   <CloseIcon />
                 </IconButton>
@@ -117,6 +124,7 @@ export const KeywordsField = ({
           <FadeGrow layoutId="addBtn">
             <button
               onClick={addKeyword}
+              data-testid="addBtn"
               style={{
                 boxShadow: "0px 4px 4px 0px rgba(0, 0, 0, 0.25)",
                 background: "white",

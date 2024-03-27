@@ -20,12 +20,12 @@ const getSchema = (
     .max(maxLength as number, {
       message: `${upperFirst(
         type
-      )} should NOT be longer than ${maxLength} characters`,
+      )} should not be longer than ${maxLength} characters`,
     })
     .min(minLength as number, {
       message: `${upperFirst(
         type
-      )} should NOT be shorter than ${minLength} characters`,
+      )} should not be shorter than ${minLength} characters`,
     })
     .regex(new RegExp(pattern as string), {
       message: `${upperFirst(type)} should match pattern "${pattern}"`,
