@@ -109,7 +109,13 @@ export const InsightsPanel = ({
         info={description}
         loading={loading}
         onClose={onClose}
-        sx={{ minHeight: "160px" }}
+        sx={{
+          minHeight: "160px",
+          ".loader": {
+            marginTop: "30px",
+            display: "block",
+          },
+        }}
       >
         {results && (
           <>

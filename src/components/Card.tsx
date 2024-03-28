@@ -96,9 +96,9 @@ export const Card = ({
           <LayoutGroup>
             {loading ? (
               <FadeGrow layoutId="loader">
-                <Grid container justifyContent="center">
+                <Grid container justifyContent="center" height="100%">
                   <Grid item>
-                    <span data-testid="loader">
+                    <span className="loader" data-testid="loader">
                       <LoadingIcon />
                     </span>
                   </Grid>

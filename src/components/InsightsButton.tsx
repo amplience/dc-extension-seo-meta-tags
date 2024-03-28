@@ -29,7 +29,7 @@ export const InsightsButton = ({
 
   return (
     <ToggleButton
-      tooltip="SEO scoring & insights"
+      tooltip="SEO Scoring & Insights"
       value="insights"
       onClick={handleClick}
       selected={selected}
