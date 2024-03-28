@@ -56,6 +56,7 @@ export const KeywordsField = ({
 
   const addKeyword = () => {
     setKeywords([...keywords, input]);
+    onChange(keywords.join(", "));
   };
 
   const keywordsChanged = (keywords: string[]) => {
