@@ -17,27 +17,21 @@ const Chip = (
   Component: MuiChipsInputChipComponent,
   key: Key,
   props: MuiChipsInputChipProps
-) => {
-  const theme = useTheme();
-
-  return (
-    <Component
-      key={key}
-      sx={{
-        borderRadius: "4px",
-        background: theme.palette.grey[700],
-        color: theme.palette.grey[200],
-        fontSize: "12px",
-        height: "24px",
-        margin: 0,
-      }}
-      deleteIcon={
-        <CloseIcon style={{ stroke: theme.palette.grey[200], width: "14px" }} />
-      }
-      {...props}
-    />
-  );
-};
+) => (
+  <Component
+    key={key}
+    sx={{
+      borderRadius: "4px",
+      background: "#f4f4f5",
+      color: "#333",
+      fontSize: "12px",
+      height: "24px",
+      margin: 0,
+    }}
+    deleteIcon={<CloseIcon style={{ stroke: "#333", width: "14px" }} />}
+    {...props}
+  />
+);
 
 export const KeywordsField = ({
   value,
