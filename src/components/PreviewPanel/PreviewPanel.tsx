@@ -10,7 +10,7 @@ import { getParams } from "../../lib";
 import { ToggleButton } from "../ToggleButton";
 import { evolve, when } from "ramda";
 import { isNilOrEmpty } from "ramda-adjunct";
-import { AnimatePresence, LayoutGroup } from "framer-motion";
+import { LayoutGroup } from "framer-motion";
 import { Fade } from "../animation/Fade";
 
 type View = "desktop" | "mobile";
@@ -112,98 +112,94 @@ export const PreviewPanel = ({
     >
       <LayoutGroup>
         {view === "desktop" && (
-          <AnimatePresence>
-            <Fade layoutId="desktop">
-              <Grid container flexDirection="column" sx={previewStyles}>
-                <Grid item>
-                  <div
-                    style={{
-                      display: "flex",
-                      gap: "8px",
-                      alignItems: "center",
-                      marginBottom: "4px",
-                    }}
-                  >
-                    example.com <MenuIcon />
-                  </div>
-                </Grid>
-                <Grid item maxWidth="100%">
-                  <div style={{ overflow: "auto", marginBottom: "4px" }}>
-                    <div style={{ minWidth: "600px" }}>
-                      <h2 style={titleStyles} data-testid="desktopTitle">
-                        {preview.title}
-                      </h2>
-                      <p
-                        style={{
-                          color: "#545454",
-                          margin: "0 0 12px",
-                          lineHeight: "22px",
-                        }}
-                      >
-                        {preview.description}
-                      </p>
-                    </div>
-                  </div>
-                </Grid>
-                <Grid item textAlign="center" width="100%">
-                  <Typography
-                    variant="subtitle"
-                    sx={{
-                      "@media (min-width: 682px)": { display: "none" },
-                    }}
-                  >
-                    Scroll to see full preview (Google previews have a fixed
-                    width of 600px)
-                  </Typography>
-                </Grid>
+          <Fade layoutId="desktop">
+            <Grid container flexDirection="column" sx={previewStyles}>
+              <Grid item>
+                <div
+                  style={{
+                    display: "flex",
+                    gap: "8px",
+                    alignItems: "center",
+                    marginBottom: "4px",
+                  }}
+                >
+                  example.com <MenuIcon />
+                </div>
               </Grid>
-            </Fade>
-          </AnimatePresence>
+              <Grid item maxWidth="100%">
+                <div style={{ overflow: "auto", marginBottom: "4px" }}>
+                  <div style={{ width: "600px" }}>
+                    <h2 style={titleStyles} data-testid="desktopTitle">
+                      {preview.title}
+                    </h2>
+                    <p
+                      style={{
+                        color: "#545454",
+                        margin: "0 0 12px",
+                        lineHeight: "22px",
+                      }}
+                    >
+                      {preview.description}
+                    </p>
+                  </div>
+                </div>
+              </Grid>
+              <Grid item textAlign="center" width="100%">
+                <Typography
+                  variant="subtitle"
+                  sx={{
+                    "@media (min-width: 682px)": { display: "none" },
+                  }}
+                >
+                  Scroll to see full preview (Google previews have a fixed width
+                  of 600px)
+                </Typography>
+              </Grid>
+            </Grid>
+          </Fade>
         )}
         {view === "mobile" && (
-          <AnimatePresence>
-            <Fade layoutId="mobile">
-              <Grid
-                container
-                flexDirection="column"
-                sx={{
-                  borderRadius: "10px",
-                  boxShadow: "0px 0px 6px 0px rgba(0, 0, 0, 0.28)",
-                  padding: "20px",
-                  maxWidth: "408px",
-                  ...previewStyles,
-                }}
-              >
-                <Grid item>
-                  <div
-                    style={{
-                      display: "flex",
-                      gap: "8px",
-                      alignItems: "center",
-                      marginBottom: "4px",
-                    }}
-                  >
-                    <img src={WorldIcon} alt="" />
-                    example.com
-                  </div>
-                </Grid>
-                <Grid item>
-                  <h2 style={titleStyles} data-testid="mobileTitle">
-                    {preview.title}
-                  </h2>
-                  <p
-                    style={{
-                      color: "#545454",
-                      margin: 0,
-                      lineHeight: "22px",
-                    }}
-                  >
-                    {preview.description}
-                  </p>
-                </Grid>
+          <Fade layoutId="mobile">
+            <Grid
+              container
+              flexDirection="column"
+              sx={{
+                borderRadius: "10px",
+                boxShadow: "0px 0px 6px 0px rgba(0, 0, 0, 0.28)",
+                padding: "20px",
+                maxWidth: "408px",
+                ...previewStyles,
+              }}
+            >
+              <Grid item>
+                <div
+                  style={{
+                    display: "flex",
+                    gap: "8px",
+                    alignItems: "center",
+                    marginBottom: "4px",
+                  }}
+                >
+                  <img src={WorldIcon} alt="" />
+                  example.com
+                </div>
               </Grid>
-            </Fade>
-          </AnimatePresence>
+              <Grid item>
+                <h2 style={titleStyles} data-testid="mobileTitle">
+                  {preview.title}
+                </h2>
+                <p
+                  style={{
+                    color: "#545454",
+                    margin: 0,
+                    lineHeight: "22px",
+                  }}
+                >
+                  {preview.description}
+                </p>
+              </Grid>
+            </Grid>
+          </Fade>
         )}
       </LayoutGroup>
     </Card>

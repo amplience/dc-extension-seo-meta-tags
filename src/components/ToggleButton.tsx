@@ -32,11 +32,15 @@ export const ToggleButton = ({
     },
   });
 
-  return disabled ? (
-    <ToggleButton size="small" disabled={true} {...props}></ToggleButton>
-  ) : (
+  return (
     <Tooltip title={tooltip} placement="bottom">
-      <ToggleButton size="small" {...props}></ToggleButton>
+      <span>
+        <ToggleButton
+          size="small"
+          disabled={disabled}
+          {...props}
+        ></ToggleButton>
+      </span>
     </Tooltip>
   );
 };
