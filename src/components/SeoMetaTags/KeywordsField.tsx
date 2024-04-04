@@ -78,6 +78,7 @@ export const KeywordsField = ({
           onInputChange={setInput}
           variant="standard"
           clearInputOnBlur
+          disableEdition
           hideClearAll
           placeholder={placeholder}
           sx={{
