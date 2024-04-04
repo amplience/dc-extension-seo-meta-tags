@@ -129,16 +129,20 @@ export const SeoMetaTags = () => {
           </Grid>
           <Grid item>
             <Stack direction="row" spacing={1}>
-              <InsightsButton
-                selected={insightsSelected}
-                onSelect={setSelectedPanel}
-                disabled={hasOptions}
-              />
-              <PreviewButton
-                selected={previewSelected}
-                onSelect={setSelectedPanel}
-                disabled={hasOptions}
-              />
+              {!isKeywords && (
+                <>
+                  <InsightsButton
+                    selected={insightsSelected}
+                    onSelect={setSelectedPanel}
+                    disabled={hasOptions}
+                  />
+                  <PreviewButton
+                    selected={previewSelected}
+                    onSelect={setSelectedPanel}
+                    disabled={hasOptions}
+                  />
+                </>
+              )}
               <GenerateButton
                 onStartGeneration={generationStarted}
                 onFinishGeneration={generationComplete}
