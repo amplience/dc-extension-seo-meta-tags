@@ -8,8 +8,8 @@ import { useContext, useEffect, useState } from "react";
 import { ContentFieldExtensionContext } from "../../hooks/ContentFieldExtensionContext";
 import { getParams } from "../../lib";
 import { ToggleButton } from "../ToggleButton";
-import { evolve, when } from "ramda";
-import { isNilOrEmpty } from "ramda-adjunct";
+import { evolve, ifElse, pipe, take, trim, when } from "ramda";
+import { concatRight, isNilOrEmpty, lengthGt } from "ramda-adjunct";
 import { LayoutGroup } from "framer-motion";
 import { Fade } from "../animation/Fade";
 
@@ -73,6 +73,12 @@ const previewStyles = {
   fontFamily: "Arial",
 };
 
+const truncate = (numChars: number) =>
+  when(
+    lengthGt(numChars),
+    pipe(take(numChars) as (s: string) => string, trim, concatRight("…"))
+  );
+
 export const PreviewPanel = ({
   value,
   onClose,
@@ -91,8 +97,12 @@ export const PreviewPanel = ({
     const { type } = getParams(sdk!);
     const updatedPreview = evolve(
       {
-        title: when(isNilOrEmpty, () => defaultTitle),
-        description: when(isNilOrEmpty, () => defaultDescription),
+        title: ifElse(isNilOrEmpty, () => defaultTitle, truncate(60)),
+        description: ifElse(
+          isNilOrEmpty,
+          () => defaultDescription,
+          truncate(160)
+        ),
       },
       {
         ...seoValues,
