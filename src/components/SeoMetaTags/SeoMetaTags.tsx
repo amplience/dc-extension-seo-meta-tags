@@ -19,6 +19,7 @@ import { broadcastValue } from "./broadcastValue";
 import { TextField } from "./TextField";
 import { getParams } from "../../lib";
 import { KeywordsField } from "./KeywordsField";
+import { sanitiseKeywords } from "./sanitiseKeywords";
 
 export const SeoMetaTags = () => {
   const { sdk, readOnly, broadcastChannel } = useContext(ExtensionContext);
@@ -72,8 +73,9 @@ export const SeoMetaTags = () => {
 
   const textGenerated = (variants: string[]) => {
     if (type === "keywords") {
-      sdk!.field.setValue(variants[0]);
-      setInputValue(variants[0]);
+      const keywords = sanitiseKeywords(variants[0]);
+      sdk!.field.setValue(keywords);
+      setInputValue(keywords);
     } else {
       setOptions(variants);
     }

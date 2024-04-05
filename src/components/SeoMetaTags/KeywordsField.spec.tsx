@@ -117,7 +117,7 @@ describe("KeywordsField", () => {
 
     (init as jest.Mock).mockResolvedValue(sdk);
 
-    render(<KeywordsField value="one, two,three" onChange={onChange} />, {
+    render(<KeywordsField value="one,two,three" onChange={onChange} />, {
       wrapper,
     });
 

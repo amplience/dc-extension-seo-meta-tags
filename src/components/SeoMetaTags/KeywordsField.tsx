@@ -1,5 +1,4 @@
 import { IconButton, Tooltip, useTheme } from "@mui/material";
-import { isEmpty, map, pipe, reject, split, trim } from "ramda";
 import { Key, useContext, useEffect, useState } from "react";
 import CloseIcon from "../../assets/close-icon.svg?react";
 import {
@@ -12,6 +11,7 @@ import { AnimatePresence } from "framer-motion";
 import { Fade } from "../animation/Fade";
 import { FadeGrow } from "../animation/FadeGrow";
 import { getPlaceholder } from "./getPlaceholder";
+import { isEmpty, pipe, split, reject } from "ramda";
 
 const Chip = (
   Component: MuiChipsInputChipComponent,
@@ -46,11 +46,10 @@ export const KeywordsField = ({
   const [input, setInput] = useState("");
   const hasInput = input.length > 0;
   const hasKeywords = keywords.length > 0;
-  const placeholder = keywords.length ? "" : getPlaceholder(sdk!);
+  const placeholder = hasKeywords ? "" : getPlaceholder(sdk!);
 
   useEffect(() => {
-    const splitKeywords = pipe(split(","), map(trim), reject(isEmpty));
-
+    const splitKeywords = pipe(split(","), reject(isEmpty));
     setKeywords(splitKeywords(value));
   }, [value]);
 
