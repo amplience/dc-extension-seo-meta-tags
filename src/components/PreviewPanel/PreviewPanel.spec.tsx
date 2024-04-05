@@ -131,4 +131,47 @@ describe("PreviewPanel", () => {
       expect(close).toHaveBeenCalled();
     });
   });
+
+  it("Should truncate values when they are too long", async () => {
+    const sdk = await init<ContentFieldExtension>();
+    const description =
+      "This description is greater than 160 characters therefore it is too long to be displayed. I will have to keep typing because it still is not long enough, oh wait now it is.";
+
+    (sdk.field.getValue as jest.Mock).mockResolvedValue("test");
+    (sdk.form.getValue as jest.Mock).mockResolvedValue({});
+
+    (init as jest.Mock).mockResolvedValue(sdk);
+
+    render(<PreviewPanel value={description} onClose={() => {}} />, {
+      wrapper,
+    });
+
+    await waitFor(() => {
+      expect(screen.getByTestId("mobile")).toBeInTheDocument();
+    });
+
+    act(() => {
+      (bc as { postMessage: (d: unknown) => void }).postMessage({
+        data: {
+          type: "title",
+          sources: ["/content"],
+          value:
+            "the title is also too long. It needs to be less than sixty chars",
+        },
+      });
+    });
+
+    await waitFor(() => {
+      expect(
+        screen.getByText(
+          "the title is also too long. It needs to be less than sixty c…"
+        )
+      ).toBeInTheDocument();
+      expect(
+        screen.getByText(
+          "This description is greater than 160 characters therefore it is too long to be displayed. I will have to keep typing because it still is not long enough, oh wai…"
+        )
+      ).toBeInTheDocument();
+    });
+  });
 });

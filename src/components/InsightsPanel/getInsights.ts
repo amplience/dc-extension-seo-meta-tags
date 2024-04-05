@@ -3,6 +3,7 @@ import {
   EVENTS,
   RESPONSE_STORE,
   getData,
+  getParams,
   isEmptyString,
   responseHasError,
   safeParse,
@@ -38,18 +39,27 @@ const responseIsOk = allPass([
   }),
 ]);
 
-const SCORES = {
+const titleScores = {
   optimal: { low: 45, high: 60 },
   belowOptimal: { low: 1, high: 44 },
   aboveOptimal: { low: 61, high: 99 },
   excessive: 100,
 };
 
+const descriptionScores = {
+  optimal: { low: 120, high: 160 },
+  belowOptimal: { low: 1, high: 119 },
+  aboveOptimal: { low: 161, high: 199 },
+  excessive: 200,
+};
+
 export const getInsights = async (
   sdk: ContentFieldExtension
 ): Promise<Insights | null> => {
+  const { type } = getParams(sdk);
   const text = (await sdk.field.getValue()) as string;
   const hubId = sdk.hub.organizationId;
+  const grades = type === "title" ? titleScores : descriptionScores;
 
   if (isEmptyString(text)) {
     return null;
@@ -64,7 +74,7 @@ export const getInsights = async (
     return previousResponse;
   }
 
-  const characterCountGrade = calculateCharacterCountScore(SCORES, text);
+  const characterCountGrade = calculateCharacterCountScore(grades, text);
 
   const insights = await sdk.connection
     .request(

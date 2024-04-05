@@ -198,7 +198,7 @@ describe("InsightsPanel", () => {
     });
 
     await waitFor(() => {
-      expect(screen.getByText("8")).toBeInTheDocument();
+      expect(screen.getByText("3")).toBeInTheDocument();
       expect(screen.getByText("20")).toBeInTheDocument();
       expect(screen.getByText("30")).toBeInTheDocument();
     });

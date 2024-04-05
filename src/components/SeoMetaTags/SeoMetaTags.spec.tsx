@@ -462,4 +462,26 @@ describe("SeoMetaTags", () => {
       expect(screen.getByTestId("keywords")).toBeInTheDocument();
     });
   });
+
+  it("Should not show insights and preview when in keywords mode", async () => {
+    const sdk = await init<ContentFieldExtension>();
+
+    (sdk.field.getValue as jest.Mock).mockResolvedValue("");
+    (sdk.form.getValue as jest.Mock).mockResolvedValue({});
+
+    (sdk.params.installation as Record<string, string>).type = "keywords";
+
+    (init as jest.Mock).mockResolvedValue(sdk);
+
+    render(<SeoMetaTags />, { wrapper });
+
+    await waitFor(() => {
+      screen.getByTestId("seo-component");
+    });
+
+    await waitFor(() => {
+      expect(screen.queryByTestId("insightsBtn")).not.toBeInTheDocument();
+      expect(screen.queryByTestId("previewBtn")).not.toBeInTheDocument();
+    });
+  });
 });
