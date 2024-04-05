@@ -11,6 +11,7 @@ import { AnimatePresence } from "framer-motion";
 import { Fade } from "../animation/Fade";
 import { FadeGrow } from "../animation/FadeGrow";
 import { getPlaceholder } from "./getPlaceholder";
+import { isEmpty, pipe, split, reject } from "ramda";
 
 const Chip = (
   Component: MuiChipsInputChipComponent,
@@ -48,7 +49,8 @@ export const KeywordsField = ({
   const placeholder = hasKeywords ? "" : getPlaceholder(sdk!);
 
   useEffect(() => {
-    setKeywords(value.split(","));
+    const splitKeywords = pipe(split(","), reject(isEmpty));
+    setKeywords(splitKeywords(value));
   }, [value]);
 
   const addKeyword = () => {
