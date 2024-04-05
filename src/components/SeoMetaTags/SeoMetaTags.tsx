@@ -73,8 +73,9 @@ export const SeoMetaTags = () => {
 
   const textGenerated = (variants: string[]) => {
     if (type === "keywords") {
-      sdk!.field.setValue(sanitiseKeywords(variants[0]));
-      setInputValue(variants[0]);
+      const keywords = sanitiseKeywords(variants[0]);
+      sdk!.field.setValue(keywords);
+      setInputValue(keywords);
     } else {
       setOptions(variants);
     }
