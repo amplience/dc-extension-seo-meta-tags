@@ -1,5 +1,4 @@
 import { IconButton, Tooltip, useTheme } from "@mui/material";
-import { isEmpty, map, pipe, reject, split, trim } from "ramda";
 import { Key, useContext, useEffect, useState } from "react";
 import CloseIcon from "../../assets/close-icon.svg?react";
 import {
@@ -46,12 +45,10 @@ export const KeywordsField = ({
   const [input, setInput] = useState("");
   const hasInput = input.length > 0;
   const hasKeywords = keywords.length > 0;
-  const placeholder = keywords.length ? "" : getPlaceholder(sdk!);
+  const placeholder = hasKeywords ? "" : getPlaceholder(sdk!);
 
   useEffect(() => {
-    const splitKeywords = pipe(split(","), map(trim), reject(isEmpty));
-
-    setKeywords(splitKeywords(value));
+    setKeywords(value.split(","));
   }, [value]);
 
   const addKeyword = () => {
