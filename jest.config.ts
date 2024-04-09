@@ -104,6 +104,7 @@ const config: Config = {
   moduleNameMapper: {
     "\\.svg\\?react$": "<rootDir>/src/__mocks__/svg.ts",
     "\\.css$": "ts-jest",
+    "\\.(png)$": "ts-jest",
   },
 
   // An array of regexp pattern strings, matched against all module paths before considered 'visible' to the module loader

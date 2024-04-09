@@ -1,5 +1,4 @@
 import { Box, Button } from "@mui/material";
-import type { ContentFieldExtension } from "dc-extensions-sdk";
 import { generateValues } from "./generateValues";
 import { useContext, useState } from "react";
 import { track } from "../../lib/gainsight";
@@ -23,22 +22,20 @@ export const GenerateButton = ({
   onFinishGeneration: { (): void };
   onError: { (e: string): void };
 }) => {
-  const { sdk, readOnly } = useContext(
-    ContentFieldExtensionContext
-  ) as ContentFieldExtensionContext & { sdk: ContentFieldExtension };
+  const { sdk, readOnly } = useContext(ContentFieldExtensionContext);
   const [generating, setGenerating] = useState(false);
 
   const trackingParams = {
     name: EXTENSION_NAME,
     category: "Extension",
-    type: getParams(sdk).type,
+    type: getParams(sdk!).type,
   };
 
   const handleClick = async () => {
     onStartGeneration();
     setGenerating(true);
     try {
-      const values = await generateValues(sdk);
+      const values = await generateValues(sdk!);
 
       if (values) {
         track(window, "SEO generation", trackingParams);

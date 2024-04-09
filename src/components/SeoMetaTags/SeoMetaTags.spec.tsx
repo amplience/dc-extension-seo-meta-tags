@@ -243,7 +243,9 @@ describe("SeoMetaTags", () => {
     await userEvent.click(insightsBtn);
 
     await waitFor(() => {
-      expect(screen.getByText("SEO scoring & insights")).toBeInTheDocument();
+      expect(
+        screen.getAllByText("SEO Scoring & Insights")[0]
+      ).toBeInTheDocument();
     });
   });
 
@@ -301,7 +303,9 @@ describe("SeoMetaTags", () => {
     await userEvent.click(insightsBtn);
 
     await waitFor(() => {
-      expect(screen.getByText("SEO scoring & insights")).toBeInTheDocument();
+      expect(
+        screen.getAllByText("SEO Scoring & Insights")[0]
+      ).toBeInTheDocument();
     });
 
     await waitFor(() => {

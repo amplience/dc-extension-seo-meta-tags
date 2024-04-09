@@ -12,4 +12,15 @@ export declare global {
     code: string;
     message: string;
   };
+
+  type BroadcastMessage = {
+    type: "title" | "description";
+    sources: string[];
+    value: string;
+  };
+
+  type SeoValues = {
+    title: string;
+    description: string;
+  };
 }

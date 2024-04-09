@@ -19,12 +19,12 @@ export const generateValues = async (
 ): Promise<string[] | null> => {
   const text = await getText(sdk);
   const { type } = getParams(sdk);
-  const hubId = sdk.hub.organizationId as string;
+  const hubId = sdk.hub.organizationId;
   const prompt =
     type === "description"
       ? generateDescriptionPrompt(text)
       : generateTitlePrompt(text);
-  const mutation = getMutation(hubId, 5, prompt);
+  const mutation = getMutation(hubId!, 5, prompt);
 
   if (isEmptyString(text)) {
     return Promise.reject(toSdkError("NO_CONTENT"));

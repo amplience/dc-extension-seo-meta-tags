@@ -41,7 +41,7 @@ const InsightBox = ({
 
   return (
     <Box
-      sx={{ backgroundColor, color: theme.palette.grey[200] }}
+      sx={{ backgroundColor, color: theme.palette.grey[200], width: "100%" }}
       padding={2}
       data-testid={`insights-${type}`}
     >
@@ -109,7 +109,13 @@ export const InsightsPanel = ({
         info={description}
         loading={loading}
         onClose={onClose}
-        sx={{ minHeight: "160px" }}
+        sx={{
+          minHeight: "160px",
+          ".loader": {
+            marginTop: "30px",
+            display: "block",
+          },
+        }}
       >
         {results && (
           <>
