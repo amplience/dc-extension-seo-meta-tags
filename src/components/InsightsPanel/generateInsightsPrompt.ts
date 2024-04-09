@@ -49,7 +49,8 @@ export const generateInisghtsPrompt = (
       }
     2. Only respond with the json output.
     3. Don't include any other commentary.
-    4. If you don't understand the text, you will respond only with [ERROR] and nothing else`,
+    4. If you don't understand the text, you will respond only with [ERROR] and nothing else.
+    5. Positive and negative aspects should not contradict one another.`,
     },
   ];
 };

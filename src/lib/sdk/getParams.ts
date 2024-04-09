@@ -1,7 +1,7 @@
 import { ContentFieldExtension } from "dc-extensions-sdk";
 
 type Params = {
-  type: "title" | "description";
+  type: "title" | "description" | "keywords";
   sources: string[];
 };
 

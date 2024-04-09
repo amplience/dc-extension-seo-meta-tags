@@ -12,7 +12,7 @@ import MinusIcon from "../../assets/minus-icon.svg?react";
 import { getError, getParams, toSdkError } from "../../lib";
 import { ContentFieldExtension } from "dc-extensions-sdk";
 import { useContext, useEffect, useState } from "react";
-import { ContentFieldExtensionContext } from "../../hooks/ContentFieldExtensionContext";
+import { ExtensionContext } from "../../hooks/ExtensionContext";
 import { Chart } from "./Chart";
 import upperFirst from "lodash/upperFirst";
 import { Insights, getInsights } from "./getInsights";
@@ -72,7 +72,7 @@ export const InsightsPanel = ({
   value: string;
   onClose: { (): void };
 }) => {
-  const { sdk } = useContext(ContentFieldExtensionContext) as {
+  const { sdk } = useContext(ExtensionContext) as {
     sdk: ContentFieldExtension;
   };
   const theme = useTheme();

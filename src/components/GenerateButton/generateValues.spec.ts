@@ -40,6 +40,7 @@ describe("generateValues", () => {
               content: expect.stringContaining("for use as a SERP description"),
             }),
           ]),
+          variants: 5,
         }),
       })
     );
@@ -67,6 +68,35 @@ describe("generateValues", () => {
               content: expect.stringContaining("You will write a page title"),
             }),
           ]),
+          variants: 5,
+        }),
+      })
+    );
+  });
+
+  it("Should use the keywords prompt", async () => {
+    const sdk = await init<ContentFieldExtension>();
+
+    (sdk.params.installation as { type: string }).type = "keywords";
+
+    (sdk.form.getValue as jest.Mock).mockResolvedValue({
+      content: "A really interesting article",
+    });
+
+    (sdk.connection.request as jest.Mock).mockResolvedValue(response);
+
+    await generateValues(sdk);
+
+    expect(sdk.connection.request).toHaveBeenCalledWith(
+      EVENTS.MUTATION,
+      expect.objectContaining({
+        vars: expect.objectContaining({
+          prompts: expect.arrayContaining([
+            expect.objectContaining({
+              content: expect.stringContaining("You will generate keywords"),
+            }),
+          ]),
+          variants: 1,
         }),
       })
     );

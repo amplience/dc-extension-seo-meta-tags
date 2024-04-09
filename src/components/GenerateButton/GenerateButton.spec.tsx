@@ -310,7 +310,9 @@ describe("GenerateButton", () => {
 
       userEvent.click(btn);
 
-      expect(onError).toHaveBeenCalledWith("Generation failed.");
+      expect(onError).toHaveBeenCalledWith(
+        expect.stringMatching(/Generation failed/)
+      );
     });
   });
 

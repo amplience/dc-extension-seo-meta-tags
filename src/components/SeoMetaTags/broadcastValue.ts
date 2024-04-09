@@ -1,7 +1,7 @@
 import { ContentFieldExtension } from "dc-extensions-sdk";
 import { getParams } from "../../lib";
 
-export const postValue = (
+export const broadcastValue = (
   channel: BroadcastChannel,
   sdk: ContentFieldExtension,
   value: string

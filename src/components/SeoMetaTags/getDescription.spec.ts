@@ -24,4 +24,16 @@ describe("getDescription", () => {
 
     expect(result).toContain("SEO title");
   });
+
+  it("Should return the keywords description", async () => {
+    const sdk = await init<ContentFieldExtension>();
+
+    sdk.params.installation = {
+      type: "keywords",
+    };
+
+    const result = getDescription(sdk);
+
+    expect(result).toContain("SEO keywords");
+  });
 });

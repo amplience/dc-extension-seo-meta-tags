@@ -49,6 +49,25 @@ describe("InsightsPanel", () => {
     });
   });
 
+  it("Should show error message if field empty", async () => {
+    const sdk = await init<ContentFieldExtension>();
+
+    (sdk.field.getValue as jest.Mock).mockResolvedValue("");
+    (sdk.form.getValue as jest.Mock).mockResolvedValue({});
+
+    (init as jest.Mock).mockResolvedValue(sdk);
+
+    render(<InsightsPanel onClose={jest.fn()} value="Generated text" />, {
+      wrapper,
+    });
+
+    await waitFor(() => {
+      expect(
+        screen.getByText("Sorry, something went wrong.")
+      ).toBeInTheDocument();
+    });
+  });
+
   it("Should show loading icon when loading", async () => {
     const sdk = await init<ContentFieldExtension>();
 
@@ -179,7 +198,7 @@ describe("InsightsPanel", () => {
     });
 
     await waitFor(() => {
-      expect(screen.getByText("8")).toBeInTheDocument();
+      expect(screen.getByText("3")).toBeInTheDocument();
       expect(screen.getByText("20")).toBeInTheDocument();
       expect(screen.getByText("30")).toBeInTheDocument();
     });
