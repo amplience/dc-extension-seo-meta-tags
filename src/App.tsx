@@ -1,14 +1,14 @@
 import { SeoMetaTags } from "./components/SeoMetaTags/SeoMetaTags";
 import Theme from "./components/Theme";
-import { WithContentFieldExtension } from "./hooks/withContentFieldExtension";
+import { WithExtensionContext } from "./hooks/withExtensionContext";
 
 function App() {
   return (
-    <WithContentFieldExtension>
+    <WithExtensionContext>
       <Theme>
         <SeoMetaTags />
       </Theme>
-    </WithContentFieldExtension>
+    </WithExtensionContext>
   );
 }
 

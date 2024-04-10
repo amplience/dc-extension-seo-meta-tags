@@ -17,6 +17,7 @@ import InfoIcon from "../assets/info-icon.svg?react";
 import LoadingIcon from "../assets/loading-icon.svg?react";
 import { FadeGrow } from "./animation/FadeGrow";
 import { LayoutGroup } from "framer-motion";
+import { ReactElement } from "react";
 
 const CloseBtn = (props: IconButtonProps) => {
   const theme = useTheme();
@@ -27,6 +28,7 @@ const CloseBtn = (props: IconButtonProps) => {
       size="small"
       sx={{ stroke: theme.palette.grey[200] }}
       data-testid="closeCard"
+      aria-label="Close"
       {...props}
     >
       <CloseIcon />
@@ -57,12 +59,15 @@ export const Card = ({
   children,
   title,
   info,
+  action,
   onClose,
+  ...props
 }: CardProps & {
   loading?: boolean;
   title: string;
   info?: string;
-  onClose: { (): void };
+  action?: ReactElement;
+  onClose?: { (): void };
 }) => {
   const theme = useTheme();
 
@@ -78,18 +83,23 @@ export const Card = ({
 
   return (
     <FadeGrow layoutId="card">
-      <CardBase variant="outlined">
+      <CardBase variant="outlined" {...props}>
         <CardHeader
           title={<Title title={title} info={info} />}
-          action={<CloseBtn onClick={onClose} disabled={loading} />}
+          action={
+            <Stack direction="row" gap={2}>
+              {action}
+              <CloseBtn onClick={onClose} disabled={loading} />
+            </Stack>
+          }
         ></CardHeader>
         <CardContent>
           <LayoutGroup>
             {loading ? (
               <FadeGrow layoutId="loader">
-                <Grid container justifyContent="center">
+                <Grid container justifyContent="center" height="100%">
                   <Grid item>
-                    <span data-testid="loader">
+                    <span className="loader" data-testid="loader">
                       <LoadingIcon />
                     </span>
                   </Grid>

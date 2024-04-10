@@ -1,11 +1,9 @@
 import InsightsIcon from "../assets/insights-icon.svg?react";
 import { ToggleButton } from "./ToggleButton";
-import { isEmptyString } from "ramda-adjunct";
 import { useContext, useState } from "react";
-import { ContentFieldExtensionContext } from "../hooks/ContentFieldExtensionContext";
-import { isNil } from "ramda";
+import { ExtensionContext } from "../hooks/ExtensionContext";
+import { isEmpty, isNil } from "ramda";
 import { getParams } from "../lib";
-import { ContentFieldExtension } from "dc-extensions-sdk";
 
 export const InsightsButton = ({
   selected,
@@ -17,29 +15,24 @@ export const InsightsButton = ({
   selected: boolean;
   onSelect: { (s: "insights" | null): void };
 }) => {
-  const { sdk } = useContext(
-    ContentFieldExtensionContext
-  ) as ContentFieldExtensionContext & { sdk: ContentFieldExtension };
-  const [noTitle, setNoTitle] = useState(true);
+  const { sdk } = useContext(ExtensionContext);
+  const [noValue, setNoValue] = useState(true);
 
-  const extensionType = getParams(sdk).type;
+  const extensionType = getParams(sdk!).type;
 
-  sdk?.field
+  sdk!.field
     .getValue()
-    .then((value) =>
-      setNoTitle(isNil(value) || isEmptyString(value as string))
-    );
+    .then((value) => setNoValue(isNil(value) || isEmpty(value)));
 
   const handleClick = () => onSelect(selected ? null : "insights");
 
   return (
     <ToggleButton
-      tooltip="SEO scoring & insights"
-      size="small"
+      tooltip="SEO Scoring & Insights"
       value="insights"
       onClick={handleClick}
       selected={selected}
-      disabled={disabled || noTitle}
+      disabled={disabled || noValue}
       data-testid="insightsBtn"
       data-id={`seo-insights-${extensionType}`}
       {...props}

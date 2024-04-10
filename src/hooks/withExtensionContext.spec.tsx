@@ -1,8 +1,8 @@
 import { ContentFieldExtension, init } from "dc-extensions-sdk";
-import { WithContentFieldExtension } from "./withContentFieldExtension";
+import { WithExtensionContext } from "./withExtensionContext";
 import { act, render, waitFor } from "@testing-library/react";
 import { useContext, useEffect } from "react";
-import { ContentFieldExtensionContext } from "./ContentFieldExtensionContext";
+import { ExtensionContext } from "./ExtensionContext";
 
 jest.mock("dc-extensions-sdk", () => {
   const originalModule = jest.requireActual("../__mocks__/dc-extensions-sdk");
@@ -13,9 +13,9 @@ jest.mock("dc-extensions-sdk", () => {
 const DummyEl = ({
   setContext,
 }: {
-  setContext: { (sdk: ContentFieldExtensionContext): void };
+  setContext: { (sdk: ExtensionContext): void };
 }) => {
-  const context = useContext(ContentFieldExtensionContext);
+  const context = useContext(ExtensionContext);
 
   useEffect(() => {
     setContext(context);
@@ -25,7 +25,7 @@ const DummyEl = ({
 };
 describe("WithContentFieldExtension", () => {
   it("Should initialise the SDK and start the auto resizer", async () => {
-    let context: ContentFieldExtensionContext;
+    let context: ExtensionContext;
     const sdk = await init<ContentFieldExtension>();
 
     (sdk.form.getValue as jest.Mock).mockResolvedValue({});
@@ -33,13 +33,13 @@ describe("WithContentFieldExtension", () => {
     (init as jest.Mock).mockResolvedValue(sdk);
 
     render(
-      <WithContentFieldExtension>
+      <WithExtensionContext>
         <DummyEl
           setContext={(ctx) => {
             context = ctx;
           }}
         />
-      </WithContentFieldExtension>
+      </WithExtensionContext>
     );
 
     await waitFor(() => {
@@ -49,7 +49,7 @@ describe("WithContentFieldExtension", () => {
   });
 
   it("Should set 'canGenerate' to true when there is content in the form", async () => {
-    let context: ContentFieldExtensionContext;
+    let context: ExtensionContext;
     const sdk = await init<ContentFieldExtension>();
 
     (init as jest.Mock).mockResolvedValue(sdk);
@@ -59,13 +59,13 @@ describe("WithContentFieldExtension", () => {
     });
 
     render(
-      <WithContentFieldExtension>
+      <WithExtensionContext>
         <DummyEl
           setContext={(ctx) => {
             context = ctx;
           }}
         />
-      </WithContentFieldExtension>
+      </WithExtensionContext>
     );
 
     await waitFor(() => {
@@ -75,7 +75,7 @@ describe("WithContentFieldExtension", () => {
   });
 
   it("Should set 'canGenerate' to true if content is added to the form", async () => {
-    let context: ContentFieldExtensionContext;
+    let context: ExtensionContext;
     const sdk = await init<ContentFieldExtension>();
 
     (init as jest.Mock).mockResolvedValue(sdk);
@@ -86,13 +86,13 @@ describe("WithContentFieldExtension", () => {
     sdk.form.formValueSubscribers = [];
 
     render(
-      <WithContentFieldExtension>
+      <WithExtensionContext>
         <DummyEl
           setContext={(ctx) => {
             context = ctx;
           }}
         />
-      </WithContentFieldExtension>
+      </WithExtensionContext>
     );
 
     await waitFor(() => {
@@ -114,7 +114,7 @@ describe("WithContentFieldExtension", () => {
   });
 
   it("Should set 'readOnly' to true when the form is in readonly mode", async () => {
-    let context: ContentFieldExtensionContext;
+    let context: ExtensionContext;
     const sdk = await init<ContentFieldExtension>();
 
     (init as jest.Mock).mockResolvedValue(sdk);
@@ -125,13 +125,13 @@ describe("WithContentFieldExtension", () => {
     sdk.form.readOnlySubscribers = [];
 
     render(
-      <WithContentFieldExtension>
+      <WithExtensionContext>
         <DummyEl
           setContext={(ctx) => {
             context = ctx;
           }}
         />
-      </WithContentFieldExtension>
+      </WithExtensionContext>
     );
 
     await waitFor(() => {
@@ -161,9 +161,9 @@ describe("WithContentFieldExtension", () => {
     jest.spyOn(console, "error");
 
     render(
-      <WithContentFieldExtension>
+      <WithExtensionContext>
         <></>
-      </WithContentFieldExtension>
+      </WithExtensionContext>
     );
 
     await waitFor(() => {

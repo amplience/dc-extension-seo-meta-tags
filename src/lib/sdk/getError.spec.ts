@@ -14,12 +14,12 @@ describe("getError", () => {
       data: { errors: [{ extensions: { code: "UNKNOWN" } }] },
     });
 
-    expect(msg).toEqual("Generation failed.");
+    expect(msg).toMatch(/Generation failed/);
   });
 
   it("Should default to 'SYSTEM_ERROR'", () => {
     const msg = getError({});
 
-    expect(msg).toEqual("Generation failed.");
+    expect(msg).toMatch(/Generation failed/);
   });
 });

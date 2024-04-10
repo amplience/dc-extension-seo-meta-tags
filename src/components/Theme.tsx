@@ -127,7 +127,9 @@ const theme = extendTheme({
           fontSize: theme.typography.fontSize,
           fontWeight: 500,
           lineHeight: "14px",
-          padding: "5px 9px",
+          padding: "6px 12px",
+          whiteSpace: "pre-line",
+          maxWidth: "410px",
         }),
         arrow: ({ theme }) => ({
           color: theme.vars.palette.grey[100],

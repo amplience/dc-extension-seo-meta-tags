@@ -140,7 +140,7 @@ describe("SeoMetaTags", () => {
     });
   });
 
-  it.skip("Should disable the generate button and icon if the form is readonly", async () => {
+  it("Should disable the generate button and icon if the form is readonly", async () => {
     const sdk = await init<ContentFieldExtension>();
 
     (sdk.field.getValue as jest.Mock).mockResolvedValue("");
@@ -220,7 +220,7 @@ describe("SeoMetaTags", () => {
     expect(title).toBeInTheDocument();
   });
 
-  it.skip("Should show insights panel when button pressed", async () => {
+  it("Should show insights panel when button pressed", async () => {
     const sdk = await init<ContentFieldExtension>();
 
     (sdk.field.getValue as jest.Mock).mockResolvedValue("text");
@@ -243,11 +243,13 @@ describe("SeoMetaTags", () => {
     await userEvent.click(insightsBtn);
 
     await waitFor(() => {
-      expect(screen.getByText("SEO scoring & insights")).toBeInTheDocument();
+      expect(
+        screen.getAllByText("SEO Scoring & Insights")[0]
+      ).toBeInTheDocument();
     });
   });
 
-  it.skip("Should hide the insight panel when insights button pressed again", async () => {
+  it("Should hide the insight panel when insights button pressed again", async () => {
     const sdk = await init<ContentFieldExtension>();
 
     (sdk.field.getValue as jest.Mock).mockResolvedValue("text");
@@ -278,7 +280,7 @@ describe("SeoMetaTags", () => {
     });
   });
 
-  it.skip("Should hide panel when 'x' is pressed on panel", async () => {
+  it("Should hide panel when 'x' is pressed on panel", async () => {
     const sdk = await init<ContentFieldExtension>();
 
     (sdk.field.getValue as jest.Mock).mockResolvedValue("text");
@@ -301,7 +303,9 @@ describe("SeoMetaTags", () => {
     await userEvent.click(insightsBtn);
 
     await waitFor(() => {
-      expect(screen.getByText("SEO scoring & insights")).toBeInTheDocument();
+      expect(
+        screen.getAllByText("SEO Scoring & Insights")[0]
+      ).toBeInTheDocument();
     });
 
     await waitFor(() => {
@@ -315,7 +319,7 @@ describe("SeoMetaTags", () => {
     });
   });
 
-  it.skip("Should disable the generate button and text field when insights or preview panels are open", async () => {
+  it("Should disable the generate button and text field when insights or preview panels are open", async () => {
     const sdk = await init<ContentFieldExtension>();
 
     (sdk.field.getValue as jest.Mock).mockResolvedValue("text");
@@ -436,5 +440,48 @@ describe("SeoMetaTags", () => {
     expect(
       screen.getByText(/You're out of Amplience Credits/)
     ).toBeInTheDocument();
+  });
+
+  it("Should show keywords field", async () => {
+    const sdk = await init<ContentFieldExtension>();
+
+    (sdk.field.getValue as jest.Mock).mockResolvedValue("");
+    (sdk.form.getValue as jest.Mock).mockResolvedValue({});
+
+    (sdk.params.installation as Record<string, string>).type = "keywords";
+
+    (init as jest.Mock).mockResolvedValue(sdk);
+
+    render(<SeoMetaTags />, { wrapper });
+
+    await waitFor(() => {
+      screen.getByTestId("seo-component");
+    });
+
+    await waitFor(() => {
+      expect(screen.getByTestId("keywords")).toBeInTheDocument();
+    });
+  });
+
+  it("Should not show insights and preview when in keywords mode", async () => {
+    const sdk = await init<ContentFieldExtension>();
+
+    (sdk.field.getValue as jest.Mock).mockResolvedValue("");
+    (sdk.form.getValue as jest.Mock).mockResolvedValue({});
+
+    (sdk.params.installation as Record<string, string>).type = "keywords";
+
+    (init as jest.Mock).mockResolvedValue(sdk);
+
+    render(<SeoMetaTags />, { wrapper });
+
+    await waitFor(() => {
+      screen.getByTestId("seo-component");
+    });
+
+    await waitFor(() => {
+      expect(screen.queryByTestId("insightsBtn")).not.toBeInTheDocument();
+      expect(screen.queryByTestId("previewBtn")).not.toBeInTheDocument();
+    });
   });
 });

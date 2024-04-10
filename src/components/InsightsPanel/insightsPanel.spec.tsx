@@ -2,9 +2,7 @@ import { render, screen, waitFor } from "@testing-library/react";
 import { InsightsPanel } from "./InsightsPanel";
 import { wrapper } from "../../__mocks__/wrapper";
 import { init, ContentFieldExtension } from "dc-extensions-sdk";
-import { EVENTS } from "../../lib";
 import userEvent from "@testing-library/user-event";
-// import userEvent from "@testing-library/user-event";
 
 jest.mock("dc-extensions-sdk", () => {
   const originalModule = jest.requireActual(
@@ -20,7 +18,6 @@ const insights = {
       variants: [
         JSON.stringify({
           overallScore: 81,
-          charactersScore: 10,
           readabilityScore: 20,
           accessibilityScore: 30,
           positive: ["a", "b", "c"],
@@ -32,7 +29,7 @@ const insights = {
 };
 
 describe("InsightsPanel", () => {
-  it("Should show toast if insights fail to load", async () => {
+  it("Should show error message if insights fail to load", async () => {
     const sdk = await init<ContentFieldExtension>();
 
     (sdk.field.getValue as jest.Mock).mockResolvedValue("test");
@@ -46,10 +43,28 @@ describe("InsightsPanel", () => {
     });
 
     await waitFor(() => {
-      expect(sdk.connection.emit).toHaveBeenCalledWith(
-        EVENTS.ERROR_TOAST,
-        "Could not get insights"
-      );
+      expect(
+        screen.getByText("Sorry, something went wrong.")
+      ).toBeInTheDocument();
+    });
+  });
+
+  it("Should show error message if field empty", async () => {
+    const sdk = await init<ContentFieldExtension>();
+
+    (sdk.field.getValue as jest.Mock).mockResolvedValue("");
+    (sdk.form.getValue as jest.Mock).mockResolvedValue({});
+
+    (init as jest.Mock).mockResolvedValue(sdk);
+
+    render(<InsightsPanel onClose={jest.fn()} value="Generated text" />, {
+      wrapper,
+    });
+
+    await waitFor(() => {
+      expect(
+        screen.getByText("Sorry, something went wrong.")
+      ).toBeInTheDocument();
     });
   });
 
@@ -183,7 +198,7 @@ describe("InsightsPanel", () => {
     });
 
     await waitFor(() => {
-      expect(screen.getByText("10")).toBeInTheDocument();
+      expect(screen.getByText("3")).toBeInTheDocument();
       expect(screen.getByText("20")).toBeInTheDocument();
       expect(screen.getByText("30")).toBeInTheDocument();
     });

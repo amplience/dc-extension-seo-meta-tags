@@ -1,84 +1,86 @@
 import { useContext, useEffect, useState } from "react";
-import {
-  Grid,
-  LinearProgress,
-  Link,
-  Stack,
-  TextField,
-  Typography,
-} from "@mui/material";
+import { Grid, LinearProgress, Link, Stack, Typography } from "@mui/material";
 import { SparklesIcon } from "../SparklesIcon";
-import { ContentFieldExtensionContext } from "../../hooks/ContentFieldExtensionContext";
+import { ExtensionContext } from "../../hooks/ExtensionContext";
 import { GenerateButton } from "../GenerateButton/GenerateButton";
-import { ContentFieldExtension } from "dc-extensions-sdk";
 import { getTitle } from "./getTitle";
 import { getDescription } from "./getDescription";
-import { withValue } from "../../lib/events/withValue";
 import { getPlaceholder } from "./getPlaceholder";
 import { TitleOptions } from "../TitleOptions/TitleOptions";
 import { useTheme } from "@mui/material";
 import { InsightsPanel } from "../InsightsPanel/InsightsPanel";
-// import { InsightsButton } from "../InsightsButton";
-// import { PreviewButton } from "../PreviewButton";
+import { InsightsButton } from "../InsightsButton";
+import { PreviewButton } from "../PreviewButton";
 import { AnimatePresence, LayoutGroup } from "framer-motion";
 import { Fade } from "../animation/Fade";
 import { ErrorMessage } from "../ErrorMessage.";
+import { PreviewPanel } from "../PreviewPanel/PreviewPanel";
+import { broadcastValue } from "./broadcastValue";
+import { TextField } from "./TextField";
+import { getParams } from "../../lib";
+import { KeywordsField } from "./KeywordsField";
+import { sanitiseKeywords } from "./sanitiseKeywords";
 
 export const SeoMetaTags = () => {
-  const { sdk, readOnly } = useContext(
-    ContentFieldExtensionContext
-  ) as ContentFieldExtensionContext & {
-    sdk: ContentFieldExtension;
-  };
+  const { sdk, readOnly, broadcastChannel } = useContext(ExtensionContext);
+  const { type } = getParams(sdk!);
   const [inputValue, setInputValue] = useState("");
   const [options, setOptions] = useState<string[]>([]);
   const [generating, setGenerating] = useState(false);
-  const title = getTitle(sdk);
-  const description = getDescription(sdk);
+  const title = getTitle(sdk!);
+  const description = getDescription(sdk!);
   const theme = useTheme();
   const [selectedPanel, setSelectedPanel] = useState<
     "insights" | "preview" | null
   >(null);
-  const [initialised, setInitialised] = useState(false);
-  const [placeholder, setPlaceholder] = useState(getPlaceholder(sdk));
-  const [error, setError] = useState<string | null>(null);
+  const [placeholder, setPlaceholder] = useState(getPlaceholder(sdk!));
+  const [generationError, setGenerationError] = useState<string | null>(null);
   const insightsSelected = selectedPanel === "insights";
-  // const previewSelected = selectedPanel === "preview";
+  const previewSelected = selectedPanel === "preview";
   const hasOptions = options.length > 0;
   const panelOpen = selectedPanel !== null;
+  const isKeywords = type === "keywords";
 
   useEffect(() => {
-    (sdk.field.getValue() as Promise<string | undefined>).then((val = "") =>
-      setInputValue(val)
-    );
-  }, [sdk]);
+    (sdk!.field.getValue() as Promise<string | undefined>).then((val = "") => {
+      setInputValue(val);
+      broadcastValue(broadcastChannel!, sdk!, val);
+    });
+  }, [sdk, broadcastChannel]);
 
-  useEffect(() => {
-    if (!initialised) {
-      setInitialised(true);
-      return;
-    }
-
-    sdk.field.setValue(inputValue);
-  }, [sdk, initialised, setInitialised, inputValue]);
+  const fieldChanged = (value: string) => {
+    setInputValue(value);
+    sdk!.field.setValue(value);
+  };
 
   const optionSelected = (option: string) => {
     clearOptions();
     setInputValue(option);
-    sdk.field.setValue(option);
+    sdk!.field.setValue(option);
   };
 
   const hidePanels = () => setSelectedPanel(null);
 
   const clearOptions = () => {
     setOptions([]);
-    setPlaceholder(getPlaceholder(sdk));
+    setPlaceholder(getPlaceholder(sdk!));
   };
 
   const generationStarted = () => {
     setGenerating(true);
-    setError(null);
+    setGenerationError(null);
   };
+
+  const textGenerated = (variants: string[]) => {
+    if (type === "keywords") {
+      const keywords = sanitiseKeywords(variants[0]);
+      sdk!.field.setValue(keywords);
+      setInputValue(keywords);
+    } else {
+      setOptions(variants);
+    }
+  };
+
   const generationComplete = () => setGenerating(false);
 
   return (
@@ -92,7 +94,7 @@ export const SeoMetaTags = () => {
       <Grid item>
         <SparklesIcon />
       </Grid>
-      <Grid container item direction="column">
+      <Grid container item direction="column" overflow="hidden">
         <Grid item container spacing={1} flexWrap="nowrap" alignItems="end">
           <Grid item container flexGrow={1} direction="column">
             <Typography
@@ -103,7 +105,7 @@ export const SeoMetaTags = () => {
             </Typography>
             <Stack direction="row" spacing={2}>
               <LayoutGroup>
-                {!error && (
+                {!generationError && (
                   <Fade layoutId="descrpition">
                     <Typography variant="subtitle">
                       {description}{" "}
@@ -119,9 +121,9 @@ export const SeoMetaTags = () => {
                     </Typography>
                   </Fade>
                 )}
-                {error && (
+                {generationError && (
                   <Fade layoutId="error">
-                    <ErrorMessage error={error} />
+                    <ErrorMessage error={generationError} />
                   </Fade>
                 )}
               </LayoutGroup>
@@ -129,48 +131,46 @@ export const SeoMetaTags = () => {
           </Grid>
           <Grid item>
             <Stack direction="row" spacing={1}>
-              {/* <InsightsButton
-                selected={insightsSelected}
-                onSelect={setSelectedPanel}
-                disabled={hasOptions}
-              /> */}
-              {/* <PreviewButton
-                selected={previewSelected}
-                onSelect={setSelectedPanel}
-              /> */}
+              {!isKeywords && (
+                <>
+                  <InsightsButton
+                    selected={insightsSelected}
+                    onSelect={setSelectedPanel}
+                    disabled={hasOptions}
+                  />
+                  <PreviewButton
+                    selected={previewSelected}
+                    onSelect={setSelectedPanel}
+                    disabled={hasOptions}
+                  />
+                </>
+              )}
               <GenerateButton
                 onStartGeneration={generationStarted}
                 onFinishGeneration={generationComplete}
-                onTextGenerated={setOptions}
-                onError={setError}
+                onTextGenerated={textGenerated}
+                onError={setGenerationError}
                 disabled={panelOpen || hasOptions}
               ></GenerateButton>
             </Stack>
           </Grid>
         </Grid>
-        <Grid item>
+        <Grid item maxWidth="100%!important">
           <Stack spacing={3} marginTop={1}>
             <LayoutGroup>
               {!generating && (
-                <Fade layoutId="textField">
-                  <TextField
-                    fullWidth
-                    onChange={withValue(setInputValue)}
-                    placeholder={placeholder}
-                    value={inputValue}
-                    variant="standard"
-                    disabled={panelOpen}
-                    inputProps={{
-                      sx: {
-                        color: theme.palette.grey[200],
-                        "&::placeholder": {
-                          color: theme.palette.grey[600],
-                          opacity: 1,
-                        },
-                      },
-                    }}
-                  />
-                </Fade>
+                <div>
+                  {isKeywords ? (
+                    <KeywordsField value={inputValue} onChange={fieldChanged} />
+                  ) : (
+                    <TextField
+                      disabled={panelOpen}
+                      placeholder={placeholder}
+                      value={inputValue}
+                      onChange={fieldChanged}
+                    />
+                  )}
+                </div>
               )}
               {generating && (
                 <Fade layoutId="progress">
@@ -191,6 +191,14 @@ export const SeoMetaTags = () => {
             <AnimatePresence>
               {insightsSelected && (
                 <InsightsPanel value={inputValue} onClose={hidePanels} />
+              )}
+            </AnimatePresence>
+            <AnimatePresence>
+              {previewSelected && (
+                <PreviewPanel
+                  value={inputValue}
+                  onClose={hidePanels}
+                ></PreviewPanel>
               )}
             </AnimatePresence>
           </Stack>

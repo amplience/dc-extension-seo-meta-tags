@@ -6,6 +6,25 @@ describe("getInsights", () => {
   afterEach(() => {
     jest.restoreAllMocks();
   });
+
+  it("Should return a 'BAD_CONTENT' error if the API response has an error", async () => {
+    const sdk = await init<ContentFieldExtension>();
+
+    (sdk.field.getValue as jest.Mock).mockResolvedValue("something");
+
+    (sdk.connection.request as jest.Mock).mockResolvedValue({
+      data: {
+        generateSEOText: {
+          variants: ["[ERROR]"],
+        },
+      },
+    });
+
+    expect(getInsights(sdk)).rejects.toEqual({
+      data: { errors: [{ extensions: { code: "BAD_CONTENT" } }] },
+    });
+  });
+
   it("Should return null if text is empty", async () => {
     const sdk = await init<ContentFieldExtension>();
 
@@ -44,22 +63,11 @@ describe("getInsights", () => {
     expect(insights).toEqual(prev);
   });
 
-  it("Should return null if error", async () => {
-    const sdk = await init<ContentFieldExtension>();
-    (sdk.field.getValue as jest.Mock).mockResolvedValue("something");
-
-    (sdk.connection.request as jest.Mock).mockRejectedValue("Nooooo!");
-
-    const insights = await getInsights(sdk);
-
-    expect(insights).toEqual(null);
-  });
-
   it("Should return insights", async () => {
     const sdk = await init<ContentFieldExtension>();
     const response = {
       overallScore: 1,
-      charactersScore: 1,
+      charactersScore: 8,
       readabilityScore: 1,
       accessibilityScore: 1,
       positive: ["amazing"],
@@ -84,7 +92,7 @@ describe("getInsights", () => {
     const sdk = await init<ContentFieldExtension>();
     const response = {
       overallScore: 1,
-      charactersScore: 1,
+      charactersScore: 8,
       readabilityScore: 1,
       accessibilityScore: 1,
       positive: ["amazing"],
