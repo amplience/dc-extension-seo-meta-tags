@@ -37,4 +37,42 @@ describe("getText", () => {
 
     expect(text).toEqual("some text\nan intro\nYeah, nested");
   });
+
+  it("Should support json format", async () => {
+    const sdk = await init<ContentFieldExtension>();
+
+    sdk.params.installation = {
+      sources: ["/content"],
+    };
+
+    (sdk.form.getValue as jest.Mock).mockResolvedValue({
+      content: [
+        {
+          type: "markdown",
+          data: "This is some text",
+        },
+        {
+          type: "dc-image-link",
+          data: {
+            _meta: {
+              schema:
+                "http://bigcontent.io/cms/schema/v1/core#/definitions/image-link",
+            },
+            id: "1111111-1111-1111-1111-1111111111",
+            name: "imgbg-removal-scale-test",
+            endpoint: "TestEndpoint",
+            defaultHost: "cdn.media.amplience.net",
+          },
+        },
+        {
+          type: "markdown",
+          data: "more text",
+        },
+      ],
+    });
+
+    const text = await getText(sdk);
+
+    expect(text).toEqual("This is some text\nmore text");
+  });
 });
