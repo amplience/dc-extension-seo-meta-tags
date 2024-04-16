@@ -59,7 +59,7 @@ describe("getText", () => {
                 "http://bigcontent.io/cms/schema/v1/core#/definitions/image-link",
             },
             id: "1111111-1111-1111-1111-1111111111",
-            name: "imgbg-removal-scale-test",
+            name: "img",
             endpoint: "TestEndpoint",
             defaultHost: "cdn.media.amplience.net",
           },
