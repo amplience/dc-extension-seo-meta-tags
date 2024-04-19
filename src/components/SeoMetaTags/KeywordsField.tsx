@@ -1,3 +1,4 @@
+import "./keywords.css";
 import { IconButton, Tooltip, useTheme } from "@mui/material";
 import { Key, useContext, useEffect, useState } from "react";
 import CloseIcon from "../../assets/close-icon.svg?react";
@@ -11,7 +12,7 @@ import { AnimatePresence } from "framer-motion";
 import { Fade } from "../animation/Fade";
 import { FadeGrow } from "../animation/FadeGrow";
 import { getPlaceholder } from "./getPlaceholder";
-import { isEmpty, pipe, split, reject } from "ramda";
+import { isEmpty, pipe, split, reject, trim, map } from "ramda";
 
 const Chip = (
   Component: MuiChipsInputChipComponent,
@@ -49,13 +50,14 @@ export const KeywordsField = ({
   const placeholder = hasKeywords ? "" : getPlaceholder(sdk!);
 
   useEffect(() => {
-    const splitKeywords = pipe(split(","), reject(isEmpty));
+    const splitKeywords = pipe(split(","), map(trim), reject(isEmpty));
     setKeywords(splitKeywords(value));
   }, [value]);
 
   const addKeyword = () => {
-    setKeywords([...keywords, input]);
-    onChange(keywords.join(", "));
+    const updatedKeywords = [...keywords, input];
+    setKeywords(updatedKeywords);
+    onChange(updatedKeywords.join(", "));
   };
 
   const keywordsChanged = (keywords: string[]) => {
@@ -124,6 +126,7 @@ export const KeywordsField = ({
             <button
               onClick={addKeyword}
               data-testid="addBtn"
+              className="addBtn"
               style={{
                 boxShadow: "0px 4px 4px 0px rgba(0, 0, 0, 0.25)",
                 background: "white",
