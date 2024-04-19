@@ -63,13 +63,14 @@ describe("KeywordsField", () => {
 
   it("Should add keyword when instructions pressed", async () => {
     const sdk = await init<ContentFieldExtension>();
+    const onChange = jest.fn();
 
     (sdk.field.getValue as jest.Mock).mockResolvedValue("");
     (sdk.form.getValue as jest.Mock).mockResolvedValue({});
 
     (init as jest.Mock).mockResolvedValue(sdk);
 
-    render(<KeywordsField value="one, two,three" onChange={() => {}} />, {
+    render(<KeywordsField value="one, two,three" onChange={onChange} />, {
       wrapper,
     });
 
@@ -85,8 +86,18 @@ describe("KeywordsField", () => {
 
     await userEvent.click(screen.getByTestId("addBtn"));
 
+    await userEvent.type(screen.getByRole("textbox"), "again");
+
+    await waitFor(() => {
+      expect(screen.getByTestId("addBtn")).toBeInTheDocument();
+    });
+
+    await userEvent.click(screen.getByTestId("addBtn"));
+
     await waitFor(() => {
       expect(screen.getByText("test")).toHaveClass("MuiChip-label");
+      expect(screen.getByText("again")).toHaveClass("MuiChip-label");
+      expect(onChange).toHaveBeenCalledWith("one, two, three, test, again");
     });
   });
 
