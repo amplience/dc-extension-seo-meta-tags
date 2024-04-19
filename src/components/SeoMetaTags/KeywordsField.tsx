@@ -87,6 +87,10 @@ export const KeywordsField = ({
             ".MuiInputBase-root": { padding: "0 26px 5px 0", gap: "8px" },
             "& input": {
               width: "0 !important",
+              "&::placeholder": {
+                color: theme.palette.grey[600],
+                opacity: 1,
+              },
             },
           }}
           size="small"
