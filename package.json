@@ -13,6 +13,7 @@
     "test:ci": "jest src --ci"
   },
   "dependencies": {
+    "@datadog/browser-rum": "^5.16.0",
     "@emotion/react": "^11.11.3",
     "@emotion/styled": "^11.11.0",
     "@fontsource/ibm-plex-sans": "^5.0.18",
