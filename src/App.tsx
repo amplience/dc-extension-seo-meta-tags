@@ -17,12 +17,12 @@ function App() {
         env: ddEnv,
         site: "datadoghq.com",
         service: "dc-extension-seo-meta-tags",
-        version: "1.1.0",
         trackResources: true,
         trackLongTasks: true,
         trackUserInteractions: true,
         defaultPrivacyLevel: "allow",
         sessionSampleRate: 100,
+        sessionReplaySampleRate: 100,
         usePartitionedCrossSiteSessionCookie: true,
         proxy: "https://dd-proxy.amplience.net",
       });
