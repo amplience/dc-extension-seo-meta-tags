@@ -37,7 +37,7 @@ This extension must be [registered](https://amplience.com/developers/docs/integr
 
 ## Assigning the Extension to a Schema
 
-To use the SEO meta tags extension, simply associate it with a string field in your content type schema.
+To use the SEO meta tags extension, simply associate it with a string or list of strings field in your content type schema.
 
 The string field should be configured to use the `ui:extension` property. The `name` property should match the name that was used to register the extension. The `type` parameter must be included to inform the extension what type of meta tag to generate and the `sources` parameter must be included to tell the extension which fields to base the meta tag on.
 
@@ -88,6 +88,8 @@ The string field should be configured to use the `ui:extension` property. The `n
   }
 }
 ```
+
+The extension works well in conjunction with the [Rich Text Editor extension](https://github.com/amplience/dc-extension-rich-text). The Automatic Meta Tags extension supports both the `markdown` and `json` formats of the Rich Text Editor extension. See the readme of the Rich Text Editor for more information.
 
 ## Limitations
 

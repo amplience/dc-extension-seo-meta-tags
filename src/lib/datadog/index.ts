@@ -1,0 +1,1 @@
+export { initDatadog } from "./initDatadog";
