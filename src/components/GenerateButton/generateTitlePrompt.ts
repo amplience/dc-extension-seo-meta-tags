@@ -1,7 +1,7 @@
 export const generateTitlePrompt = (content: string) => [
   {
     role: "SYSTEM",
-    content: `You are an SEO expert. You will write a page title for the text provided by the user. 
+    content: `Adopt the role of an SEO expert. You will write a page title for the text provided by the user. 
        
       The user will now provide the page content:`,
   },

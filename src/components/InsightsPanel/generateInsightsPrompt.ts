@@ -1,19 +1,20 @@
 import { ContentFieldExtension } from "dc-extensions-sdk";
-import { getParams } from "../../lib";
+import { getParams, getText } from "../../lib";
 import { CharacterCountGrade } from "./calculateCharacterCountScore";
 
-export const generateInisghtsPrompt = (
+export const generateInisghtsPrompt = async (
   sdk: ContentFieldExtension,
   characterCountGrade: CharacterCountGrade,
   content: string
 ) => {
   const { type } = getParams(sdk);
+  const pageContent = await getText(sdk);
 
   return [
     {
       role: "SYSTEM",
       content: `* Objective: 
-    Your task is to analyze a web page ${type}'s effectiveness for SEO based on three criteria: Character Count, Readability, and Accessibility. Evaluate each criterion, calculate scores, and then determine an overall score. Additionally, provide insights for improvement and positive aspects.
+    Adopt the role of an SEO expert. Your task is to analyze a web page ${type}'s effectiveness for SEO based on three criteria: Character Count, Readability, and Accessibility. Evaluate each criterion, calculate scores, and then determine an overall score. Additionally, provide insights for improvement and positive aspects.
     
     * Character Count Scoring:
     The length of the ${type} is ${characterCountGrade.grade}. It gets a score of ${characterCountGrade.score} / 100
@@ -39,6 +40,14 @@ export const generateInisghtsPrompt = (
     },
     {
       role: "SYSTEM",
+      content: `This is the original text that the ${type} was based on:`,
+    },
+    {
+      role: "USER",
+      content: pageContent,
+    },
+    {
+      role: "SYSTEM",
       content: `** Make sure to apply the following restrictions, follow them directly and don't skip any of them:
     1. The output must be in the followng json format: {
       "overallScore": calculated_average,
@@ -51,6 +60,10 @@ export const generateInisghtsPrompt = (
     3. Don't include any other commentary.
     4. If you don't understand the text, you will respond only with [ERROR] and nothing else.
     5. Positive and negative aspects should not contradict one another.`,
+    },
+    {
+      role: "SYSTEM",
+      content: `** Evaluate the response and make sure it matches the criteria given above. If it doesn't regenerate the response and repeat the steps until it does`,
     },
   ];
 };

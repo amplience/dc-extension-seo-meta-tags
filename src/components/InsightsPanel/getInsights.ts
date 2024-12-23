@@ -82,7 +82,7 @@ export const getInsights = async (
       getMutation(
         hubId!,
         1,
-        generateInisghtsPrompt(sdk, characterCountGrade, text)
+        await generateInisghtsPrompt(sdk, characterCountGrade, text)
       )
     )
     .then(
