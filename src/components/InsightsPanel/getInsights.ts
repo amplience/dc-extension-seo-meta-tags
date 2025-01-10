@@ -103,7 +103,8 @@ export const getInsights = async (
 
   if (responseIsOk(insights)) {
     store.setItem(text, insights);
+    return insights as Insights;
   }
 
-  return insights as Insights;
+  return null;
 };

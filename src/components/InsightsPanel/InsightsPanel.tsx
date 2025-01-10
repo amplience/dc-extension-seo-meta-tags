@@ -89,6 +89,7 @@ export const InsightsPanel = ({
     getInsights(sdk)
       .then((results) => {
         if (results) {
+          setError(null);
           setResults(results);
         } else {
           setError(getError(toSdkError("BAD_CONTENT")));
