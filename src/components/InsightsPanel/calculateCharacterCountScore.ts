@@ -47,7 +47,7 @@ export const calculateCharacterCountScore = (
           return {
             score: scaleValue(
               [targets.aboveOptimal.low, targets.aboveOptimal.high],
-              [99, 1],
+              [99, 10],
               len
             ),
             grade: "above optimal",
