@@ -43,14 +43,16 @@ export const calculateCharacterCountScore = (
       ],
       [
         inRange(targets.aboveOptimal.low, targets.aboveOptimal.high),
-        (len) => ({
-          score: scaleValue(
-            [targets.aboveOptimal.low, targets.aboveOptimal.high],
-            [1, 99],
-            len
-          ),
-          grade: "above optimal",
-        }),
+        (len) => {
+          return {
+            score: scaleValue(
+              [targets.aboveOptimal.low, targets.aboveOptimal.high],
+              [99, 1],
+              len
+            ),
+            grade: "above optimal",
+          };
+        },
       ],
       [gt(__, targets.excessive), () => ({ score: 10, grade: "excessive" })],
     ]),

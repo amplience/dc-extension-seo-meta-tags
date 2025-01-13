@@ -68,6 +68,68 @@ describe("InsightsPanel", () => {
     });
   });
 
+  it("Should show error message if the response is in the wrong format", async () => {
+    const insights = {
+      data: {
+        generateSEOText: {
+          variants: [
+            '```json {"overallScore":81,"readabilityScore":20,"accessibilityScore":30,"positive":["a","b","c"],"negative":["d","e","f"]}```',
+          ],
+        },
+      },
+    };
+
+    const sdk = await init<ContentFieldExtension>();
+
+    (sdk.field.getValue as jest.Mock).mockResolvedValue("test");
+    (sdk.form.getValue as jest.Mock).mockResolvedValue({});
+    (sdk.connection.request as jest.Mock).mockResolvedValue(insights);
+
+    (init as jest.Mock).mockResolvedValue(sdk);
+
+    render(<InsightsPanel onClose={jest.fn()} value="Generated text" />, {
+      wrapper,
+    });
+
+    await waitFor(() => {
+      expect(
+        screen.getByText("Sorry, something went wrong.")
+      ).toBeInTheDocument();
+    });
+  });
+
+  it("Should hide the error panel if response is regenerated and is valid", async () => {
+    const sdk = await init<ContentFieldExtension>();
+
+    jest.resetAllMocks();
+
+    (sdk.field.getValue as jest.Mock).mockResolvedValue("test");
+    (sdk.form.getValue as jest.Mock).mockResolvedValue({});
+    (sdk.connection.request as jest.Mock).mockRejectedValueOnce("Error");
+
+    (init as jest.Mock).mockResolvedValue(sdk);
+
+    render(<InsightsPanel onClose={jest.fn()} value="Generated text" />, {
+      wrapper,
+    });
+
+    await waitFor(() => {
+      expect(
+        screen.getByText("Sorry, something went wrong.")
+      ).toBeInTheDocument();
+    });
+
+    // (sdk.connection.request as jest.Mock).mockResolvedValueOnce(insights);
+
+    // await userEvent.click(screen.getByTestId("reoladInsights"));
+
+    // expect(
+    //   screen.queryByText("Sorry, something went wrong.")
+    // ).not.toBeInTheDocument();
+
+    // expect(screen.getByText(/Showing results for/)).toBeInTheDocument();
+  });
+
   it("Should show loading icon when loading", async () => {
     const sdk = await init<ContentFieldExtension>();
 

@@ -12,4 +12,10 @@ describe("scaleValue", () => {
 
     expect(scaled).toEqual(0.5);
   });
+
+  it("Should work if the numbers supplied for the target range are backwards", () => {
+    const scaled = scaleValue([1, 10], [10, 1], 9);
+
+    expect(scaled).toEqual(2);
+  });
 });

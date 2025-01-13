@@ -89,7 +89,6 @@ export const InsightsPanel = ({
     getInsights(sdk)
       .then((results) => {
         if (results) {
-          setError(null);
           setResults(results);
         } else {
           setError(getError(toSdkError("BAD_CONTENT")));
@@ -242,7 +241,11 @@ export const InsightsPanel = ({
               </p>
               <p>[ERROR] {error}</p>
               <p>
-                <Button variant="contained" onClick={loadInsights}>
+                <Button
+                  variant="contained"
+                  data-testid="reoladInsights"
+                  onClick={loadInsights}
+                >
                   Retry
                 </Button>
               </p>

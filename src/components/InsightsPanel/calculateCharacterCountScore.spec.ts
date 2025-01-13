@@ -27,14 +27,27 @@ describe("calculateCharacterCountScore", () => {
     expect(result.grade).toEqual("below optimal");
   });
 
-  it("Should return 58 if above optimal", () => {
+  it("Should return 42 if above optimal", () => {
     const result = calculateCharacterCountScore(
       targets,
       "this is too long to get a good score so that is unfortunate. shame it's not shorter"
     );
 
-    expect(result.score).toEqual(58);
+    expect(result.score).toEqual(42);
     expect(result.grade).toEqual("above optimal");
+  });
+
+  it("Should be a higher score if closer to bottom of the range if above optimal", () => {
+    const result1 = calculateCharacterCountScore(
+      targets,
+      "this is too long to get a good score so that is unfortunate. shame it's not shorter"
+    );
+    const result2 = calculateCharacterCountScore(
+      targets,
+      "this is long but it is not as long so it should have a better score"
+    );
+
+    expect(result1.score).toBeLessThan(result2.score);
   });
 
   it("Should return 10 if excessive", () => {

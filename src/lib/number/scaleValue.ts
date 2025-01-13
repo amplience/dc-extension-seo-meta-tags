@@ -4,13 +4,13 @@ import { divideNum, subtractNum } from "ramda-adjunct";
 const applySubtract = apply(subtractNum) as unknown as (a: number[]) => number;
 
 export const scaleValue = (
-  sourceRange: number[],
-  targetRange: number[],
+  sourceRange: [number, number],
+  targetRange: [number, number],
   value: number
 ) =>
   pipe(
-    subtractNum(head(sourceRange) as number),
+    subtractNum(head(sourceRange)),
     multiply(applySubtract(targetRange)),
     divideNum(applySubtract(sourceRange)),
-    add(head(targetRange) as number)
+    add(head(targetRange))
   )(value);
