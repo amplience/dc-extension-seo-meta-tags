@@ -59,4 +59,42 @@ describe("calculateCharacterCountScore", () => {
     expect(result.score).toEqual(10);
     expect(result.grade).toEqual("excessive");
   });
+
+  it("Should return the correct score if the count is exactly on the higher limit for each grade", () => {
+    const chars60 =
+      "this text has exactly 60 characters. Actually it does not so";
+    const chars44 = "this text has exactly 44 characters. Actuall";
+    const chars99 =
+      "this text has exactly 99 characters. Actually it does not so adding a few more in to bump up the le";
+    const result1 = calculateCharacterCountScore(targets, chars60);
+    const result2 = calculateCharacterCountScore(targets, chars44);
+    const result3 = calculateCharacterCountScore(targets, chars99);
+
+    expect(result1.grade).toEqual("optimal");
+    expect(result2.grade).toEqual("below optimal");
+    expect(result3.grade).toEqual("above optimal");
+  });
+
+  it("Should return the correct score if the count is exactly on the lower limit for each grade", () => {
+    const chars45 = "this text has exactly 44 characters. Actually";
+    const chars1 = "X";
+    const chars61 =
+      "this text has exactly 61 characters. Actually it does not so.";
+
+    const result1 = calculateCharacterCountScore(targets, chars45);
+    const result2 = calculateCharacterCountScore(targets, chars1);
+    const result3 = calculateCharacterCountScore(targets, chars61);
+
+    expect(result1.grade).toEqual("optimal");
+    expect(result2.grade).toEqual("below optimal");
+    expect(result3.grade).toEqual("above optimal");
+  });
+
+  it("Should handle 0 length strings", () => {
+    const nowt = "";
+    const result = calculateCharacterCountScore(targets, nowt);
+
+    expect(result.grade).toEqual("below optimal");
+    expect(result.score).toEqual(0);
+  });
 });
