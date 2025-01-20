@@ -98,7 +98,7 @@ describe("calculateCharacterCountScore", () => {
     expect(result.score).toEqual(0);
   });
 
-  it("Should return excessive if the score exactyl matches the excessive value", () => {
+  it("Should return excessive if the score exactly matches the excessive value", () => {
     const excessive =
       "this text has 100 chars because the length is excessive. More more more more more more more more mor";
 
