@@ -97,4 +97,14 @@ describe("calculateCharacterCountScore", () => {
     expect(result.grade).toEqual("below optimal");
     expect(result.score).toEqual(0);
   });
+
+  it("Should return excessive if the score exactyl matches the excessive value", () => {
+    const excessive =
+      "this text has 100 chars because the length is excessive. More more more more more more more more mor";
+
+    const result = calculateCharacterCountScore(targets, excessive);
+
+    expect(result.grade).toEqual("excessive");
+    expect(result.score).toEqual(10);
+  });
 });

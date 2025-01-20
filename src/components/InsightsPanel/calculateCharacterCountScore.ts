@@ -1,4 +1,4 @@
-import { __, cond, evolve, gt, inc, length, lt, pipe } from "ramda";
+import { __, cond, evolve, gte, inc, length, lt, pipe } from "ramda";
 import { inRange, round } from "ramda-adjunct";
 import { scaleValue } from "../../lib";
 
@@ -55,7 +55,7 @@ export const calculateCharacterCountScore = (
           };
         },
       ],
-      [gt(__, targets.excessive), () => ({ score: 10, grade: "excessive" })],
+      [gte(__, targets.excessive), () => ({ score: 10, grade: "excessive" })],
     ]),
     evolve({
       score: round,
