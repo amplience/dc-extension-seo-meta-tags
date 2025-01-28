@@ -1,4 +1,4 @@
-import { __, cond, evolve, gt, length, pipe } from "ramda";
+import { __, cond, evolve, gte, inc, length, lt, pipe } from "ramda";
 import { inRange, round } from "ramda-adjunct";
 import { scaleValue } from "../../lib";
 
@@ -26,12 +26,13 @@ export const calculateCharacterCountScore = (
   pipe(
     length,
     cond([
+      [lt(__, 1), () => ({ score: 0, grade: "below optimal" })],
       [
-        inRange(targets.optimal.low, targets.optimal.high),
+        inRange(targets.optimal.low, inc(targets.optimal.high)),
         () => ({ score: 100, grade: "optimal" }),
       ],
       [
-        inRange(targets.belowOptimal.low, targets.belowOptimal.high),
+        inRange(targets.belowOptimal.low, inc(targets.belowOptimal.high)),
         (len) => ({
           score: scaleValue(
             [targets.belowOptimal.low, targets.belowOptimal.high],
@@ -42,7 +43,7 @@ export const calculateCharacterCountScore = (
         }),
       ],
       [
-        inRange(targets.aboveOptimal.low, targets.aboveOptimal.high),
+        inRange(targets.aboveOptimal.low, inc(targets.aboveOptimal.high)),
         (len) => {
           return {
             score: scaleValue(
@@ -54,7 +55,7 @@ export const calculateCharacterCountScore = (
           };
         },
       ],
-      [gt(__, targets.excessive), () => ({ score: 10, grade: "excessive" })],
+      [gte(__, targets.excessive), () => ({ score: 10, grade: "excessive" })],
     ]),
     evolve({
       score: round,
