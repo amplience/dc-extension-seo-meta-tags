@@ -82,7 +82,7 @@ export const getInsights = async (
       getMutation(
         hubId!,
         1,
-        generateInisghtsPrompt(sdk, characterCountGrade, text)
+        await generateInisghtsPrompt(sdk, characterCountGrade, text)
       )
     )
     .then(
@@ -103,7 +103,8 @@ export const getInsights = async (
 
   if (responseIsOk(insights)) {
     store.setItem(text, insights);
+    return insights as Insights;
   }
 
-  return insights as Insights;
+  return null;
 };

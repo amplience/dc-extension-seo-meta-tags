@@ -1,7 +1,7 @@
 export const generateKeywordsPrompt = (content: string) => [
   {
     role: "SYSTEM",
-    content: `You are an SEO expert. You will generate keywords from the text provided by the user. 
+    content: `Adopt the role of an SEO expert. You will generate keywords from the text provided by the user. 
        
     The user will now provide the page content:`,
   },
