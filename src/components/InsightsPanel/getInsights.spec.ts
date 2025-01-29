@@ -7,28 +7,31 @@ describe("getInsights", () => {
     jest.restoreAllMocks();
   });
 
-  it("Should return a 'BAD_CONTENT' error if the API response has an error", async () => {
-    const sdk = await init<ContentFieldExtension>();
-
-    (sdk.field.getValue as jest.Mock).mockResolvedValue("something");
-
-    (sdk.connection.request as jest.Mock).mockResolvedValue({
-      data: {
-        generateSEOText: {
-          variants: ["[ERROR]"],
-        },
-      },
-    });
-
-    expect(getInsights(sdk)).rejects.toEqual({
-      data: { errors: [{ extensions: { code: "BAD_CONTENT" } }] },
-    });
-  });
-
   it("Should return null if text is empty", async () => {
     const sdk = await init<ContentFieldExtension>();
 
     (sdk.field.getValue as jest.Mock).mockResolvedValue("");
+
+    const insights = await getInsights(sdk);
+
+    expect(insights).toEqual(null);
+  });
+
+  it("Should return null if response is not in the right format", async () => {
+    const sdk = await init<ContentFieldExtension>();
+
+    (sdk.field.getValue as jest.Mock).mockResolvedValue("titular");
+    (sdk.form.getValue as jest.Mock).mockResolvedValue("titular");
+
+    (sdk.connection.request as jest.Mock).mockResolvedValue({
+      data: {
+        generateSEOText: {
+          variants: [
+            '```json\n{\n  "overallScore": 67,\n  "readabilityScore": 85,\n  "accessibilityScore": 75,\n  "positive": [\n    "The title clearly outlines the benefits of dogs.",\n    "It uses simple language, making it accessible to a broad audience.",\n    "The title is engaging and likely to attract readers interested in pets."\n  ],\n  "negative": [\n    "The title is too long, reducing its effectiveness for SEO.",\n    "It could be more concise to improve character count.",\n    "Consider focusing on one or two key aspects to enhance clarity."\n  ]\n}\n```',
+          ],
+        },
+      },
+    });
 
     const insights = await getInsights(sdk);
 
@@ -75,6 +78,7 @@ describe("getInsights", () => {
     };
 
     (sdk.field.getValue as jest.Mock).mockResolvedValue("something");
+    (sdk.form.getValue as jest.Mock).mockResolvedValue("something");
     (sdk.connection.request as jest.Mock).mockResolvedValue({
       data: {
         generateSEOText: {
@@ -99,6 +103,8 @@ describe("getInsights", () => {
       negative: ["awful"],
     };
     (sdk.field.getValue as jest.Mock).mockResolvedValue("something");
+    (sdk.form.getValue as jest.Mock).mockResolvedValue("something");
+
     (sdk.connection.request as jest.Mock).mockResolvedValue({
       data: {
         generateSEOText: {

@@ -1,7 +1,7 @@
 export const generateDescriptionPrompt = (content: string) => [
   {
     role: "SYSTEM",
-    content: `You are an SEO expert. You will summarize the text provided by the user for use as a SERP description.
+    content: `Adopt the role of an SEO expert. You will summarize the text provided by the user for use as a SERP description.
       
       The user will now provide the page content:`,
   },
@@ -16,6 +16,8 @@ export const generateDescriptionPrompt = (content: string) => [
     2. You can only respond with the description
     3. Your response must not be conversational
     4. Each variant of the description will be unique
-    5. If you don't understand the text, you will respond only with [ERROR] and nothing else`,
+    5. Return only a single description
+    6. Do not return a numbered list
+    7. If you don't understand the text, you will respond only with [ERROR] and nothing else`,
   },
 ];
